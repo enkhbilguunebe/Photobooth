@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cute Online Photo Booth</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="app">
+    <div class="floating-hearts" aria-hidden="true">
+      <span>♡</span><span>✦</span><span>♡</span><span>✧</span><span>♡</span>
+    </div>
+
+    <header class="hero">
+      <div class="pill">Live Room Photo Booth</div>
+      <h1>Take cute photos together<br><span>from anywhere</span></h1>
+      <p>Send your room link, connect live, start the countdown, and download one adorable combined frame.</p>
+    </header>
+
+    <section class="card setup-card">
+      <div class="input-group">
+        <label>Your display name</label>
+        <input id="nameInput" maxlength="18" placeholder="Your name" value="Me" />
+      </div>
+
+      <div class="input-group">
+        <label>Theme</label>
+        <select id="themeSelect">
+          <option value="strawberry">Strawberry Milk 🍓</option>
+          <option value="sky">Soft Sky ☁️</option>
+          <option value="lavender">Lavender Dream 💜</option>
+          <option value="mint">Mint Matcha 🍵</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Countdown</label>
+        <select id="timerSelect">
+          <option value="3">3 seconds</option>
+          <option value="5">5 seconds</option>
+          <option value="7">7 seconds</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="card share-card">
+      <div class="share-info">
+        <label>Room link</label>
+        <input id="shareLink" readonly />
+      </div>
+      <button id="copyLinkBtn" class="secondary-btn">Copy Link</button>
+    </section>
+
+    <section class="status-card">
+      <div>
+        <strong id="statusTitle">Not connected yet</strong>
+        <p id="status">Start your camera, then send the room link to your friend.</p>
+      </div>
+      <div class="room-dots">
+        <span id="youDot" class="dot"></span>
+        <span id="friendDot" class="dot"></span>
+      </div>
+    </section>
+
+    <section class="video-grid">
+      <article class="video-card">
+        <div class="video-header">
+          <div>
+            <h2 id="localNameLabel">You</h2>
+            <p id="localSub">Camera not started</p>
+          </div>
+          <span id="localBadge" class="badge">Offline</span>
+        </div>
+        <div class="video-frame">
+          <video id="localVideo" autoplay playsinline muted></video>
+          <div id="localOverlay" class="video-placeholder">Start camera ✨</div>
+        </div>
+      </article>
+
+      <article class="video-card">
+        <div class="video-header">
+          <div>
+            <h2 id="remoteNameLabel">Friend</h2>
+            <p id="remoteSub">Waiting for link join</p>
+          </div>
+          <span id="remoteBadge" class="badge">Waiting</span>
+        </div>
+        <div class="video-frame">
+          <video id="remoteVideo" autoplay playsinline></video>
+          <div id="remoteOverlay" class="video-placeholder">Waiting for friend 💌</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="action-card">
+      <div id="countdown" class="countdown hidden">3</div>
+      <div class="buttons">
+        <button id="startBtn">Start Camera & Join</button>
+        <button id="readyBtn" disabled>I'm Ready</button>
+        <button id="takeTogetherBtn" disabled>Take Together</button>
+        <button id="resetBtn" class="secondary-btn" disabled>Retake</button>
+      </div>
+      <p class="hint">Both people must press <strong>I'm Ready</strong> before taking the photo.</p>
+    </section>
+
+    <section class="result-section">
+      <article class="card result-card">
+        <div class="video-header">
+          <div>
+            <h2>Final cute frame</h2>
+            <p id="resultSub">Your combined result appears here.</p>
+          </div>
+          <span id="resultBadge" class="badge">Not ready</span>
+        </div>
+        <canvas id="finalCanvas" width="1400" height="1000"></canvas>
+        <a id="downloadLink" class="download disabled" download="cute-online-photobooth.png">Download Cute Frame</a>
+      </article>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/script.js"></script>
+</body>
+</html>

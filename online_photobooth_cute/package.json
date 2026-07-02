@@ -1,0 +1,14 @@
+{
+  "name": "online-photobooth-cute",
+  "version": "2.0.0",
+  "description": "Cute two-person WebRTC online photo booth with shared countdown, themes, labels, and combined frame.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.8.1"
+  }
+}
