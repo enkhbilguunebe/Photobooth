@@ -1,30 +1,21 @@
-# Cheezy Photo Booth
+# Cheezy by Billy Photo Booth
 
-Baby-blue pastel/minimal/retro online photo booth.
+Updates included:
+- App renamed to **Cheezy by Billy**
+- Countdown fixed with a very high overlay so it appears above the frames
+- Added **Vintage booth B/W** filter inspired by old high-contrast photo booth prints
+- Added red curtain / old photo booth background
+- Added layout choices A-K
+- Added automatic back-to-back shooting: the selected layout decides how many poses are taken
 
-## Features
-- 1-person mode
-- 2-person live WebRTC mode
-- Shareable room link
-- Name labels
-- Ready button
-- Countdown
-- Filters: no filter, more contrast, old black & white, retro warm, soft pastel
-- Layouts: side-by-side, vertical strip, Polaroid, magazine cover
-- Download final PNG
-
-## Run locally
-
+Run locally:
 ```bash
 npm install
 npm start
 ```
 
-Open `http://localhost:3000`.
-
-## Deploy on Render
-
-Use Web Service, not Static Site.
-
-Build Command: `npm install`
-Start Command: `npm start`
+Render settings:
+```text
+Build Command: npm install
+Start Command: npm start
+```
