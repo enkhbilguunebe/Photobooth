@@ -19,3 +19,9 @@ Render settings:
 Build Command: npm install
 Start Command: npm start
 ```
+
+
+## Bilingual / strip update
+- Added English/Mongolian language button.
+- Hero banner now only says: "Let's get Cheezy".
+- In 2-person mode, the chosen strip/layout is one shared print; both people's photos alternate inside the same strip/frame.

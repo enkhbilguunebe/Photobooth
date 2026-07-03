@@ -1,1 +1,14 @@
-{"name":"cheezy-by-billy","version":"5.0.0","main":"server.js","scripts":{"start":"node server.js","dev":"node server.js"},"dependencies":{"express":"^4.19.2","socket.io":"^4.8.1"}}
+{
+  "name": "cheezy-by-billy-bilingual",
+  "version": "5.1.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.8.1"
+  },
+  "description": "Cheezy by Billy bilingual English/Mongolian photo booth."
+}
