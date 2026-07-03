@@ -1,7 +1,7 @@
 {
-  "name": "online-photobooth-cute",
-  "version": "2.0.0",
-  "description": "Cute two-person WebRTC online photo booth with shared countdown, themes, labels, and combined frame.",
+  "name": "cheezy-photobooth",
+  "version": "4.0.0",
+  "description": "Cheezy online photo booth",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -1,57 +1,30 @@
-# Cute Online Photo Booth
+# Cheezy Photo Booth
 
-This is an upgraded two-person online photo booth using WebRTC + Socket.IO.
+Baby-blue pastel/minimal/retro online photo booth.
 
 ## Features
+- 1-person mode
+- 2-person live WebRTC mode
 - Shareable room link
-- Two-person live video connection
-- Cute pastel design
-- Display names
-- Four theme choices:
-  - Strawberry Milk
-  - Soft Sky
-  - Lavender Dream
-  - Mint Matcha
-- Ready button for both users
-- Shared countdown
-- Combined final image with cute frame
-- Download PNG
-- Better lobby/status messages
+- Name labels
+- Ready button
+- Countdown
+- Filters: no filter, more contrast, old black & white, retro warm, soft pastel
+- Layouts: side-by-side, vertical strip, Polaroid, magazine cover
+- Download final PNG
 
 ## Run locally
-
-Install Node.js, then run:
 
 ```bash
 npm install
 npm start
 ```
 
-Open:
+Open `http://localhost:3000`.
 
-```text
-http://localhost:3000
-```
+## Deploy on Render
 
-Copy the room link and open it in another browser or device.
+Use Web Service, not Static Site.
 
-## Use with far-away friend
-
-Localhost only works on your own computer. For a real friend far away, deploy this project as a Node.js web service on Render, Railway, or another platform with HTTPS.
-
-Render settings:
-
-```text
-Build Command: npm install
-Start Command: npm start
-```
-
-## Important production note
-
-The project uses a free public STUN server:
-
-```js
-stun:stun.l.google.com:19302
-```
-
-This works for many tests, but production WebRTC often needs a TURN server so people on strict Wi-Fi/cellular networks can connect.
+Build Command: `npm install`
+Start Command: `npm start`
