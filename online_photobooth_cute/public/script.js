@@ -1,238 +1,38 @@
-// ===== LANGUAGE BUTTON FIX =====
-const CHEEZY_TEXT = {
-  en: {
-    btn: "MN",
-    heroTitle: "Let’s get Cheezy",
-    name: "Name",
-    mode: "Mode",
-    layout: "Layout",
-    filter: "Filter",
-    timer: "Seconds each pose",
-    share: "Send this room link",
-    copy: "Copy link",
-    readyStart: "Ready to start",
-    initialStatus: "Start your camera. In 2-person mode, send the room link to your friend.",
-    cameraNotStarted: "Camera not started",
-    waitingFriend: "Waiting for friend",
-    startCamera: "Start camera",
-    sendRoom: "Send room link",
-    startJoin: "Start camera & join",
-    ready: "I'm ready",
-    readyDone: "Ready ✓",
-    startBooth: "Start photo booth",
-    retake: "Retake",
-    finalPrint: "Final booth print",
-    resultHint: "Choose layout and filter, then start the booth.",
-    download: "Download PNG",
-    offline: "offline",
-    waiting: "waiting",
-    notReady: "not ready",
-    onePerson: "1 person",
-    twoPeople: "2 people",
-    noFilter: "No filter",
-    contrast: "More contrast",
-    boothbw: "Vintage booth B/W",
-    oldbw: "Old black & white",
-    vintage: "Retro warm",
-    soft: "Soft pastel"
-  },
+const socket=io();
+const $=id=>document.getElementById(id);
+const localVideo=$('localVideo'),remoteVideo=$('remoteVideo'),shareLink=$('shareLink'),copyLinkBtn=$('copyLinkBtn'),startBtn=$('startBtn'),readyBtn=$('readyBtn'),shootBtn=$('shootBtn'),resetBtn=$('resetBtn'),statusTitle=$('statusTitle'),statusEl=$('status'),countdownEl=$('countdown'),countdownText=$('countdownText'),countdownPose=$('countdownPose'),nameInput=$('nameInput'),modeSelect=$('modeSelect'),layoutSelect=$('layoutSelect'),filterSelect=$('filterSelect'),timerSelect=$('timerSelect'),poseNote=$('poseNote'),localBadge=$('localBadge'),remoteBadge=$('remoteBadge'),resultBadge=$('resultBadge'),localSub=$('localSub'),remoteSub=$('remoteSub'),resultSub=$('resultSub'),localNameLabel=$('localNameLabel'),remoteNameLabel=$('remoteNameLabel'),localOverlay=$('localOverlay'),remoteOverlay=$('remoteOverlay'),friendCard=$('friendCard'),youDot=$('youDot'),friendDot=$('friendDot'),roomChip=$('roomChip'),languageBtn=$('languageBtn'),finalCanvas=$('finalCanvas'),ctx=finalCanvas.getContext('2d'),downloadLink=$('downloadLink');
 
-  mn: {
-    btn: "EN",
-    heroTitle: "Cheezy зураг авцгаая",
-    name: "Нэр",
-    mode: "Горим",
-    layout: "Загвар",
-    filter: "Өнгөний эффект",
-    timer: "Зураг бүрийн тоолуур",
-    share: "Найздаа явуулах холбоос",
-    copy: "Холбоос хуулах",
-    readyStart: "Эхлэхэд бэлэн",
-    initialStatus: "Камераа асаана уу. 2 хүний горимд холбоосоо найздаа явуулна.",
-    cameraNotStarted: "Камер асаагүй байна",
-    waitingFriend: "Найзыгаа хүлээж байна",
-    startCamera: "Камераа асаах",
-    sendRoom: "Холбоосоо явуулна уу",
-    startJoin: "Камер асааж орох",
-    ready: "Би бэлэн",
-    readyDone: "Бэлэн ✓",
-    startBooth: "Зураг авч эхлэх",
-    retake: "Дахин авах",
-    finalPrint: "Бэлэн зураг",
-    resultHint: "Загвар, эффектээ сонгоод зураг авч эхлээрэй.",
-    download: "PNG татах",
-    offline: "асаагүй",
-    waiting: "хүлээж байна",
-    notReady: "бэлэн биш",
-    onePerson: "1 хүн",
-    twoPeople: "2 хүн",
-    noFilter: "Эффектгүй",
-    contrast: "Контраст нэмэх",
-    boothbw: "Хуучны хар-цагаан",
-    oldbw: "Сонгодог хар-цагаан",
-    vintage: "Дулаан ретро",
-    soft: "Зөөлөн пастел"
-  }
-};
+const T={en:{btn:'MN',tagline:'vintage online photo booth',heroTitle:"Let’s get Cheezy",nameLabel:'Name',modeLabel:'Mode',layoutLabel:'Layout',filterLabel:'Filter',timerLabel:'Seconds each pose',shareLabel:'Send this room link',copyLink:'Copy link',readyToStart:'Ready to start',initialStatus:'Start your camera. In 2-person mode, send the room link to your friend.',youTitle:'You',friendTitle:'Friend',cameraNotStarted:'Camera not started',offline:'offline',startCameraShort:'Start camera',waitingForFriend:'Waiting for friend',waiting:'waiting',sendRoomLink:'Send room link',startJoin:'Start camera & join',imReady:"I'm ready",readyDone:'Ready ✓',startBooth:'Start photo booth',retake:'Retake',finalPrint:'Final booth print',resultHint:'Choose layout and filter, then start the booth.',notReady:'not ready',downloadPng:'Download PNG',modeOne:'1 person',modeTwo:'2 people',filterNone:'No filter',filterContrast:'More contrast',filterBoothBw:'Vintage booth B/W',filterOldBw:'Old black & white',filterVintage:'Retro warm',filterSoft:'Soft pastel',timer3:'3 seconds',timer5:'5 seconds',timer7:'7 seconds',note:'Layout {key} will take {poses} photo{plural}, {seconds} seconds apart.',soloTitle:'Solo mode',soloStatus:'Start your camera, press Ready, then start the booth.',twoTitle:'Two-person mode',twoStatus:'Start your camera and send the room link to your friend.',starting:'Starting camera',allow:'Allow camera and microphone permission.',joined:'Joined',sendFriend:'Send the room link to your friend.',pressSolo:'Press Ready, then start the booth.',blockedTitle:'Camera blocked',blockedMsg:'Allow camera/microphone permission, then try again.',live:'live',cameraReady:'Camera ready',blocked:'blocked',connected:'connected',connectedTitle:'Connected',connectedMsg:'Both people press Ready, then start the booth.',ready:'ready',youReady:'You are ready',friendReady:'Friend is ready',friendConnected:'Friend connected',disconnected:'disconnected',lost:'Connection lost',waitingTitle:'Waiting for friend',copySend:'Copy the room link and send it.',connecting:'connecting',connectingTitle:'Connecting',connectingMsg:'Friend joined. Building live video connection.',roomFull:'Room full',roomFullMsg:'This room already has two people. Create a new room.',left:'left',friendLeft:'Friend left',notReadyTitle:'Not ready',pressReadyFirst:'Press Ready first.',captured:'Captured',poseCaptured:'Pose {pose} of {total} captured.',waitingSets:'Waiting for both photo sets.',finalReady:'Your Cheezy by Billy print is ready.',copied:'Copied'},
+mn:{btn:'EN',tagline:'чимэг онлайн фото booth',heroTitle:'Cheezy зураг авцгаая',nameLabel:'Нэр',modeLabel:'Горим',layoutLabel:'Зургийн загвар',filterLabel:'Өнгөний эффект',timerLabel:'Зураг бүрийн тоолуур',shareLabel:'Найздаа явуулах холбоос',copyLink:'Холбоос хуулах',readyToStart:'Эхлэхэд бэлэн',initialStatus:'Камераа асаана уу. 2 хүний горимд холбоосоо найздаа явуулаарай.',youTitle:'Та',friendTitle:'Найз',cameraNotStarted:'Камер асаагүй байна',offline:'асаагүй',startCameraShort:'Камераа асаах',waitingForFriend:'Найзыгаа хүлээж байна',waiting:'хүлээж байна',sendRoomLink:'Холбоосоо явуулна уу',startJoin:'Камер асааж орох',imReady:'Би бэлэн',readyDone:'Бэлэн ✓',startBooth:'Зураг авч эхлэх',retake:'Дахин авах',finalPrint:'Бэлэн зураг',resultHint:'Загвар, эффектээ сонгоод зураг авч эхлээрэй.',notReady:'бэлэн биш',downloadPng:'PNG татах',modeOne:'1 хүн',modeTwo:'2 хүн',filterNone:'Эффектгүй',filterContrast:'Контраст нэмэх',filterBoothBw:'Хуучны booth хар-цагаан',filterOldBw:'Сонгодог хар-цагаан',filterVintage:'Дулаан ретро',filterSoft:'Зөөлөн пастел',timer3:'3 секунд',timer5:'5 секунд',timer7:'7 секунд',note:'Загвар {key}: нийт {poses} зураг авна, зураг бүр {seconds} секундийн зайтай.',soloTitle:'Ганцаар авах',soloStatus:'Камераа асаагаад Бэлэн дарж, дараа нь зураг авч эхлээрэй.',twoTitle:'2 хүнээр авах',twoStatus:'Камераа асаагаад өрөөний холбоосоо найздаа явуулаарай.',starting:'Камер асааж байна',allow:'Камер, микрофон ашиглах зөвшөөрөл өгнө үү.',joined:'Өрөөнд орлоо',sendFriend:'Өрөөний холбоосоо найздаа явуулаарай.',pressSolo:'Бэлэн дарсны дараа зураг авч эхлээрэй.',blockedTitle:'Камер хаагдсан байна',blockedMsg:'Камер/микрофоны зөвшөөрөл өгөөд дахин оролдоно уу.',live:'асаалттай',cameraReady:'Камер бэлэн',blocked:'хаагдсан',connected:'холбогдсон',connectedTitle:'Холбогдлоо',connectedMsg:'Хоёулаа Бэлэн дарсны дараа зураг авч эхэлнэ.',ready:'бэлэн',youReady:'Та бэлэн байна',friendReady:'Найз бэлэн байна',friendConnected:'Найз холбогдлоо',disconnected:'тасарсан',lost:'Холболт тасарлаа',waitingTitle:'Найзыгаа хүлээж байна',copySend:'Өрөөний холбоосоо хуулж найздаа явуулаарай.',connecting:'холбож байна',connectingTitle:'Холбож байна',connectingMsg:'Найз орж ирлээ. Видео холболт үүсгэж байна.',roomFull:'Өрөө дүүрсэн',roomFullMsg:'Энэ өрөөнд 2 хүн орсон байна. Шинэ өрөө үүсгэнэ үү.',left:'гарсан',friendLeft:'Найз гарлаа',notReadyTitle:'Бэлэн биш',pressReadyFirst:'Эхлээд Бэлэн дарна уу.',captured:'Зураг авлаа',poseCaptured:'{pose}/{total} дахь зураг авлаа.',waitingSets:'Хоёр хүний зураг бүрэн орохыг хүлээж байна.',finalReady:'Cheezy by Billy зураг бэлэн боллоо.',copied:'Хуулагдлаа'}};
+let lang=localStorage.getItem('cheezyLang')||'en';
+function tr(k,v={}){let s=(T[lang]&&T[lang][k])||T.en[k]||k;for(const [a,b] of Object.entries(v))s=s.replaceAll(`{${a}}`,String(b));return s}
+function applyLang(){document.body.classList.toggle('lang-mn',lang==='mn');document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=tr(e.dataset.i18n));languageBtn.textContent=tr('btn');readyBtn.textContent=localReady?tr('readyDone'):tr('imReady');updatePoseNote()}
 
-let cheezyLang = localStorage.getItem("cheezyLang") || "en";
+const L={A:{name:'Layout A',size:'2x6',poses:3,w:800,h:2400,slots:[[80,80,640,520],[80,640,640,520],[80,1200,640,520]]},B:{name:'Layout B',size:'2x6',poses:4,w:800,h:2400,slots:[[80,80,640,440],[80,560,640,440],[80,1040,640,440],[80,1520,640,440]]},C:{name:'Layout C',size:'4x6',poses:4,w:1600,h:2400,slots:[[100,120,680,860],[820,120,680,860],[100,1040,680,860],[820,1040,680,860]]},D:{name:'Layout D',size:'4x6',poses:1,w:1600,h:2400,slots:[[160,160,1280,1700]]},E:{name:'Layout E',size:'4x6',poses:2,w:1600,h:2400,slots:[[140,120,1320,820],[140,980,1320,820]]},F:{name:'Layout F',size:'4x6',poses:1,w:1600,h:2400,slots:[[120,320,1360,820]]},G:{name:'Layout G',size:'4x6',poses:2,w:1600,h:2400,slots:[[120,260,660,560],[820,260,660,560]]},H:{name:'Layout H',size:'4x6',poses:4,w:1600,h:2400,slots:[[120,120,620,620],[120,790,420,430],[590,790,420,430],[1060,790,420,430]]},I:{name:'Layout I',size:'4x6',poses:3,w:1600,h:2400,slots:[[120,130,650,540],[120,720,650,540],[820,720,650,540]]},J:{name:'Layout J',size:'4x6',poses:3,w:1600,h:2400,slots:[[120,130,650,540],[820,130,650,540],[120,720,650,540]]},K:{name:'Layout K',size:'4x6',poses:2,w:1600,h:2400,slots:[[120,140,650,540],[120,730,650,540]]}};
+let localStream=null,pc=null,peerId=null,yourId=null,roomId=getRoom(),localReady=false,remoteReady=false,connected=false,remoteName='Friend',localPhotos=[],remotePhotos=[];
+const peerConfig={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
+function getRoom(){const p=location.pathname.split('/').filter(Boolean);if(p[0]==='room'&&p[1])return p[1];const id=Math.random().toString(36).slice(2,8).toUpperCase();history.replaceState(null,'',`/room/${id}`);return id}
+function getName(){return nameInput.value.trim()||'Me'}function layout(){return L[layoutSelect.value]||L.B}function setStatus(t,m){statusTitle.textContent=t;statusEl.textContent=m}function badge(el,t,c=''){el.textContent=t;el.className=c}function updatePoseNote(){const l=layout();poseNote.textContent=tr('note',{key:layoutSelect.value,poses:l.poses,plural:l.poses>1?'s':'',seconds:timerSelect.value})}
+async function copyLink(){try{await navigator.clipboard.writeText(shareLink.value);copyLinkBtn.textContent=tr('copied');setTimeout(()=>copyLinkBtn.textContent=tr('copyLink'),1200)}catch{shareLink.select();document.execCommand('copy')}}
+function updateModeUI(){const one=modeSelect.value==='one';friendCard.classList.toggle('hidden-mode',one);if(one){setStatus(tr('soloTitle'),tr('soloStatus'));remoteReady=false;connected=false;friendDot.classList.remove('on')}else setStatus(tr('twoTitle'),tr('twoStatus'))}
+async function startCameraAndJoin(){try{setStatus(tr('starting'),tr('allow'));localStream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:960},facingMode:'user'},audio:true});localVideo.srcObject=localStream;localOverlay.classList.add('hidden');localNameLabel.textContent=getName();badge(localBadge,tr('live'),'good');localSub.textContent=tr('cameraReady');youDot.classList.add('on');socket.emit('join-room',{roomId,name:getName()});startBtn.disabled=true;readyBtn.disabled=false;setStatus(tr('joined'),modeSelect.value==='two'?tr('sendFriend'):tr('pressSolo'));updateShootButton()}catch(e){console.error(e);setStatus(tr('blockedTitle'),tr('blockedMsg'));badge(localBadge,tr('blocked'),'warn')}}
+function makePC(){pc=new RTCPeerConnection(peerConfig);localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));pc.ontrack=e=>{remoteVideo.srcObject=e.streams[0];remoteOverlay.classList.add('hidden');connected=true;friendDot.classList.add('on');badge(remoteBadge,remoteReady?tr('ready'):tr('connected'),remoteReady?'ready':'good');remoteSub.textContent=remoteReady?tr('friendReady'):tr('friendConnected');setStatus(tr('connectedTitle'),tr('connectedMsg'));updateShootButton()};pc.onicecandidate=e=>{if(e.candidate&&peerId)socket.emit('signal',{to:peerId,data:{type:'candidate',candidate:e.candidate}})};pc.onconnectionstatechange=()=>{if(pc.connectionState==='connected'){connected=true;updateShootButton()}if(['failed','disconnected','closed'].includes(pc.connectionState)){connected=false;friendDot.classList.remove('on');badge(remoteBadge,tr('disconnected'),'warn');remoteSub.textContent=tr('lost');remoteOverlay.classList.remove('hidden');updateShootButton()}}}
+async function makeOffer(){const offer=await pc.createOffer();await pc.setLocalDescription(offer);socket.emit('signal',{to:peerId,data:{type:'offer',offer}})}
+async function handleSignal({from,data}){peerId=from;if(!pc)makePC();if(data.type==='offer'){await pc.setRemoteDescription(new RTCSessionDescription(data.offer));const answer=await pc.createAnswer();await pc.setLocalDescription(answer);socket.emit('signal',{to:peerId,data:{type:'answer',answer}})}if(data.type==='answer')await pc.setRemoteDescription(new RTCSessionDescription(data.answer));if(data.type==='candidate')try{await pc.addIceCandidate(new RTCIceCandidate(data.candidate))}catch(e){console.error(e)}}
+function toggleReady(){localReady=!localReady;readyBtn.textContent=localReady?tr('readyDone'):tr('imReady');badge(localBadge,localReady?tr('ready'):tr('live'),localReady?'ready':'good');localSub.textContent=localReady?tr('youReady'):tr('cameraReady');socket.emit('set-ready',{ready:localReady});updateShootButton()}
+function updateShootButton(){if(!localStream||!localReady)return shootBtn.disabled=true;if(modeSelect.value==='one')return shootBtn.disabled=false;shootBtn.disabled=!(connected&&remoteReady)}
+function requestShoot(){resetPhotos(false);const l=layout();socket.emit('request-shoot',{seconds:+timerSelect.value,poses:l.poses,mode:modeSelect.value})}
+function handleState(s){if(!s)return;const ids=Object.keys(s.names||{}),other=ids.find(id=>id!==yourId);if(other){remoteName=s.names[other]||'Friend';remoteNameLabel.textContent=remoteName}if(yourId&&s.ready)remoteReady=other?!!s.ready[other]:false;if(remoteReady){badge(remoteBadge,tr('ready'),'ready');remoteSub.textContent=tr('friendReady')}else if(connected){badge(remoteBadge,tr('connected'),'good');remoteSub.textContent=tr('friendConnected')}updateShootButton()}
+socket.on('room-joined',s=>{yourId=s.yourId;handleState(s);if(s.userCount===1&&modeSelect.value==='two')setStatus(tr('waitingTitle'),tr('copySend'))});socket.on('room-state',handleState);socket.on('waiting-for-peer',()=>{if(modeSelect.value==='two'){badge(remoteBadge,tr('waiting'),'warn');remoteSub.textContent=tr('waitingForFriend')}});socket.on('peer-ready',async({peerId:id,shouldCreateOffer,state})=>{peerId=id;handleState(state);if(modeSelect.value==='one')return;setStatus(tr('connectingTitle'),tr('connectingMsg'));badge(remoteBadge,tr('connecting'),'warn');remoteSub.textContent=tr('connecting')+'...';if(!pc)makePC();if(shouldCreateOffer)await makeOffer()});socket.on('signal',handleSignal);socket.on('room-full',()=>{setStatus(tr('roomFull'),tr('roomFullMsg'));startBtn.disabled=true});socket.on('peer-left',s=>{handleState(s);connected=false;remoteReady=false;friendDot.classList.remove('on');badge(remoteBadge,tr('left'),'warn');remoteSub.textContent=tr('friendLeft');remoteOverlay.classList.remove('hidden');updateShootButton()});socket.on('not-ready',({message})=>setStatus(tr('notReadyTitle'),message||tr('pressReadyFirst')));
+socket.on('shoot-start',async({startAt,seconds,poses,mode,state})=>{handleState(state);resetPhotos(false);await sleep(Math.max(0,startAt-Date.now()));localPhotos=await captureSequence(poses,seconds);if(mode==='two')socket.emit('photos-captured',{images:localPhotos,name:getName()});else remotePhotos=[];tryRenderFinal()});socket.on('peer-photos',({images,name})=>{remotePhotos=Array.isArray(images)?images:[];if(name){remoteName=name;remoteNameLabel.textContent=remoteName}tryRenderFinal()});
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}async function captureSequence(n,sec){const arr=[];for(let p=1;p<=n;p++){await runCountdown(sec,p,n);arr.push(capture(localVideo,true));setStatus(tr('captured'),tr('poseCaptured',{pose:p,total:n}));await sleep(350)}return arr}async function runCountdown(sec,p,n){countdownPose.textContent=`Pose ${p} / ${n}`;countdownEl.classList.remove('hidden');for(let i=sec;i>0;i--){countdownText.textContent=i;await sleep(1000)}countdownText.textContent='CHEESE';await sleep(450);countdownEl.classList.add('hidden')}
+function filter(){let v=filterSelect.value;if(v==='contrast')return'contrast(132%) saturate(118%)';if(v==='boothbw')return'grayscale(100%) contrast(145%) brightness(94%) sepia(12%)';if(v==='oldbw')return'grayscale(100%) contrast(120%) brightness(96%)';if(v==='vintage')return'sepia(45%) contrast(112%) saturate(82%) brightness(96%)';if(v==='soft')return'brightness(110%) contrast(92%) saturate(90%)';return'none'}
+function capture(video,mirror=false){const c=document.createElement('canvas');c.width=1200;c.height=900;const t=c.getContext('2d');t.filter=filter();if(mirror){t.translate(c.width,0);t.scale(-1,1)}t.drawImage(video,0,0,c.width,c.height);if(filterSelect.value==='boothbw'){let img=t.getImageData(0,0,c.width,c.height);for(let i=0;i<img.data.length;i+=4){let g=(Math.random()-.5)*22;img.data[i]+=g;img.data[i+1]+=g;img.data[i+2]+=g}t.putImageData(img,0,0)}return c.toDataURL('image/jpeg',.92)}function load(src){return new Promise(r=>{const im=new Image;im.onload=()=>r(im);im.src=src})}
+async function tryRenderFinal(){const l=layout();if(modeSelect.value==='two'&&(localPhotos.length<l.poses||remotePhotos.length<l.poses)){badge(resultBadge,tr('waiting'),'warn');resultSub.textContent=tr('waitingSets');return}if(localPhotos.length<l.poses)return;const li=await Promise.all(localPhotos.map(load)),ri=await Promise.all(remotePhotos.map(load));drawFinal(li,ri);downloadLink.href=finalCanvas.toDataURL('image/png');downloadLink.classList.remove('disabled');badge(resultBadge,tr('ready'),'good');resultSub.textContent=tr('finalReady');resetBtn.disabled=false}function drawIfReady(){if(!localPhotos.length)return drawEmptyFrame();tryRenderFinal()}function resetPhotos(redraw=true){localPhotos=[];remotePhotos=[];downloadLink.classList.add('disabled');downloadLink.removeAttribute('href');resetBtn.disabled=true;badge(resultBadge,tr('notReady'));resultSub.textContent=tr('resultHint');if(redraw)drawEmptyFrame()}
+function setup(l){finalCanvas.width=l.w;finalCanvas.height=l.h;ctx.setTransform(1,0,0,1,0,0)}function paper(l){ctx.fillStyle='#050505';ctx.fillRect(0,0,l.w,l.h);ctx.fillStyle='#15110d';for(let i=0;i<5000;i++){ctx.globalAlpha=Math.random()*.07;ctx.fillRect(Math.random()*l.w,Math.random()*l.h,1.5,1.5)}ctx.globalAlpha=1}function drawEmptyFrame(){const l=layout();setup(l);paper(l);l.slots.forEach((s,i)=>slot(s,`Pose ${i+1}`));brand(l)}function slot(s,txt){let[x,y,w,h]=s;ctx.fillStyle='#fffdf5';ctx.fillRect(x,y,w,h);ctx.strokeStyle='#080808';ctx.lineWidth=12;ctx.strokeRect(x,y,w,h);ctx.fillStyle='#766b5f';ctx.textAlign='center';ctx.font=`bold ${Math.max(24,Math.min(w,h)*.08)}px Arial`;ctx.fillText(txt,x+w/2,y+h/2)}function order(li,ri,n){if(modeSelect.value==='one'||!ri.length)return Array.from({length:n},(_,i)=>li[i%li.length]);let a=[];for(let i=0;i<n;i++)a.push(i%2?ri[Math.floor(i/2)%ri.length]:li[Math.floor(i/2)%li.length]);return a}
+function drawFinal(li,ri){const l=layout();setup(l);paper(l);let imgs=order(li,ri,l.poses);l.slots.forEach((s,i)=>{cover(imgs[i%imgs.length],...s);ctx.strokeStyle='#080808';ctx.lineWidth=12;ctx.strokeRect(...s)});brand(l)}function cover(img,x,y,w,h){let ir=img.width/img.height,br=w/h,sx=0,sy=0,sw=img.width,sh=img.height;if(ir>br){sw=img.height*br;sx=(img.width-sw)/2}else{sh=img.width/br;sy=(img.height-sh)/2}ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);let g=ctx.createRadialGradient(x+w/2,y+h/2,Math.min(w,h)*.1,x+w/2,y+h/2,Math.max(w,h)*.65);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(0,0,0,.22)');ctx.fillStyle=g;ctx.fillRect(x,y,w,h)}function brand(l){let strip=l.size==='2x6',y1=strip?l.h-295:l.h-330,y2=strip?l.h-220:l.h-245,y3=strip?l.h-155:l.h-175;ctx.textAlign='center';ctx.fillStyle='#fff8ea';ctx.font=`900 ${strip?72:110}px Arial`;ctx.fillText('CHEEZY',l.w/2,y1);ctx.fillStyle='#a9dcf7';ctx.font=`bold ${strip?30:48}px Arial`;ctx.fillText('by Billy',l.w/2,y2);ctx.fillStyle='#b88a5a';ctx.font=`${strip?22:34}px Arial`;ctx.fillText(new Date().toLocaleDateString(),l.w/2,y3)}
 
-function getLangBtn() {
-  let btn = document.getElementById("languageBtn");
-
-  if (!btn) {
-    btn = document.createElement("button");
-    btn.id = "languageBtn";
-    btn.className = "lang-btn";
-    btn.type = "button";
-
-    const room = document.getElementById("roomChip");
-    if (room && room.parentElement) {
-      room.parentElement.insertBefore(btn, room);
-    } else {
-      document.body.prepend(btn);
-    }
-  }
-
-  btn.style.pointerEvents = "auto";
-  btn.style.cursor = "pointer";
-  btn.style.zIndex = "999999";
-  btn.style.position = "relative";
-
-  return btn;
-}
-
-function setLabel(controlId, text) {
-  const el = document.getElementById(controlId);
-  if (!el) return;
-
-  const label = el.closest("label");
-  if (!label) return;
-
-  for (const node of label.childNodes) {
-    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-      node.textContent = text;
-      break;
-    }
-  }
-}
-
-function setText(id, text) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = text;
-}
-
-function applyCheezyLanguage() {
-  const T = CHEEZY_TEXT[cheezyLang];
-  const btn = getLangBtn();
-
-  btn.textContent = T.btn;
-
-  const hero = document.querySelector("[data-i18n='heroTitle']");
-  if (hero) hero.textContent = T.heroTitle;
-
-  setLabel("nameInput", T.name);
-  setLabel("modeSelect", T.mode);
-  setLabel("layoutSelect", T.layout);
-  setLabel("filterSelect", T.filter);
-  setLabel("timerSelect", T.timer);
-  setLabel("shareLink", T.share);
-
-  setText("copyLinkBtn", T.copy);
-  setText("startBtn", T.startJoin);
-
-  if (!readyBtn.disabled && localReady) {
-    readyBtn.textContent = T.readyDone;
-  } else {
-    setText("readyBtn", T.ready);
-  }
-
-  setText("shootBtn", T.startBooth);
-  setText("resetBtn", T.retake);
-  setText("downloadLink", T.download);
-
-  if (statusTitle.textContent === "Ready to start" || statusTitle.textContent === "Эхлэхэд бэлэн") {
-    statusTitle.textContent = T.readyStart;
-  }
-
-  if (
-    statusEl.textContent.includes("Start your camera") ||
-    statusEl.textContent.includes("Камераа асаана")
-  ) {
-    statusEl.textContent = T.initialStatus;
-  }
-
-  if (
-    localSub.textContent === "Camera not started" ||
-    localSub.textContent === "Камер асаагүй байна"
-  ) {
-    localSub.textContent = T.cameraNotStarted;
-  }
-
-  if (
-    remoteSub.textContent === "Waiting for friend" ||
-    remoteSub.textContent === "Найзыгаа хүлээж байна"
-  ) {
-    remoteSub.textContent = T.waitingFriend;
-  }
-
-  if (
-    localOverlay.textContent === "Start camera" ||
-    localOverlay.textContent === "Камераа асаах"
-  ) {
-    localOverlay.textContent = T.startCamera;
-  }
-
-  if (
-    remoteOverlay.textContent === "Send room link" ||
-    remoteOverlay.textContent === "Холбоосоо явуулна уу"
-  ) {
-    remoteOverlay.textContent = T.sendRoom;
-  }
-
-  const finalTitle = document.querySelector("[data-i18n='finalPrint']");
-  if (finalTitle) finalTitle.textContent = T.finalPrint;
-
-  if (
-    resultSub.textContent.includes("Choose layout") ||
-    resultSub.textContent.includes("Загвар")
-  ) {
-    resultSub.textContent = T.resultHint;
-  }
-
-  if (localBadge.textContent === "offline" || localBadge.textContent === "асаагүй") {
-    localBadge.textContent = T.offline;
-  }
-
-  if (remoteBadge.textContent === "waiting" || remoteBadge.textContent === "хүлээж байна") {
-    remoteBadge.textContent = T.waiting;
-  }
-
-  if (resultBadge.textContent === "not ready" || resultBadge.textContent === "бэлэн биш") {
-    resultBadge.textContent = T.notReady;
-  }
-
-  const modeOptions = modeSelect.options;
-  if (modeOptions.length >= 2) {
-    modeOptions[0].textContent = T.onePerson;
-    modeOptions[1].textContent = T.twoPeople;
-  }
-
-  const filterOptions = filterSelect.options;
-  if (filterOptions.length >= 6) {
-    filterOptions[0].textContent = T.noFilter;
-    filterOptions[1].textContent = T.contrast;
-    filterOptions[2].textContent = T.boothbw;
-    filterOptions[3].textContent = T.oldbw;
-    filterOptions[4].textContent = T.vintage;
-    filterOptions[5].textContent = T.soft;
-  }
-}
-
-getLangBtn().onclick = function () {
-  cheezyLang = cheezyLang === "en" ? "mn" : "en";
-  localStorage.setItem("cheezyLang", cheezyLang);
-  applyCheezyLanguage();
-};
-
-applyCheezyLanguage();
+shareLink.value=`${location.origin}/room/${roomId}`;roomChip.textContent=`Room ${roomId}`;
+languageBtn.onclick=()=>{lang=lang==='en'?'mn':'en';localStorage.setItem('cheezyLang',lang);applyLang();updateModeUI()};
+startBtn.onclick=startCameraAndJoin;copyLinkBtn.onclick=copyLink;readyBtn.onclick=toggleReady;shootBtn.onclick=requestShoot;resetBtn.onclick=()=>resetPhotos(true);modeSelect.onchange=()=>{updateModeUI();resetPhotos(true);updateShootButton()};layoutSelect.onchange=()=>{updatePoseNote();resetPhotos(true)};filterSelect.onchange=drawIfReady;timerSelect.onchange=updatePoseNote;nameInput.oninput=()=>{localNameLabel.textContent=getName();drawIfReady();socket.emit('update-profile',{name:getName()})};
+applyLang();updateModeUI();updatePoseNote();drawEmptyFrame();

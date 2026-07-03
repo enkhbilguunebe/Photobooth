@@ -1,27 +1,18 @@
-# Cheezy by Billy Photo Booth
+# Cheezy by Billy v6 Clean
 
-Updates included:
-- App renamed to **Cheezy by Billy**
-- Countdown fixed with a very high overlay so it appears above the frames
-- Added **Vintage booth B/W** filter inspired by old high-contrast photo booth prints
-- Added red curtain / old photo booth background
-- Added layout choices A-K
-- Added automatic back-to-back shooting: the selected layout decides how many poses are taken
+Full clean replacement ZIP.
 
-Run locally:
-```bash
-npm install
-npm start
-```
+Includes:
+- English/Mongolian language switch
+- Share link stays visible
+- Natural Mongolian translations
+- 1-person and 2-person modes
+- A-K layouts
+- 2-person shared strip/frame alternating: You, Friend, You, Friend
+- Vintage B/W filter
+- Red curtain background
+- Fixed visible countdown
 
-Render settings:
-```text
+Render:
 Build Command: npm install
 Start Command: npm start
-```
-
-
-## Bilingual / strip update
-- Added English/Mongolian language button.
-- Hero banner now only says: "Let's get Cheezy".
-- In 2-person mode, the chosen strip/layout is one shared print; both people's photos alternate inside the same strip/frame.

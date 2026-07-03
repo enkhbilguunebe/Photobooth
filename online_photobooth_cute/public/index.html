@@ -1,18 +1,98 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Cheezy by Billy</title><link rel="stylesheet" href="/style.css"></head><body><main class="app"><header class="top">
-  <div class="brand">
-    <b>CB</b>
-    <span>
-      <strong>Cheezy by Billy</strong>
-      <small>vintage online photo booth</small>
-    </span>
-  </div>
-
-  <div class="top-actions">
-    <button id="languageBtn" class="lang-btn" type="button">MN</button>
-    <span id="roomChip" class="chip">Room</span>
-  </div>
-</header><section class="hero">
-      <div class="hero-copy simple-hero">
-        <h1 data-i18n="heroTitle">Let’s get Cheezy</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheezy by Billy</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="brand">
+        <b>CB</b>
+        <span>
+          <strong>Cheezy by Billy</strong>
+          <small data-i18n="tagline">vintage online photo booth</small>
+        </span>
       </div>
-    </section><section class="panel settings"><label>Name<input id="nameInput" maxlength="18" value="Me"></label><label>Mode<select id="modeSelect"><option value="one">1 person</option><option value="two" selected>2 people</option></select></label><label class="wide">Layout<select id="layoutSelect"><option value="A">Layout A — 2x6, 3 poses</option><option value="B" selected>Layout B — 2x6, 4 poses</option><option value="C">Layout C — 4x6, 4 poses</option><option value="D">Layout D — 4x6, 1 pose</option><option value="E">Layout E — 4x6, 2 poses</option><option value="F">Layout F — 4x6, 1 pose</option><option value="G">Layout G — 4x6, 2 poses</option><option value="H">Layout H — 4x6, 4 poses</option><option value="I">Layout I — 4x6, 3 poses</option><option value="J">Layout J — 4x6, 3 poses</option><option value="K">Layout K — 4x6, 2 poses</option></select></label><label>Filter<select id="filterSelect"><option value="none">No filter</option><option value="contrast">More contrast</option><option value="boothbw" selected>Vintage booth B/W</option><option value="oldbw">Old black & white</option><option value="vintage">Retro warm</option><option value="soft">Soft pastel</option></select></label><label>Seconds each pose<select id="timerSelect"><option value="3" selected>3 seconds</option><option value="5">5 seconds</option><option value="7">7 seconds</option></select></label></section><section class="panel share"><label>Send this room link<input id="shareLink" readonly></label><button id="copyLinkBtn" class="ghost">Copy link</button></section><section class="status"><div><b id="statusTitle">Ready to start</b><p id="status" data-i18n="initialStatus">Start your camera. In 2-person mode, send the room link to your friend.</p></div><div><i id="youDot"></i><i id="friendDot"></i></div></section><section class="videos"><article class="card"><header><div><h2 id="localNameLabel">You</h2><p id="localSub" data-i18n="cameraNotStarted">Camera not started</p></div><em id="localBadge">offline</em></header><div class="frame"><video id="localVideo" autoplay playsinline muted></video><div id="localOverlay">Start camera</div></div></article><article class="card" id="friendCard"><header><div><h2 id="remoteNameLabel">Friend</h2><p id="remoteSub" data-i18n="waitingForFriend">Waiting for friend</p></div><em id="remoteBadge">waiting</em></header><div class="frame"><video id="remoteVideo" autoplay playsinline></video><div id="remoteOverlay">Send room link</div></div></article></section><section class="panel actions"><button id="startBtn">Start camera & join</button><button id="readyBtn" class="ghost" disabled>I'm ready</button><button id="shootBtn" class="primary" disabled>Start photo booth</button><button id="resetBtn" class="ghost" disabled>Retake</button><p id="poseNote">Layout B will take 4 photos, 3 seconds apart.</p></section><section class="panel result"><header><div><h2 data-i18n="finalPrint">Final booth print</h2><p id="resultSub" data-i18n="resultHint">Choose layout and filter, then start the booth.</p></div><em id="resultBadge">not ready</em></header><canvas id="finalCanvas" width="800" height="2400"></canvas><a id="downloadLink" class="download disabled" download="cheezy-by-billy.png" data-i18n="downloadPng">Download PNG</a></section></main><div id="countdown" class="countdown hidden"><span id="countdownText">3</span><small id="countdownPose">Pose 1</small></div><script src="/socket.io/socket.io.js"></script><script src="/script.js"></script></body></html>
+
+      <div class="top-actions">
+        <button id="languageBtn" class="lang-btn" type="button">MN</button>
+        <span id="roomChip" class="chip">Room</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1 data-i18n="heroTitle">Let’s get Cheezy</h1>
+    </section>
+
+    <section class="panel settings">
+      <label><span data-i18n="nameLabel">Name</span><input id="nameInput" maxlength="18" value="Me" /></label>
+      <label><span data-i18n="modeLabel">Mode</span><select id="modeSelect"><option value="one" data-i18n="modeOne">1 person</option><option value="two" data-i18n="modeTwo" selected>2 people</option></select></label>
+      <label class="wide"><span data-i18n="layoutLabel">Layout</span><select id="layoutSelect">
+        <option value="A">Layout A — 2x6, 3 poses</option>
+        <option value="B" selected>Layout B — 2x6, 4 poses</option>
+        <option value="C">Layout C — 4x6, 4 poses</option>
+        <option value="D">Layout D — 4x6, 1 pose</option>
+        <option value="E">Layout E — 4x6, 2 poses</option>
+        <option value="F">Layout F — 4x6, 1 pose</option>
+        <option value="G">Layout G — 4x6, 2 poses</option>
+        <option value="H">Layout H — 4x6, 4 poses</option>
+        <option value="I">Layout I — 4x6, 3 poses</option>
+        <option value="J">Layout J — 4x6, 3 poses</option>
+        <option value="K">Layout K — 4x6, 2 poses</option>
+      </select></label>
+      <label><span data-i18n="filterLabel">Filter</span><select id="filterSelect">
+        <option value="none" data-i18n="filterNone">No filter</option>
+        <option value="contrast" data-i18n="filterContrast">More contrast</option>
+        <option value="boothbw" data-i18n="filterBoothBw" selected>Vintage booth B/W</option>
+        <option value="oldbw" data-i18n="filterOldBw">Old black & white</option>
+        <option value="vintage" data-i18n="filterVintage">Retro warm</option>
+        <option value="soft" data-i18n="filterSoft">Soft pastel</option>
+      </select></label>
+      <label><span data-i18n="timerLabel">Seconds each pose</span><select id="timerSelect"><option value="3" data-i18n="timer3" selected>3 seconds</option><option value="5" data-i18n="timer5">5 seconds</option><option value="7" data-i18n="timer7">7 seconds</option></select></label>
+    </section>
+
+    <section class="panel share">
+      <label><span data-i18n="shareLabel">Send this room link</span><input id="shareLink" readonly /></label>
+      <button id="copyLinkBtn" class="ghost" type="button" data-i18n="copyLink">Copy link</button>
+    </section>
+
+    <section class="status">
+      <div><b id="statusTitle" data-i18n="readyToStart">Ready to start</b><p id="status" data-i18n="initialStatus">Start your camera. In 2-person mode, send the room link to your friend.</p></div>
+      <div class="dots"><i id="youDot"></i><i id="friendDot"></i></div>
+    </section>
+
+    <section class="videos">
+      <article class="card">
+        <header><div><h2 id="localNameLabel" data-i18n="youTitle">You</h2><p id="localSub" data-i18n="cameraNotStarted">Camera not started</p></div><em id="localBadge" data-i18n="offline">offline</em></header>
+        <div class="frame"><video id="localVideo" autoplay playsinline muted></video><div id="localOverlay" data-i18n="startCameraShort">Start camera</div></div>
+      </article>
+
+      <article class="card" id="friendCard">
+        <header><div><h2 id="remoteNameLabel" data-i18n="friendTitle">Friend</h2><p id="remoteSub" data-i18n="waitingForFriend">Waiting for friend</p></div><em id="remoteBadge" data-i18n="waiting">waiting</em></header>
+        <div class="frame"><video id="remoteVideo" autoplay playsinline></video><div id="remoteOverlay" data-i18n="sendRoomLink">Send room link</div></div>
+      </article>
+    </section>
+
+    <section class="panel actions">
+      <button id="startBtn" type="button" data-i18n="startJoin">Start camera & join</button>
+      <button id="readyBtn" class="ghost" type="button" disabled data-i18n="imReady">I'm ready</button>
+      <button id="shootBtn" class="primary" type="button" disabled data-i18n="startBooth">Start photo booth</button>
+      <button id="resetBtn" class="ghost" type="button" disabled data-i18n="retake">Retake</button>
+      <p id="poseNote">Layout B will take 4 photos, 3 seconds apart.</p>
+    </section>
+
+    <section class="panel result">
+      <header><div><h2 data-i18n="finalPrint">Final booth print</h2><p id="resultSub" data-i18n="resultHint">Choose layout and filter, then start the booth.</p></div><em id="resultBadge" data-i18n="notReady">not ready</em></header>
+      <canvas id="finalCanvas" width="800" height="2400"></canvas>
+      <a id="downloadLink" class="download disabled" download="cheezy-by-billy.png" data-i18n="downloadPng">Download PNG</a>
+    </section>
+  </main>
+
+  <div id="countdown" class="countdown hidden"><span id="countdownText">3</span><small id="countdownPose">Pose 1</small></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/script.js"></script>
+</body>
+</html>
