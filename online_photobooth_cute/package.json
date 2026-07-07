@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v7-live-preview",
-  "version": "7.0.0",
-  "description": "Cheezy by Billy with live two-person preview before shooting.",
+  "name": "cheezy-by-billy-v8-stable",
+  "version": "8.0.0",
+  "description": "Stable Cheezy by Billy online photo booth with improved 2-person WebRTC connection and shoot flow.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

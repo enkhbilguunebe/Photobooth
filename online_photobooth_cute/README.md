@@ -1,25 +1,18 @@
-# Cheezy by Billy v6 Clean
+# Cheezy by Billy v8 Stable
 
-Full clean replacement ZIP.
+Fixes:
+- 2-person Start photo booth button logic fixed.
+- Button enables only when both videos are truly connected and both users are ready.
+- Server tracks peer-connected state.
+- Live together preview included.
+- Reduced shooting delay with server timestamp sync.
+- 2-second timer option added.
+- Reconnection state handling improved.
 
-Includes:
-- English/Mongolian language switch
-- Share link stays visible
-- Natural Mongolian translations
-- 1-person and 2-person modes
-- A-K layouts
-- 2-person shared strip/frame alternating: You, Friend, You, Friend
-- Vintage B/W filter
-- Red curtain background
-- Fixed visible countdown
+Important:
+- True zero-delay is impossible across the internet.
+- If two users are far away and video does not connect on some Wi-Fi/cellular networks, you need a TURN server for production WebRTC reliability.
 
 Render:
 Build Command: npm install
 Start Command: npm start
-
-
-## v7 Live preview update
-- Added a large live together preview canvas.
-- In 2-person mode, both cameras appear live before shooting.
-- If the friend's camera does not appear, WebRTC is not connected yet. Both users must open the same room link and click Start camera & join.
-- For far-away users on strict networks, add a TURN server for reliable WebRTC.

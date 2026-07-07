@@ -5,9 +5,12 @@ const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
-  maxHttpBufferSize: 24e6,
-  cors: { origin: "*", methods: ["GET", "POST"] }
+  maxHttpBufferSize: 30e6,
+  cors: { origin: "*", methods: ["GET", "POST"] },
+  pingTimeout: 30000,
+  pingInterval: 10000
 });
 
 const PORT = process.env.PORT || 3000;
@@ -20,70 +23,114 @@ app.get("/room/:roomId", (req, res) => {
 });
 
 function getRoom(roomId) {
-  if (!rooms.has(roomId)) rooms.set(roomId, { users: [], names: {}, ready: {} });
+  if (!rooms.has(roomId)) {
+    rooms.set(roomId, { users: [], names: {}, ready: {}, connected: {}, shooting: false });
+  }
   return rooms.get(roomId);
 }
 
-function getState(roomId) {
-  const room = getRoom(roomId);
-  return { roomId, userCount: room.users.length, names: room.names, ready: room.ready };
+function state(roomId) {
+  const r = getRoom(roomId);
+  return {
+    roomId,
+    userCount: r.users.length,
+    names: r.names,
+    ready: r.ready,
+    connected: r.connected,
+    shooting: r.shooting
+  };
 }
 
-function leaveRoom(socket) {
+function leave(socket) {
   const roomId = socket.data.roomId;
   if (!roomId || !rooms.has(roomId)) return;
 
-  const room = rooms.get(roomId);
-  room.users = room.users.filter(id => id !== socket.id);
-  delete room.names[socket.id];
-  delete room.ready[socket.id];
+  const r = rooms.get(roomId);
+  r.users = r.users.filter(id => id !== socket.id);
+  delete r.names[socket.id];
+  delete r.ready[socket.id];
+  delete r.connected[socket.id];
+  r.shooting = false;
 
-  if (room.users.length === 0) rooms.delete(roomId);
-  else io.to(roomId).emit("peer-left", getState(roomId));
+  if (r.users.length === 0) {
+    rooms.delete(roomId);
+  } else {
+    io.to(roomId).emit("peer-left", state(roomId));
+  }
 }
 
 io.on("connection", socket => {
   socket.on("join-room", ({ roomId, name }) => {
     if (!roomId) return;
-    const room = getRoom(roomId);
 
-    if (room.users.length >= 2 && !room.users.includes(socket.id)) {
+    const r = getRoom(roomId);
+
+    if (r.users.length >= 2 && !r.users.includes(socket.id)) {
       socket.emit("room-full");
       return;
     }
 
-    if (!room.users.includes(socket.id)) room.users.push(socket.id);
+    if (!r.users.includes(socket.id)) {
+      r.users.push(socket.id);
+    }
 
     socket.data.roomId = roomId;
     socket.join(roomId);
-    room.names[socket.id] = name || "Guest";
-    room.ready[socket.id] = false;
 
-    socket.emit("room-joined", { ...getState(roomId), yourId: socket.id });
-    socket.to(roomId).emit("room-state", getState(roomId));
+    r.names[socket.id] = name || "Guest";
+    r.ready[socket.id] = false;
+    r.connected[socket.id] = false;
+    r.shooting = false;
 
-    if (room.users.length === 1) {
-      socket.emit("waiting-for-peer", getState(roomId));
+    socket.emit("room-joined", { ...state(roomId), yourId: socket.id });
+    socket.to(roomId).emit("room-state", state(roomId));
+
+    if (r.users.length === 1) {
+      socket.emit("waiting-for-peer", state(roomId));
       return;
     }
 
-    const [first, second] = room.users;
-    io.to(first).emit("peer-ready", { peerId: second, shouldCreateOffer: true, state: getState(roomId) });
-    io.to(second).emit("peer-ready", { peerId: first, shouldCreateOffer: false, state: getState(roomId) });
+    const [a, b] = r.users;
+
+    io.to(a).emit("peer-ready", {
+      peerId: b,
+      shouldCreateOffer: true,
+      state: state(roomId)
+    });
+
+    io.to(b).emit("peer-ready", {
+      peerId: a,
+      shouldCreateOffer: false,
+      state: state(roomId)
+    });
   });
 
   socket.on("update-profile", ({ name }) => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
     getRoom(roomId).names[socket.id] = name || "Guest";
-    io.to(roomId).emit("room-state", getState(roomId));
+    io.to(roomId).emit("room-state", state(roomId));
   });
 
   socket.on("set-ready", ({ ready }) => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
     getRoom(roomId).ready[socket.id] = Boolean(ready);
-    io.to(roomId).emit("room-state", getState(roomId));
+    io.to(roomId).emit("room-state", state(roomId));
+  });
+
+  socket.on("peer-connected", () => {
+    const roomId = socket.data.roomId;
+    if (!roomId || !rooms.has(roomId)) return;
+    getRoom(roomId).connected[socket.id] = true;
+    io.to(roomId).emit("room-state", state(roomId));
+  });
+
+  socket.on("peer-disconnected", () => {
+    const roomId = socket.data.roomId;
+    if (!roomId || !rooms.has(roomId)) return;
+    getRoom(roomId).connected[socket.id] = false;
+    io.to(roomId).emit("room-state", state(roomId));
   });
 
   socket.on("signal", ({ to, data }) => {
@@ -95,38 +142,60 @@ io.on("connection", socket => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
 
-    const room = getRoom(roomId);
+    const r = getRoom(roomId);
     poses = Math.max(1, Math.min(Number(poses) || 4, 4));
     seconds = Math.max(1, Math.min(Number(seconds) || 3, 10));
 
+    if (r.shooting) {
+      socket.emit("not-ready", { message: "A shoot is already running." });
+      return;
+    }
+
     if (mode === "two") {
-      const bothReady = room.users.length === 2 && room.users.every(id => room.ready[id]);
-      if (!bothReady) {
-        socket.emit("not-ready", { message: "Both people must be connected and ready." });
+      const twoUsers = r.users.length === 2;
+      const bothReady = twoUsers && r.users.every(id => r.ready[id]);
+      const bothConnected = twoUsers && r.users.every(id => r.connected[id]);
+
+      if (!twoUsers) {
+        socket.emit("not-ready", { message: "Wait until your friend joins." });
         return;
       }
 
+      if (!bothConnected) {
+        socket.emit("not-ready", { message: "Live connection is not ready yet. Wait until both videos show live." });
+        return;
+      }
+
+      if (!bothReady) {
+        socket.emit("not-ready", { message: "Both people must press Ready." });
+        return;
+      }
+
+      r.shooting = true;
+
       io.to(roomId).emit("shoot-start", {
-        startAt: Date.now() + 1000,
+        startAt: Date.now() + 900,
         seconds,
         poses,
         mode: "two",
-        state: getState(roomId)
+        state: state(roomId)
       });
       return;
     }
 
-    if (!room.ready[socket.id]) {
+    if (!r.ready[socket.id]) {
       socket.emit("not-ready", { message: "Press Ready first." });
       return;
     }
 
+    r.shooting = true;
+
     socket.emit("shoot-start", {
-      startAt: Date.now() + 700,
+      startAt: Date.now() + 500,
       seconds,
       poses,
       mode: "one",
-      state: getState(roomId)
+      state: state(roomId)
     });
   });
 
@@ -136,9 +205,24 @@ io.on("connection", socket => {
     socket.to(roomId).emit("peer-photos", { images, name: name || "Friend" });
   });
 
-  socket.on("disconnect", () => leaveRoom(socket));
+  socket.on("shoot-complete", () => {
+    const roomId = socket.data.roomId;
+    if (!roomId || !rooms.has(roomId)) return;
+    getRoom(roomId).shooting = false;
+    io.to(roomId).emit("room-state", state(roomId));
+  });
+
+  socket.on("reset-ready", () => {
+    const roomId = socket.data.roomId;
+    if (!roomId || !rooms.has(roomId)) return;
+    const r = getRoom(roomId);
+    r.shooting = false;
+    io.to(roomId).emit("room-state", state(roomId));
+  });
+
+  socket.on("disconnect", () => leave(socket));
 });
 
 server.listen(PORT, () => {
-  console.log(`Cheezy by Billy v6 running on http://localhost:${PORT}`);
+  console.log(`Cheezy by Billy v8 Stable running on http://localhost:${PORT}`);
 });

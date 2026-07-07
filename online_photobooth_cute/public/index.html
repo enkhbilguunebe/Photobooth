@@ -16,7 +16,6 @@
           <small data-i18n="tagline">vintage online photo booth</small>
         </span>
       </div>
-
       <div class="top-actions">
         <button id="languageBtn" class="lang-btn" type="button">MN</button>
         <span id="roomChip" class="chip">Room</span>
@@ -51,7 +50,7 @@
         <option value="vintage" data-i18n="filterVintage">Retro warm</option>
         <option value="soft" data-i18n="filterSoft">Soft pastel</option>
       </select></label>
-      <label><span data-i18n="timerLabel">Seconds each pose</span><select id="timerSelect"><option value="3" data-i18n="timer3" selected>3 seconds</option><option value="5" data-i18n="timer5">5 seconds</option><option value="7" data-i18n="timer7">7 seconds</option></select></label>
+      <label><span data-i18n="timerLabel">Seconds each pose</span><select id="timerSelect"><option value="2">2 seconds</option><option value="3" data-i18n="timer3" selected>3 seconds</option><option value="5" data-i18n="timer5">5 seconds</option><option value="7" data-i18n="timer7">7 seconds</option></select></label>
     </section>
 
     <section class="panel share">
@@ -60,7 +59,10 @@
     </section>
 
     <section class="status">
-      <div><b id="statusTitle" data-i18n="readyToStart">Ready to start</b><p id="status" data-i18n="initialStatus">Start your camera. In 2-person mode, send the room link to your friend.</p></div>
+      <div>
+        <b id="statusTitle" data-i18n="readyToStart">Ready to start</b>
+        <p id="status" data-i18n="initialStatus">Start your camera. In 2-person mode, send the room link to your friend.</p>
+      </div>
       <div class="dots"><i id="youDot"></i><i id="friendDot"></i></div>
     </section>
 
@@ -78,11 +80,8 @@
 
     <section class="panel live-preview" id="livePreviewPanel">
       <header>
-        <div>
-          <h2 data-i18n="livePreviewTitle">Live together preview</h2>
-          <p id="livePreviewSub" data-i18n="livePreviewHint">In 2-person mode, both cameras appear here live before the photo booth starts.</p>
-        </div>
-        <em id="livePreviewBadge" data-i18n="livePreviewWaiting">waiting</em>
+        <div><h2 data-i18n="livePreviewTitle">Live together preview</h2><p id="livePreviewSub" data-i18n="livePreviewHint">Both live cameras appear here before shooting.</p></div>
+        <em id="livePreviewBadge" data-i18n="waiting">waiting</em>
       </header>
       <canvas id="livePreviewCanvas" width="1280" height="720"></canvas>
     </section>
@@ -91,8 +90,10 @@
       <button id="startBtn" type="button" data-i18n="startJoin">Start camera & join</button>
       <button id="readyBtn" class="ghost" type="button" disabled data-i18n="imReady">I'm ready</button>
       <button id="shootBtn" class="primary" type="button" disabled data-i18n="startBooth">Start photo booth</button>
+      <button id="forceShootBtn" class="ghost hidden" type="button">Force start</button>
       <button id="resetBtn" class="ghost" type="button" disabled data-i18n="retake">Retake</button>
       <p id="poseNote">Layout B will take 4 photos, 3 seconds apart.</p>
+      <p class="connection-note" data-i18n="connectionNote">For 2-person mode: both videos must show live, then both people press Ready.</p>
     </section>
 
     <section class="panel result">
