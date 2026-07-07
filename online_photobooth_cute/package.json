@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v12-clean-fixed",
-  "version": "12.0.0",
-  "description": "Clean fixed Cheezy by Billy with admin/guest controls, server photo exchange, and no live preview section.",
+  "name": "cheezy-by-billy-v13-button-fixed",
+  "version": "13.0.0",
+  "description": "Cheezy by Billy with fixed host start button activation.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

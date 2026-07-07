@@ -26,3 +26,10 @@ Upload these top-level files to GitHub:
 - server.js
 - README.md
 - public/
+
+
+## v13 Start button fix
+- Host Start photo booth button no longer waits for the browser to perfectly detect the guest ready state.
+- Host button activates when host camera is on and host has pressed Ready.
+- When clicked, the server checks whether the guest is ready.
+- If guest is not ready, the host sees a clear message instead of a permanently disabled button.

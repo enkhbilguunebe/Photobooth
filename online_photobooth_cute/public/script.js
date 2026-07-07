@@ -430,17 +430,14 @@ function toggleReady() {
 }
 
 function updateShootButton() {
+  // Host start button should be clickable once the host has camera ON and pressed Ready.
+  // The server will check whether the guest is ready and show a message if not.
   if (!isHost || shooting || !localStream || !localReady) {
     shootBtn.disabled = true;
     return;
   }
 
-  if (modeSelect.value === "one") {
-    shootBtn.disabled = false;
-    return;
-  }
-
-  shootBtn.disabled = !remoteReady;
+  shootBtn.disabled = false;
 }
 
 function requestShoot() {
@@ -454,6 +451,13 @@ function requestShoot() {
   emitSettings();
   resetPhotos(false, false);
   const l = layout();
+
+  if (modeSelect.value === "two") {
+    setStatus("Checking guest", "Starting if both people are ready. If your friend is not ready, I will show a message.");
+  } else {
+    setStatus("Starting", "Get ready for the countdown.");
+  }
+
   socket.emit("request-shoot", { poses: l.poses });
 }
 
