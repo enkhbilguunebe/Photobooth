@@ -16,3 +16,10 @@ Includes:
 Render:
 Build Command: npm install
 Start Command: npm start
+
+
+## v7 Live preview update
+- Added a large live together preview canvas.
+- In 2-person mode, both cameras appear live before shooting.
+- If the friend's camera does not appear, WebRTC is not connected yet. Both users must open the same room link and click Start camera & join.
+- For far-away users on strict networks, add a TURN server for reliable WebRTC.

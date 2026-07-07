@@ -76,6 +76,17 @@
       </article>
     </section>
 
+    <section class="panel live-preview" id="livePreviewPanel">
+      <header>
+        <div>
+          <h2 data-i18n="livePreviewTitle">Live together preview</h2>
+          <p id="livePreviewSub" data-i18n="livePreviewHint">In 2-person mode, both cameras appear here live before the photo booth starts.</p>
+        </div>
+        <em id="livePreviewBadge" data-i18n="livePreviewWaiting">waiting</em>
+      </header>
+      <canvas id="livePreviewCanvas" width="1280" height="720"></canvas>
+    </section>
+
     <section class="panel actions">
       <button id="startBtn" type="button" data-i18n="startJoin">Start camera & join</button>
       <button id="readyBtn" class="ghost" type="button" disabled data-i18n="imReady">I'm ready</button>
