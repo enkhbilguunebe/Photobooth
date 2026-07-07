@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v8-stable",
-  "version": "8.0.0",
-  "description": "Stable Cheezy by Billy online photo booth with improved 2-person WebRTC connection and shoot flow.",
+  "name": "cheezy-by-billy-v9-admin-host",
+  "version": "9.0.0",
+  "description": "Cheezy by Billy with admin host controls and simplified guest mode.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

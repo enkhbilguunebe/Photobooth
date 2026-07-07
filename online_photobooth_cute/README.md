@@ -16,3 +16,11 @@ Important:
 Render:
 Build Command: npm install
 Start Command: npm start
+
+
+## v9 Admin/Guest mode
+- The first person who creates/opens a room is the Host/Admin.
+- Host can choose layout, filter, timer, mode, and start the photo booth.
+- Guest can choose only 1-person/2-person mode, start/join camera, press Ready, retake, and download PNG.
+- In 2-person mode, Guest cannot change layout/filter/timer or start the booth.
+- Host settings sync automatically to the guest.

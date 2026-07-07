@@ -24,7 +24,7 @@ app.get("/room/:roomId", (req, res) => {
 
 function getRoom(roomId) {
   if (!rooms.has(roomId)) {
-    rooms.set(roomId, { users: [], names: {}, ready: {}, connected: {}, shooting: false });
+    rooms.set(roomId, { users: [], names: {}, ready: {}, connected: {}, shooting: false, hostId: null, settings: { mode: 'two', layout: 'B', filter: 'boothbw', seconds: 3 } });
   }
   return rooms.get(roomId);
 }
@@ -37,7 +37,9 @@ function state(roomId) {
     names: r.names,
     ready: r.ready,
     connected: r.connected,
-    shooting: r.shooting
+    shooting: r.shooting,
+    hostId: r.hostId,
+    settings: r.settings
   };
 }
 
@@ -50,6 +52,7 @@ function leave(socket) {
   delete r.names[socket.id];
   delete r.ready[socket.id];
   delete r.connected[socket.id];
+  if (r.hostId === socket.id) r.hostId = r.users[0] || null;
   r.shooting = false;
 
   if (r.users.length === 0) {
@@ -72,6 +75,7 @@ io.on("connection", socket => {
 
     if (!r.users.includes(socket.id)) {
       r.users.push(socket.id);
+      if (!r.hostId) r.hostId = socket.id;
     }
 
     socket.data.roomId = roomId;
@@ -138,13 +142,40 @@ io.on("connection", socket => {
     io.to(to).emit("signal", { from: socket.id, data });
   });
 
+  socket.on("update-settings", ({ settings }) => {
+    const roomId = socket.data.roomId;
+    if (!roomId || !rooms.has(roomId)) return;
+
+    const r = getRoom(roomId);
+    if (socket.id !== r.hostId) return;
+
+    r.settings = {
+      mode: settings?.mode === "one" ? "one" : "two",
+      layout: String(settings?.layout || "B").slice(0, 1),
+      filter: String(settings?.filter || "boothbw"),
+      seconds: Math.max(1, Math.min(Number(settings?.seconds) || 3, 10))
+    };
+
+    io.to(roomId).emit("settings-updated", {
+      settings: r.settings,
+      state: state(roomId)
+    });
+  });
+
   socket.on("request-shoot", ({ mode = "two", poses = 4, seconds = 3 }) => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
 
     const r = getRoom(roomId);
+
+    if (socket.id !== r.hostId) {
+      socket.emit("not-ready", { message: "Only the host can start the booth." });
+      return;
+    }
+
+    mode = r.settings.mode || mode;
+    seconds = Math.max(1, Math.min(Number(r.settings.seconds || seconds) || 3, 10));
     poses = Math.max(1, Math.min(Number(poses) || 4, 4));
-    seconds = Math.max(1, Math.min(Number(seconds) || 3, 10));
 
     if (r.shooting) {
       socket.emit("not-ready", { message: "A shoot is already running." });
