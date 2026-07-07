@@ -185,15 +185,9 @@ io.on("connection", socket => {
     if (mode === "two") {
       const twoUsers = r.users.length === 2;
       const bothReady = twoUsers && r.users.every(id => r.ready[id]);
-      const bothConnected = twoUsers && r.users.every(id => r.connected[id]);
 
       if (!twoUsers) {
         socket.emit("not-ready", { message: "Wait until your friend joins." });
-        return;
-      }
-
-      if (!bothConnected) {
-        socket.emit("not-ready", { message: "Live connection is not ready yet. Wait until both videos show live." });
         return;
       }
 
@@ -255,5 +249,5 @@ io.on("connection", socket => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Cheezy by Billy v8 Stable running on http://localhost:${PORT}`);
+  console.log(`Cheezy by Billy v10 Austria Safe running on http://localhost:${PORT}`);
 });

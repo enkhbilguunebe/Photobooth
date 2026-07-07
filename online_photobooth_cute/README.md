@@ -24,3 +24,18 @@ Start Command: npm start
 - Guest can choose only 1-person/2-person mode, start/join camera, press Ready, retake, and download PNG.
 - In 2-person mode, Guest cannot change layout/filter/timer or start the booth.
 - Host settings sync automatically to the guest.
+
+
+## v10 Austria-safe update
+This version fixes long-distance 2-person photo taking.
+
+Important change:
+- 2-person photo taking no longer requires WebRTC live video to connect.
+- Both people only need to join the same room and press Ready.
+- The host can start the booth even if live video preview fails.
+- Photos are exchanged through the Render Socket.IO server, so Canada ↔ Austria should work better.
+
+Live video note:
+- The live video preview still tries to connect peer-to-peer.
+- If live video does not connect across countries, that is a NAT/firewall issue.
+- For true reliable live video, add a TURN server such as Twilio, Metered, or your own coturn server.

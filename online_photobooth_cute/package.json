@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v9-admin-host",
-  "version": "9.0.0",
-  "description": "Cheezy by Billy with admin host controls and simplified guest mode.",
+  "name": "cheezy-by-billy-v10-austria-safe",
+  "version": "10.0.0",
+  "description": "Cheezy by Billy with server-based 2-person photo fallback for long-distance rooms.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
