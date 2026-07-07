@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v10-austria-safe",
-  "version": "10.0.0",
-  "description": "Cheezy by Billy with server-based 2-person photo fallback for long-distance rooms.",
+  "name": "cheezy-by-billy-v11-turn-based",
+  "version": "11.0.0",
+  "description": "Cheezy by Billy with turn-based 2-person posing and fixed host/guest slot placement.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

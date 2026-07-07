@@ -39,3 +39,9 @@ Live video note:
 - The live video preview still tries to connect peer-to-peer.
 - If live video does not connect across countries, that is a NAT/firewall issue.
 - For true reliable live video, add a TURN server such as Twilio, Metered, or your own coturn server.
+
+
+## v11 Turn-based 2-person posing
+- Slot order is fixed: Host 1, Guest 1, Host 2, Guest 2.
+- Each person only poses on their own turn.
+- Final layout always keeps the host in host slots and the guest in guest slots.
