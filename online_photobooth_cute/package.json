@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v13-button-fixed",
-  "version": "13.0.0",
-  "description": "Cheezy by Billy with fixed host start button activation.",
+  "name": "cheezy-by-billy-v14-scrapbook-design",
+  "version": "14.0.0",
+  "description": "Cheezy by Billy with vintage scrapbook visual design, Einstein logo, animated title, and layout cards.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

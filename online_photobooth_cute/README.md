@@ -33,3 +33,12 @@ Upload these top-level files to GitHub:
 - Host button activates when host camera is on and host has pressed Ready.
 - When clicked, the server checks whether the guest is ready.
 - If guest is not ready, the host sees a clear message instead of a permanently disabled button.
+
+
+## v14 Scrapbook design
+- Added Einstein sticker logo.
+- Removed subtitle under Cheezy by Billy.
+- Added cut-out magazine letter title.
+- Added hover grow/lift animations for buttons.
+- Added visual layout cards for host.
+- Kept existing working photo logic.

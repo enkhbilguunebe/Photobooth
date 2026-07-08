@@ -161,6 +161,21 @@ function tr(key) {
   return (TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || key;
 }
 
+function renderHeroTitle() {
+  const hero = document.getElementById("heroTitle");
+  if (!hero) return;
+  const text = lang === "mn" ? "Cheezy зураг авцгаая" : "Let’s get Cheezy";
+  hero.setAttribute("aria-label", text);
+  hero.innerHTML = "";
+  [...text].forEach((ch, index) => {
+    const span = document.createElement("span");
+    span.className = ch === " " ? "letter space" : "letter";
+    span.style.setProperty("--i", index);
+    span.textContent = ch === " " ? "" : ch;
+    hero.appendChild(span);
+  });
+}
+
 const LAYOUTS = {
   A: { name: "Layout A", size: "2x6", poses: 3, w: 800, h: 2400, slots: [[80,80,640,520],[80,640,640,520],[80,1200,640,520]] },
   B: { name: "Layout B", size: "2x6", poses: 4, w: 800, h: 2400, slots: [[80,80,640,440],[80,560,640,440],[80,1040,640,440],[80,1520,640,440]] },
@@ -228,6 +243,7 @@ function applyLanguage() {
     el.textContent = tr(el.dataset.i18n);
   });
   languageBtn.textContent = tr("btn");
+  renderHeroTitle();
   roleChip.textContent = isHost ? tr("hostRole") : tr("guestRole");
   readyBtn.textContent = localReady ? tr("readyDone") : tr("imReady");
   updatePoseNote();
@@ -275,6 +291,7 @@ function applySettings(settings) {
 
   updateModeUI(false);
   updatePoseNote();
+  updateLayoutCards();
   drawEmptyFrame();
 }
 
@@ -739,8 +756,16 @@ function setupCanvas(l) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
+function layoutAccent() {
+  const key = layoutSelect.value;
+  if (key === "C") return "#9a0f24";
+  if (key === "H") return "#2d3030";
+  if (key === "K" || key === "E" || key === "D") return "#fff8ea";
+  return "#050505";
+}
+
 function paper(l) {
-  ctx.fillStyle = "#050505";
+  ctx.fillStyle = layoutAccent();
   ctx.fillRect(0, 0, l.w, l.h);
 
   ctx.fillStyle = "#15110d";
@@ -869,6 +894,24 @@ function brand(l) {
   ctx.fillText(new Date().toLocaleDateString(), l.w / 2, y3);
 }
 
+
+function updateLayoutCards() {
+  document.querySelectorAll(".layout-card").forEach(card => {
+    card.classList.toggle("active", card.dataset.layout === layoutSelect.value);
+  });
+}
+
+document.querySelectorAll(".layout-card").forEach(card => {
+  card.addEventListener("click", () => {
+    if (!isHost) return;
+    layoutSelect.value = card.dataset.layout;
+    updateLayoutCards();
+    updatePoseNote();
+    resetPhotos(true, false);
+    emitSettings();
+  });
+});
+
 languageBtn.onclick = () => {
   lang = lang === "en" ? "mn" : "en";
   localStorage.setItem("cheezyLang", lang);
@@ -887,6 +930,7 @@ modeSelect.onchange = () => {
 };
 
 layoutSelect.onchange = () => {
+  updateLayoutCards();
   if (!isHost) {
     applySettings(roomSettings);
     return;
@@ -924,4 +968,5 @@ applyRoleUI();
 applyLanguage();
 updateModeUI(false);
 updatePoseNote();
+updateLayoutCards();
 drawEmptyFrame();

@@ -10,10 +10,9 @@
   <main class="app">
     <header class="top">
       <div class="brand">
-        <b>CB</b>
+        <img class="brand-logo" src="/assets/einstein-logo.png" alt="Cheezy by Billy logo" />
         <span>
           <strong>Cheezy by Billy</strong>
-          <small data-i18n="tagline">vintage online photo booth</small>
         </span>
       </div>
 
@@ -25,7 +24,7 @@
     </header>
 
     <section class="hero">
-      <h1 data-i18n="heroTitle">Let’s get Cheezy</h1>
+      <h1 id="heroTitle" class="cutout-title" aria-label="Let’s get Cheezy"></h1>
     </section>
 
     <section class="panel settings">
@@ -80,6 +79,25 @@
           <option value="7" data-i18n="timer7">7 seconds</option>
         </select>
       </label>
+    </section>
+
+    <section class="panel layout-cards host-only" id="layoutCardsPanel">
+      <header class="layout-header">
+        <div>
+          <h2>Choose a layout style</h2>
+          <p>Host controls the frame style. Guest receives the same setting automatically.</p>
+        </div>
+      </header>
+      <div class="layout-grid" id="layoutGrid">
+        <button class="layout-card" type="button" data-layout="B"><span class="mini strip black"><i></i><i></i><i></i><i></i></span><b>Classic Black</b><small>4-slot booth strip</small></button>
+        <button class="layout-card" type="button" data-layout="A"><span class="mini strip white"><i></i><i></i><i></i></span><b>White Strip</b><small>3-slot clean strip</small></button>
+        <button class="layout-card" type="button" data-layout="C"><span class="mini grid red"><i></i><i></i><i></i><i></i></span><b>Red Collage</b><small>4 photos on 4x6</small></button>
+        <button class="layout-card" type="button" data-layout="E"><span class="mini double cream"><i></i><i></i></span><b>Cream Double</b><small>2 big moments</small></button>
+        <button class="layout-card" type="button" data-layout="D"><span class="mini polaroid"><i></i></span><b>Polaroid Single</b><small>one big print</small></button>
+        <button class="layout-card" type="button" data-layout="H"><span class="mini stars"><i></i><i></i><i></i><i></i></span><b>Star Scrapbook</b><small>casual frame</small></button>
+        <button class="layout-card" type="button" data-layout="I"><span class="mini scrapbook"><i></i><i></i><i></i></span><b>Scrapbook 3</b><small>playful uneven layout</small></button>
+        <button class="layout-card" type="button" data-layout="K"><span class="mini gingham"><i></i><i></i></span><b>Gingham Duo</b><small>cute 2-photo frame</small></button>
+      </div>
     </section>
 
     <section class="panel share">
