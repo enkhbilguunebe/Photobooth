@@ -61,7 +61,6 @@ const tokenStatus = $("tokenStatus");
 const TEXT = {
   en: {
     tokensWord: "tokens", landingEyebrow: "Free vintage photo booth",
-    landingSub: "A retro scrapbook photo booth you share with a link. Pick your poses, strike a pose with a friend across any distance, and walk away with a print worth keeping.",
     enterBooth: "Start a Cheezy session", igEarnBtn: "Follow on Instagram plus 5 tokens", igClaimedBtn: "Bonus claimed",
     tokenHint: "Each photo costs 1 token. New here? You start with a few on the house.",
     step1Title: "Choose your setup", step1Body: "Pick 1, 2, 4 or 6 poses and a matching frame, like polaroid, film strip, or scrapbook.",
@@ -88,7 +87,6 @@ const TEXT = {
   },
   mn: {
     tokensWord: "токен", landingEyebrow: "Үнэгүй ретро фото будк",
-    landingSub: "Холбоосоор хуваалцдаг ретро scrapbook фото будк. Позоо сонгоод, хол байгаа найзтайгаа хамт зураг авч, хэвлэмэл зурагтай гарна.",
     enterBooth: "Cheezy эхлүүлэх", igEarnBtn: "Instagram дагаад, 5 токен ав", igClaimedBtn: "Бонус авсан",
     tokenHint: "Зураг бүр 1 токен зарцуулна. Шинэ хэрэглэгч бол хэдэн токен үнэгүй өгнө.",
     step1Title: "Тохиргоогоо сонго", step1Body: "1, 2, 4 эсвэл 6 pose, тохирох frame-аа сонго, polaroid, film strip, scrapbook гэх мэт.",
@@ -259,7 +257,7 @@ function setStatus(title, message) { statusTitle.textContent = title; statusEl.t
 function badge(el, text, cls = "") { el.textContent = text; el.className = cls; }
 
 function renderHeroTitle() {
-  const lines = lang === "mn" ? ["Cheezy зураг", "авцгаая"] : ["Let’s get", "Cheezy"];
+  const lines = lang === "mn" ? ["Cheezy", "зураг", "авцгаая"] : ["Let’s", "get", "Cheezy"];
   ["heroTitle", "landingHeroTitle"].forEach(id => {
     const hero = document.getElementById(id);
     if (!hero) return;
@@ -943,7 +941,16 @@ function slotsFor(frame) {
   if (p === 1) return [[180, 320, w - 360, h - 760]];
   if (p === 2) return [[160, 170, w - 320, 820], [160, 1050, w - 320, 820]];
   if (p === 4) return [[120, 160, 640, 760], [840, 160, 640, 760], [120, 1000, 640, 760], [840, 1000, 640, 760]];
-  if (p === 6) return [[100, 140, 430, 580], [585, 140, 430, 580], [1070, 140, 430, 580], [100, 800, 430, 580], [585, 800, 430, 580], [1070, 800, 430, 580]];
+  if (p === 6) {
+    const colW = 680, rowH = 520, gapX = 40, gapY = 30, marginX = 100, top = 120;
+    const x1 = marginX, x2 = marginX + colW + gapX;
+    const y1 = top, y2 = y1 + rowH + gapY, y3 = y2 + rowH + gapY;
+    return [
+      [x1, y1, colW, rowH], [x2, y1, colW, rowH],
+      [x1, y2, colW, rowH], [x2, y2, colW, rowH],
+      [x1, y3, colW, rowH], [x2, y3, colW, rowH]
+    ];
+  }
   return slots;
 }
 
