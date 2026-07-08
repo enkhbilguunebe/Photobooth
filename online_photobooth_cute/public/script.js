@@ -43,8 +43,35 @@ const finalCanvas = $("finalCanvas");
 const ctx = finalCanvas.getContext("2d");
 const downloadLink = $("downloadLink");
 
+// Landing / token elements
+const landing = $("landing");
+const boothApp = $("boothApp");
+const enterBoothBtn = $("enterBoothBtn");
+const backToLandingBtn = $("backToLandingBtn");
+const landingLangBtn = $("landingLangBtn");
+const landingGallery = $("landingGallery");
+const landingTokenCount = $("landingTokenCount");
+const appTokenCount = $("appTokenCount");
+const landingTokenChip = $("landingTokenChip");
+const appTokenChip = $("appTokenChip");
+const igEarnBtnLanding = $("igEarnBtnLanding");
+const igEarnBtnApp = $("igEarnBtnApp");
+const tokenStatus = $("tokenStatus");
+
 const TEXT = {
   en: {
+    tokensWord: "tokens", landingEyebrow: "Free vintage photo booth",
+    landingSub: "A retro scrapbook photo booth you share with a link. Pick your poses, strike a pose with a friend across any distance, and walk away with a print worth keeping.",
+    enterBooth: "Start a Cheezy session", igEarnBtn: "Follow on Instagram plus 5 tokens", igClaimedBtn: "Bonus claimed",
+    tokenHint: "Each photo costs 1 token. New here? You start with a few on the house.",
+    step1Title: "Choose your setup", step1Body: "Pick 1, 2, 4 or 6 poses and a matching frame, like polaroid, film strip, or scrapbook.",
+    step2Title: "Send the link, strike a pose", step2Body: "Solo, or share the room link so a friend anywhere can join and take turns with you.",
+    step3Title: "Download your print", step3Body: "Your finished scrapbook strip is ready to save and share in seconds.",
+    landingFooter: "Made for people who miss real photo booths.",
+    needTokens: "You need TOKEN_N token(s) for your photos. Follow us on Instagram for 5 free.",
+    outOfTokens: "Out of tokens for this turn. Earn more, then retake.",
+    tokensLeft: "You have TOKEN_N token(s) left.",
+    igBonusToast: "Plus 5 tokens added! Thanks for the follow.",
     btn: "MN", nameLabel: "Name", modeLabel: "Mode", poseLabel: "Pose count", filterLabel: "Filter", timerLabel: "Seconds each turn",
     shareLabel: "Send this room link", copyLink: "Copy link", readyToStart: "Ready to start",
     initialStatus: "Start your camera. In 2-person mode, send the room link to your friend.",
@@ -60,6 +87,18 @@ const TEXT = {
     friendConnected: "Friend connected", finalReady: "Your Cheezy by Billy print is ready."
   },
   mn: {
+    tokensWord: "токен", landingEyebrow: "Үнэгүй ретро фото будк",
+    landingSub: "Холбоосоор хуваалцдаг ретро scrapbook фото будк. Позоо сонгоод, хол байгаа найзтайгаа хамт зураг авч, хэвлэмэл зурагтай гарна.",
+    enterBooth: "Cheezy эхлүүлэх", igEarnBtn: "Instagram дагаад, 5 токен ав", igClaimedBtn: "Бонус авсан",
+    tokenHint: "Зураг бүр 1 токен зарцуулна. Шинэ хэрэглэгч бол хэдэн токен үнэгүй өгнө.",
+    step1Title: "Тохиргоогоо сонго", step1Body: "1, 2, 4 эсвэл 6 pose, тохирох frame-аа сонго, polaroid, film strip, scrapbook гэх мэт.",
+    step2Title: "Холбоос явуулаад зураг ав", step2Body: "Ганцаараа эсвэл room холбоосоо явуулж найзтайгаа ээлжлэн зураг ав.",
+    step3Title: "Зургаа татаж ав", step3Body: "Бэлэн scrapbook зураг хэдхэн секундэд татахад бэлэн болно.",
+    landingFooter: "Жинхэнэ фото будкийг санадаг хүмүүст зориулав.",
+    needTokens: "Зургаа авахад TOKEN_N токен хэрэгтэй. Instagram дагаад 5 үнэгүй ав.",
+    outOfTokens: "Энэ эргэлтэд токен дууслаа. Нэмж аваад дахин оролдоорой.",
+    tokensLeft: "Танд TOKEN_N токен байна.",
+    igBonusToast: "Нэмж 5 токен нэмэгдлээ! Дагасанд баярлалаа.",
     btn: "EN", nameLabel: "Нэр", modeLabel: "Горим", poseLabel: "Зургийн тоо", filterLabel: "Өнгөний эффект", timerLabel: "Зураг бүрийн хугацаа",
     shareLabel: "Найздаа явуулах холбоос", copyLink: "Холбоос хуулах", readyToStart: "Эхлэхэд бэлэн",
     initialStatus: "Камераа асаана уу. 2 хүний горимд холбоосоо найздаа явуулаарай.",
@@ -75,6 +114,88 @@ const TEXT = {
     friendConnected: "Найз холбогдлоо", finalReady: "Cheezy by Billy зураг бэлэн боллоо."
   }
 };
+
+function trTokens(key, n) { return tr(key).replace("TOKEN_N", n); }
+
+/* ---------------- Token economy ---------------- */
+const TOKEN_COST_PER_PHOTO = 1;
+const FREE_TOKENS_ON_FIRST_VISIT = 3;
+const INSTAGRAM_BONUS_TOKENS = 5;
+const INSTAGRAM_URL = "https://instagram.com/cheezybybilly"; // TODO: replace with your real Instagram handle
+
+function getTokens() {
+  const raw = localStorage.getItem("cheezyTokens");
+  if (raw === null) {
+    localStorage.setItem("cheezyTokens", String(FREE_TOKENS_ON_FIRST_VISIT));
+    return FREE_TOKENS_ON_FIRST_VISIT;
+  }
+  return Math.max(0, Number(raw) || 0);
+}
+
+function setTokens(n) {
+  localStorage.setItem("cheezyTokens", String(Math.max(0, n)));
+  renderTokenUI();
+}
+
+function addTokens(n) { setTokens(getTokens() + n); }
+function spendTokens(n) { setTokens(getTokens() - n); }
+
+function igClaimed() { return localStorage.getItem("cheezyIgClaimed") === "1"; }
+
+function claimInstagramBonus() {
+  window.open(INSTAGRAM_URL, "_blank", "noopener");
+  if (igClaimed()) return;
+  localStorage.setItem("cheezyIgClaimed", "1");
+  addTokens(INSTAGRAM_BONUS_TOKENS);
+  setStatus(tr("igBonusToast"), trTokens("tokensLeft", getTokens()));
+  renderTokenUI();
+}
+
+function renderTokenUI() {
+  const n = getTokens();
+  if (landingTokenCount) landingTokenCount.textContent = n;
+  if (appTokenCount) appTokenCount.textContent = n;
+  [landingTokenChip, appTokenChip].forEach(chip => { if (chip) chip.classList.toggle("low", n < 1); });
+  [igEarnBtnLanding, igEarnBtnApp].forEach(btn => {
+    if (!btn) return;
+    btn.classList.toggle("claimed", igClaimed());
+    const label = btn.querySelector("[data-i18n]") || btn;
+    label.textContent = igClaimed() ? tr("igClaimedBtn") : tr("igEarnBtn");
+  });
+  updateShootButton();
+}
+
+function requiredTokensForMe() {
+  const frame = selectedFrame();
+  return myRequiredPhotos(frame.poses, modeSelect.value) * TOKEN_COST_PER_PHOTO;
+}
+
+function renderLandingGallery() {
+  if (!landingGallery || landingGallery.dataset.built) return;
+  landingGallery.dataset.built = "1";
+  const specs = [
+    { cls: "s1", rows: 4 },
+    { cls: "s2", rows: 1 },
+    { cls: "s3", rows: 2 },
+    { cls: "s4", rows: 2 }
+  ];
+  specs.forEach(spec => {
+    const strip = document.createElement("div");
+    strip.className = `scatter-strip ${spec.cls}`;
+    for (let i = 0; i < spec.rows; i++) strip.appendChild(document.createElement("i"));
+    landingGallery.appendChild(strip);
+  });
+}
+
+function showLanding() {
+  landing.classList.remove("hidden");
+  boothApp.classList.add("hidden");
+}
+
+function showBoothApp() {
+  landing.classList.add("hidden");
+  boothApp.classList.remove("hidden");
+}
 
 let lang = localStorage.getItem("cheezyLang") || "en";
 function tr(key) { return (TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || key; }
@@ -138,22 +259,24 @@ function setStatus(title, message) { statusTitle.textContent = title; statusEl.t
 function badge(el, text, cls = "") { el.textContent = text; el.className = cls; }
 
 function renderHeroTitle() {
-  const hero = document.getElementById("heroTitle");
-  if (!hero) return;
-  hero.innerHTML = "";
   const lines = lang === "mn" ? ["Cheezy зураг", "авцгаая"] : ["Let’s get", "Cheezy"];
-  let idx = 0;
-  lines.forEach(line => {
-    const row = document.createElement("span");
-    row.className = "cutout-line";
-    [...line].forEach(ch => {
-      const span = document.createElement("span");
-      span.className = ch === " " ? "letter space" : "letter";
-      span.style.setProperty("--i", idx++);
-      span.textContent = ch === " " ? "" : ch;
-      row.appendChild(span);
+  ["heroTitle", "landingHeroTitle"].forEach(id => {
+    const hero = document.getElementById(id);
+    if (!hero) return;
+    hero.innerHTML = "";
+    let idx = 0;
+    lines.forEach(line => {
+      const row = document.createElement("span");
+      row.className = "cutout-line";
+      [...line].forEach(ch => {
+        const span = document.createElement("span");
+        span.className = ch === " " ? "letter space" : "letter";
+        span.style.setProperty("--i", idx++);
+        span.textContent = ch === " " ? "" : ch;
+        row.appendChild(span);
+      });
+      hero.appendChild(row);
     });
-    hero.appendChild(row);
   });
 }
 
@@ -458,6 +581,16 @@ async function handleSignal({ from, data }) {
 }
 
 function toggleReady() {
+  if (!localReady) {
+    const need = requiredTokensForMe();
+    if (getTokens() < need) {
+      tokenStatus.textContent = trTokens("needTokens", need);
+      tokenStatus.classList.remove("hidden");
+      setStatus("Not enough tokens", trTokens("needTokens", need));
+      return;
+    }
+  }
+  tokenStatus.classList.add("hidden");
   localReady = !localReady;
   readyBtn.textContent = localReady ? tr("readyDone") : tr("imReady");
   badge(localBadge, localReady ? tr("ready") : tr("live"), localReady ? "ready" : "good");
@@ -471,7 +604,7 @@ function updateShootButton() {
     shootBtn.disabled = true;
     return;
   }
-  shootBtn.disabled = false;
+  shootBtn.disabled = getTokens() < requiredTokensForMe();
 }
 
 function requestShoot() {
@@ -480,6 +613,13 @@ function requestShoot() {
     return;
   }
   if (shooting) return;
+  const need = requiredTokensForMe();
+  if (getTokens() < need) {
+    tokenStatus.textContent = trTokens("needTokens", need);
+    tokenStatus.classList.remove("hidden");
+    setStatus("Not enough tokens", trTokens("needTokens", need));
+    return;
+  }
   emitSettings();
   resetPhotos(false, false);
   setStatus("Checking", modeSelect.value === "two" ? "Starting if both people are ready." : "Starting countdown.");
@@ -572,6 +712,13 @@ async function captureSequence(totalSlots, seconds, mode) {
     const mine = isMyTurn(slot, mode);
     await runCountdown(seconds, slot, totalSlots, mine, mode);
     if (mine) {
+      if (getTokens() < TOKEN_COST_PER_PHOTO) {
+        tokenStatus.textContent = tr("outOfTokens");
+        tokenStatus.classList.remove("hidden");
+        setStatus("Out of tokens", tr("outOfTokens"));
+        break;
+      }
+      spendTokens(TOKEN_COST_PER_PHOTO);
       images.push(capture(localVideo, true));
       setStatus("Captured", `Captured slot ${slot} of ${totalSlots}.`);
       await sleep(250);
@@ -883,11 +1030,16 @@ function brand(frame) {
 }
 
 languageBtn.onclick = () => { lang = lang === "en" ? "mn" : "en"; localStorage.setItem("cheezyLang", lang); applyLanguage(); };
+landingLangBtn.onclick = () => { lang = lang === "en" ? "mn" : "en"; localStorage.setItem("cheezyLang", lang); applyLanguage(); };
 startBtn.onclick = startCameraAndJoin;
 copyLinkBtn.onclick = copyLink;
 readyBtn.onclick = toggleReady;
 shootBtn.onclick = requestShoot;
 resetBtn.onclick = () => resetPhotos(true, true);
+enterBoothBtn.onclick = showBoothApp;
+backToLandingBtn.onclick = showLanding;
+igEarnBtnLanding.onclick = claimInstagramBonus;
+igEarnBtnApp.onclick = claimInstagramBonus;
 
 modeSelect.onchange = () => { updateModeUI(true); onSettingsChanged(true); };
 poseSelect.onchange = () => onSettingsChanged(true);
@@ -900,3 +1052,7 @@ applyLanguage();
 refreshFrameUI();
 updateModeUI(false);
 drawEmptyFrame();
+renderLandingGallery();
+renderTokenUI();
+tokenStatus.classList.add("hidden");
+showLanding();

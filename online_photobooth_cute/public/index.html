@@ -7,7 +7,69 @@
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
-  <main class="app">
+
+  <section id="landing" class="landing">
+    <div class="landing-inner">
+      <div class="top landing-top">
+        <div class="brand">
+          <img class="brand-logo" src="/assets/einstein-logo.png" alt="Cheezy by Billy logo" />
+          <span><strong>Cheezy by Billy</strong></span>
+        </div>
+        <div class="top-actions">
+          <button id="landingLangBtn" class="lang-btn" type="button">MN</button>
+          <div class="token-chip" id="landingTokenChip">
+            <span class="token-dot">🎟️</span>
+            <b id="landingTokenCount">0</b>
+            <span data-i18n="tokensWord">tokens</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="landing-hero">
+        <div class="landing-copy">
+          <span class="landing-eyebrow" data-i18n="landingEyebrow">Free vintage photo booth</span>
+          <h1 id="landingHeroTitle" class="cutout-title" aria-label="Let’s get Cheezy"></h1>
+          <p class="landing-sub" data-i18n="landingSub">A retro scrapbook photo booth you share with a link. Pick your poses, strike a pose with a friend across any distance, and walk away with a print worth keeping.</p>
+
+          <div class="landing-cta-row">
+            <button id="enterBoothBtn" class="primary" type="button" data-i18n="enterBooth">Start a Cheezy session</button>
+          </div>
+
+          <button id="igEarnBtnLanding" class="ghost ig-btn" type="button">
+            <span class="ig-icon">📷</span>
+            <span data-i18n="igEarnBtn">Follow on Instagram · +5 tokens</span>
+          </button>
+          <p class="landing-token-hint" data-i18n="tokenHint">Each photo costs 1 token. New here? You start with a few on the house.</p>
+        </div>
+
+        <div class="landing-gallery" id="landingGallery" aria-hidden="true"></div>
+      </div>
+
+      <div class="landing-steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <h3 data-i18n="step1Title">Choose your setup</h3>
+          <p data-i18n="step1Body">Pick 1, 2, 4 or 6 poses and a matching frame — polaroid, film strip, scrapbook and more.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <h3 data-i18n="step2Title">Send the link, strike a pose</h3>
+          <p data-i18n="step2Body">Solo, or share the room link so a friend anywhere can join and take turns with you.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <h3 data-i18n="step3Title">Download your print</h3>
+          <p data-i18n="step3Body">Your finished scrapbook strip is ready to save and share in seconds.</p>
+        </div>
+      </div>
+
+      <footer class="landing-footer">
+        <p data-i18n="landingFooter">Made for people who miss real photo booths.</p>
+      </footer>
+    </div>
+  </section>
+
+  <main class="app hidden" id="boothApp">
     <header class="top">
       <div class="brand">
         <img class="brand-logo" src="/assets/einstein-logo.png" alt="Cheezy by Billy logo" />
@@ -15,7 +77,12 @@
       </div>
 
       <div class="top-actions">
+        <button id="backToLandingBtn" class="lang-btn" type="button" title="Back to home">←</button>
         <button id="languageBtn" class="lang-btn" type="button">MN</button>
+        <div class="token-chip" id="appTokenChip">
+          <span class="token-dot">🎟️</span>
+          <b id="appTokenCount">0</b>
+        </div>
         <span id="roleChip" class="chip">Host</span>
         <span id="roomChip" class="chip">Room</span>
       </div>
@@ -130,6 +197,11 @@
       <button id="resetBtn" class="ghost" type="button" disabled data-i18n="retake">Retake</button>
       <p id="poseNote">2-person order: Host → Guest → Host → Guest.</p>
       <p class="guest-note" data-i18n="guestNote">Guest mode: press Ready and wait for the host to start.</p>
+      <p id="tokenStatus" class="token-status"></p>
+      <button id="igEarnBtnApp" class="ghost ig-btn" type="button">
+        <span class="ig-icon">📷</span>
+        <span data-i18n="igEarnBtn">Follow on Instagram · +5 tokens</span>
+      </button>
     </section>
 
     <section class="panel result">
