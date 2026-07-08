@@ -5,6 +5,7 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
   maxHttpBufferSize: 35e6,
   pingInterval: 10000,
@@ -22,7 +23,13 @@ app.get("/room/:roomId", (req, res) => {
 });
 
 function defaultSettings() {
-  return { mode: "two", layout: "B", filter: "boothbw", seconds: 3 };
+  return {
+    mode: "two",
+    poseCount: 4,
+    frameId: "classic-black-4",
+    filter: "boothbw",
+    seconds: 3
+  };
 }
 
 function getRoom(roomId) {
@@ -40,7 +47,7 @@ function getRoom(roomId) {
   return rooms.get(roomId);
 }
 
-function roomState(roomId) {
+function state(roomId) {
   const room = getRoom(roomId);
   return {
     roomId,
@@ -74,8 +81,8 @@ function leaveRoom(socket) {
   if (room.users.length === 0) {
     rooms.delete(roomId);
   } else {
-    io.to(roomId).emit("peer-left", roomState(roomId));
-    io.to(roomId).emit("room-state", roomState(roomId));
+    io.to(roomId).emit("peer-left", state(roomId));
+    io.to(roomId).emit("room-state", state(roomId));
   }
 }
 
@@ -106,32 +113,30 @@ io.on("connection", socket => {
     room.connected[socket.id] = false;
     room.shooting = false;
 
-    socket.emit("room-joined", { ...roomState(roomId), yourId: socket.id });
-    socket.to(roomId).emit("room-state", roomState(roomId));
+    socket.emit("room-joined", { ...state(roomId), yourId: socket.id });
+    socket.to(roomId).emit("room-state", state(roomId));
 
     if (room.users.length === 2) {
       const [a, b] = room.users;
-      io.to(a).emit("peer-ready", { peerId: b, shouldCreateOffer: true, state: roomState(roomId) });
-      io.to(b).emit("peer-ready", { peerId: a, shouldCreateOffer: false, state: roomState(roomId) });
+      io.to(a).emit("peer-ready", { peerId: b, shouldCreateOffer: true, state: state(roomId) });
+      io.to(b).emit("peer-ready", { peerId: a, shouldCreateOffer: false, state: state(roomId) });
     } else {
-      socket.emit("waiting-for-peer", roomState(roomId));
+      socket.emit("waiting-for-peer", state(roomId));
     }
   });
 
   socket.on("update-profile", ({ name }) => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
-    const room = getRoom(roomId);
-    room.names[socket.id] = name || "Guest";
-    io.to(roomId).emit("room-state", roomState(roomId));
+    getRoom(roomId).names[socket.id] = name || "Guest";
+    io.to(roomId).emit("room-state", state(roomId));
   });
 
   socket.on("set-ready", ({ ready }) => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
-    const room = getRoom(roomId);
-    room.ready[socket.id] = Boolean(ready);
-    io.to(roomId).emit("room-state", roomState(roomId));
+    getRoom(roomId).ready[socket.id] = Boolean(ready);
+    io.to(roomId).emit("room-state", state(roomId));
   });
 
   socket.on("update-settings", ({ settings }) => {
@@ -142,16 +147,22 @@ io.on("connection", socket => {
     if (socket.id !== room.hostId) return;
 
     const next = settings || {};
+    const mode = next.mode === "one" ? "one" : "two";
+    let poseCount = Number(next.poseCount) || 4;
+    const allowed = mode === "one" ? [1, 2, 4, 6] : [2, 4, 6];
+    if (!allowed.includes(poseCount)) poseCount = mode === "one" ? 1 : 2;
+
     room.settings = {
-      mode: next.mode === "one" ? "one" : "two",
-      layout: /^[A-K]$/.test(next.layout) ? next.layout : "B",
+      mode,
+      poseCount,
+      frameId: String(next.frameId || "classic-black-4"),
       filter: String(next.filter || "boothbw"),
       seconds: Math.max(1, Math.min(Number(next.seconds) || 3, 10))
     };
 
     io.to(roomId).emit("settings-updated", {
       settings: room.settings,
-      state: roomState(roomId)
+      state: state(roomId)
     });
   });
 
@@ -159,14 +170,14 @@ io.on("connection", socket => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
     getRoom(roomId).connected[socket.id] = true;
-    io.to(roomId).emit("room-state", roomState(roomId));
+    io.to(roomId).emit("room-state", state(roomId));
   });
 
   socket.on("peer-disconnected", () => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
     getRoom(roomId).connected[socket.id] = false;
-    io.to(roomId).emit("room-state", roomState(roomId));
+    io.to(roomId).emit("room-state", state(roomId));
   });
 
   socket.on("signal", ({ to, data }) => {
@@ -174,7 +185,7 @@ io.on("connection", socket => {
     io.to(to).emit("signal", { from: socket.id, data });
   });
 
-  socket.on("request-shoot", ({ poses }) => {
+  socket.on("request-shoot", () => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
 
@@ -190,9 +201,7 @@ io.on("connection", socket => {
       return;
     }
 
-    const mode = room.settings.mode;
-    const seconds = room.settings.seconds;
-    poses = Math.max(1, Math.min(Number(poses) || 4, 4));
+    const { mode, poseCount, seconds } = room.settings;
 
     if (mode === "two") {
       const hasTwo = room.users.length === 2;
@@ -207,20 +216,18 @@ io.on("connection", socket => {
         socket.emit("not-ready", { message: "Both people must press Ready first." });
         return;
       }
-    } else {
-      if (!room.ready[socket.id]) {
-        socket.emit("not-ready", { message: "Press Ready first." });
-        return;
-      }
+    } else if (!room.ready[socket.id]) {
+      socket.emit("not-ready", { message: "Press Ready first." });
+      return;
     }
 
     room.shooting = true;
     io.to(roomId).emit("shoot-start", {
       startAt: Date.now() + 900,
       seconds,
-      poses,
+      poseCount,
       mode,
-      state: roomState(roomId)
+      state: state(roomId)
     });
   });
 
@@ -233,22 +240,20 @@ io.on("connection", socket => {
   socket.on("shoot-complete", () => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
-    const room = getRoom(roomId);
-    room.shooting = false;
-    io.to(roomId).emit("room-state", roomState(roomId));
+    getRoom(roomId).shooting = false;
+    io.to(roomId).emit("room-state", state(roomId));
   });
 
   socket.on("reset-shoot", () => {
     const roomId = socket.data.roomId;
     if (!roomId || !rooms.has(roomId)) return;
-    const room = getRoom(roomId);
-    room.shooting = false;
-    io.to(roomId).emit("room-state", roomState(roomId));
+    getRoom(roomId).shooting = false;
+    io.to(roomId).emit("room-state", state(roomId));
   });
 
   socket.on("disconnect", () => leaveRoom(socket));
 });
 
 server.listen(PORT, () => {
-  console.log(`Cheezy by Billy v13 button fixed running on http://localhost:${PORT}`);
+  console.log(`Cheezy by Billy v15 running on http://localhost:${PORT}`);
 });

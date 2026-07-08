@@ -11,9 +11,7 @@
     <header class="top">
       <div class="brand">
         <img class="brand-logo" src="/assets/einstein-logo.png" alt="Cheezy by Billy logo" />
-        <span>
-          <strong>Cheezy by Billy</strong>
-        </span>
+        <span><strong>Cheezy by Billy</strong></span>
       </div>
 
       <div class="top-actions">
@@ -33,7 +31,7 @@
         <input id="nameInput" maxlength="18" value="Me" />
       </label>
 
-      <label>
+      <label class="host-only">
         <span data-i18n="modeLabel">Mode</span>
         <select id="modeSelect">
           <option value="one" data-i18n="modeOne">1 person</option>
@@ -41,20 +39,13 @@
         </select>
       </label>
 
-      <label class="host-only wide">
-        <span data-i18n="layoutLabel">Layout</span>
-        <select id="layoutSelect">
-          <option value="A">Layout A — 2x6, 3 slots</option>
-          <option value="B" selected>Layout B — 2x6, 4 slots</option>
-          <option value="C">Layout C — 4x6, 4 slots</option>
-          <option value="D">Layout D — 4x6, 1 slot</option>
-          <option value="E">Layout E — 4x6, 2 slots</option>
-          <option value="F">Layout F — 4x6, 1 slot</option>
-          <option value="G">Layout G — 4x6, 2 slots</option>
-          <option value="H">Layout H — 4x6, 4 slots</option>
-          <option value="I">Layout I — 4x6, 3 slots</option>
-          <option value="J">Layout J — 4x6, 3 slots</option>
-          <option value="K">Layout K — 4x6, 2 slots</option>
+      <label class="host-only">
+        <span data-i18n="poseLabel">Pose count</span>
+        <select id="poseSelect">
+          <option value="1">1 pose</option>
+          <option value="2">2 poses</option>
+          <option value="4" selected>4 poses</option>
+          <option value="6">6 poses</option>
         </select>
       </label>
 
@@ -73,31 +64,23 @@
       <label class="host-only">
         <span data-i18n="timerLabel">Seconds each turn</span>
         <select id="timerSelect">
-          <option value="2" data-i18n="timer2">2 seconds</option>
-          <option value="3" selected data-i18n="timer3">3 seconds</option>
-          <option value="5" data-i18n="timer5">5 seconds</option>
-          <option value="7" data-i18n="timer7">7 seconds</option>
+          <option value="2">2 seconds</option>
+          <option value="3" selected>3 seconds</option>
+          <option value="5">5 seconds</option>
+          <option value="7">7 seconds</option>
         </select>
       </label>
     </section>
 
-    <section class="panel layout-cards host-only" id="layoutCardsPanel">
-      <header class="layout-header">
+    <section class="panel frame-panel host-only">
+      <header class="section-header">
         <div>
-          <h2>Choose a layout style</h2>
-          <p>Host controls the frame style. Guest receives the same setting automatically.</p>
+          <h2 data-i18n="frameTitle">Choose a frame</h2>
+          <p id="frameHint">Only frames that fit your selected pose count are shown.</p>
         </div>
       </header>
-      <div class="layout-grid" id="layoutGrid">
-        <button class="layout-card" type="button" data-layout="B"><span class="mini strip black"><i></i><i></i><i></i><i></i></span><b>Classic Black</b><small>4-slot booth strip</small></button>
-        <button class="layout-card" type="button" data-layout="A"><span class="mini strip white"><i></i><i></i><i></i></span><b>White Strip</b><small>3-slot clean strip</small></button>
-        <button class="layout-card" type="button" data-layout="C"><span class="mini grid red"><i></i><i></i><i></i><i></i></span><b>Red Collage</b><small>4 photos on 4x6</small></button>
-        <button class="layout-card" type="button" data-layout="E"><span class="mini double cream"><i></i><i></i></span><b>Cream Double</b><small>2 big moments</small></button>
-        <button class="layout-card" type="button" data-layout="D"><span class="mini polaroid"><i></i></span><b>Polaroid Single</b><small>one big print</small></button>
-        <button class="layout-card" type="button" data-layout="H"><span class="mini stars"><i></i><i></i><i></i><i></i></span><b>Star Scrapbook</b><small>casual frame</small></button>
-        <button class="layout-card" type="button" data-layout="I"><span class="mini scrapbook"><i></i><i></i><i></i></span><b>Scrapbook 3</b><small>playful uneven layout</small></button>
-        <button class="layout-card" type="button" data-layout="K"><span class="mini gingham"><i></i><i></i></span><b>Gingham Duo</b><small>cute 2-photo frame</small></button>
-      </div>
+      <div class="pose-pills" id="posePills"></div>
+      <div class="frame-grid" id="frameGrid"></div>
     </section>
 
     <section class="panel share">
@@ -113,19 +96,13 @@
         <b id="statusTitle" data-i18n="readyToStart">Ready to start</b>
         <p id="status" data-i18n="initialStatus">Start your camera. In 2-person mode, send the room link to your friend.</p>
       </div>
-      <div class="dots">
-        <i id="youDot"></i>
-        <i id="friendDot"></i>
-      </div>
+      <div class="dots"><i id="youDot"></i><i id="friendDot"></i></div>
     </section>
 
     <section class="videos">
       <article class="card">
         <header>
-          <div>
-            <h2 id="localNameLabel" data-i18n="youTitle">You</h2>
-            <p id="localSub" data-i18n="cameraNotStarted">Camera not started</p>
-          </div>
+          <div><h2 id="localNameLabel" data-i18n="youTitle">You</h2><p id="localSub" data-i18n="cameraNotStarted">Camera not started</p></div>
           <em id="localBadge" data-i18n="offline">offline</em>
         </header>
         <div class="frame">
@@ -136,10 +113,7 @@
 
       <article class="card" id="friendCard">
         <header>
-          <div>
-            <h2 id="remoteNameLabel" data-i18n="friendTitle">Friend</h2>
-            <p id="remoteSub" data-i18n="waitingForFriend">Waiting for friend</p>
-          </div>
+          <div><h2 id="remoteNameLabel" data-i18n="friendTitle">Friend</h2><p id="remoteSub" data-i18n="waitingForFriend">Waiting for friend</p></div>
           <em id="remoteBadge" data-i18n="waiting">waiting</em>
         </header>
         <div class="frame">
@@ -154,19 +128,15 @@
       <button id="readyBtn" class="ghost" type="button" disabled data-i18n="imReady">I'm ready</button>
       <button id="shootBtn" class="primary host-only" type="button" disabled data-i18n="startBooth">Start photo booth</button>
       <button id="resetBtn" class="ghost" type="button" disabled data-i18n="retake">Retake</button>
-      <p id="poseNote">Layout B: Host 1, Guest 1, Host 2, Guest 2.</p>
+      <p id="poseNote">2-person order: Host → Guest → Host → Guest.</p>
       <p class="guest-note" data-i18n="guestNote">Guest mode: press Ready and wait for the host to start.</p>
     </section>
 
     <section class="panel result">
       <header>
-        <div>
-          <h2 data-i18n="finalPrint">Final booth print</h2>
-          <p id="resultSub" data-i18n="resultHint">Choose layout and filter, then start the booth.</p>
-        </div>
+        <div><h2 data-i18n="finalPrint">Final booth print</h2><p id="resultSub" data-i18n="resultHint">Choose pose count and frame, then start the booth.</p></div>
         <em id="resultBadge" data-i18n="notReady">not ready</em>
       </header>
-
       <canvas id="finalCanvas" width="800" height="2400"></canvas>
       <a id="downloadLink" class="download disabled" download="cheezy-by-billy.png" data-i18n="downloadPng">Download PNG</a>
     </section>

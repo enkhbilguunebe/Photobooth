@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v14-scrapbook-design",
-  "version": "14.0.0",
-  "description": "Cheezy by Billy with vintage scrapbook visual design, Einstein logo, animated title, and layout cards.",
+  "name": "cheezy-by-billy-v15-pose-frame-clean",
+  "version": "15.0.0",
+  "description": "Clean Cheezy by Billy with pose count selection, matching frame templates, and turn-based 2-person capture.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
