@@ -432,3 +432,54 @@ body.solo-mode .videos{grid-template-columns:1fr;max-width:520px;margin:0 auto}
     height:190px;
   }
 }
+
+
+/* ---------- v23 fixes: no old business-card image + Bikini Bottom ID frame ---------- */
+.business-card-box{
+  display:none !important;
+}
+
+.mini.license-mini{
+  width:150px !important;
+  height:92px !important;
+  margin:0 auto;
+  background:#f7ecd7 !important;
+  border:2px solid #111;
+  border-radius:12px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.08);
+}
+
+.mini.license-mini::before{
+  content:"BIKINI ID";
+  position:absolute;
+  top:8px;
+  left:40px;
+  right:8px;
+  text-align:center;
+  font-family:Georgia,serif;
+  font-size:13px;
+  font-weight:950;
+  color:#111;
+}
+
+.mini.license-mini::after{
+  content:"";
+  position:absolute;
+  left:12px;
+  top:34px;
+  width:45px;
+  height:45px;
+  border:3px solid #4b1f77;
+  border-radius:5px;
+  background:#eee;
+}
+
+.mini.license-mini i{
+  display:none !important;
+}
+
+.developer-card-box{
+  display:block !important;
+}

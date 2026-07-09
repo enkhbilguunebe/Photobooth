@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v22-profile-card",
-  "version": "22.0.0",
-  "description": "Cheezy by Billy with cleaner header icons and animated developer profile card.",
+  "name": "cheezy-by-billy-v23-license-frame",
+  "version": "23.0.0",
+  "description": "Cheezy by Billy with fixed developer popup and Bikini Bottom 1-pose license frame.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

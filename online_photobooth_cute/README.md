@@ -39,3 +39,10 @@ Start Command: npm start
   - Instagram link: @ebe.exe
   - Toronto, Ontario
 - Kept redeem-code/token/photo booth logic unchanged.
+
+
+## v23
+- Fixed the person icon popup so the old business-card image no longer appears.
+- Person icon now only opens the developer profile card.
+- Added `Bikini Bottom ID` frame to 1-person / 1-pose frame options.
+- The captured photo is placed inside the left portrait area of the license frame.

@@ -274,6 +274,7 @@ const FRAMES = [
   { id:"polaroid-1", name:"Polaroid Single", poses:1, style:"polaroid", ratio:"4x6", w:1600, h:2400 },
   { id:"camera-1", name:"Digital Camera", poses:1, style:"camera", ratio:"4x6", w:1600, h:2400 },
   { id:"tv-1", name:"Retro TV", poses:1, style:"tv", ratio:"4x6", w:1600, h:2400 },
+  { id:"bikini-license-1", name:"Bikini Bottom ID", poses:1, style:"license", ratio:"license", w:2000, h:1200 },
   { id:"double-strip-2", name:"Double Strip", poses:2, style:"classic", ratio:"2x6", w:800, h:2400 },
   { id:"polaroid-duo-2", name:"Polaroid Duo", poses:2, style:"polaroid", ratio:"4x6", w:1600, h:2400 },
   { id:"gingham-duo-2", name:"Gingham Duo", poses:2, style:"gingham", ratio:"4x6", w:1600, h:2400 },
@@ -461,6 +462,7 @@ function renderPosePills() {
 }
 
 function frameLayout(frame) {
+  if (frame.style === "license") return { cols: 1, rows: 1 };
   if (frame.ratio === "2x6") return { cols: 1, rows: frame.poses };
   if (frame.poses <= 2) return { cols: 1, rows: frame.poses };
   if (frame.poses === 4) return { cols: 2, rows: 2 };
@@ -475,6 +477,7 @@ function miniClass(frame) {
   if (frame.style === "gingham") return "mini gingham";
   if (frame.style === "polaroid" || frame.style === "cream") return "mini cream";
   if (frame.style === "camera") return "mini white";
+  if (frame.style === "license") return "mini license-mini";
   return "mini";
 }
 
@@ -984,6 +987,7 @@ function setupCanvas(frame) {
 function frameBg(frame) {
   if (frame.style === "lips") return "#8b1018";
   if (frame.style === "gingham") return "#fff8ea";
+  if (frame.style === "license") return "#f7ecd7";
   if (frame.style === "polaroid" || frame.style === "camera" || frame.style === "tv" || frame.style === "cream") return "#fff8ea";
   if (frame.style === "scrapbook") return "#f6ead2";
   return "#050505";
@@ -1005,6 +1009,7 @@ function paper(frame) {
   if (frame.style === "camera") drawCameraDecor(frame);
   if (frame.style === "tv") drawTvDecor(frame);
   if (frame.style === "scrapbook") drawScrapbookTape(frame);
+  if (frame.style === "license") drawLicenseDecor(frame);
 }
 
 function drawFilmHoles(frame) {
@@ -1063,7 +1068,130 @@ function drawScrapbookTape(frame) {
   ctx.restore();
 }
 
+
+function drawLicenseDecor(frame) {
+  const w = frame.w, h = frame.h;
+
+  // rounded ID card background
+  ctx.save();
+  ctx.strokeStyle = "rgba(0,0,0,.28)";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(24, 24, w - 48, h - 48);
+  ctx.restore();
+
+  // orange top stripes
+  ctx.fillStyle = "#d86612";
+  roundRect(70, 70, 350, 18, 8, true, false);
+  roundRect(70, 105, 350, 55, 10, true, false);
+  roundRect(w - 420, 70, 350, 18, 8, true, false);
+  roundRect(w - 420, 105, 350, 55, 10, true, false);
+
+  // faded seal
+  ctx.save();
+  ctx.globalAlpha = 0.11;
+  ctx.strokeStyle = "#3f6f9c";
+  ctx.lineWidth = 18;
+  ctx.beginPath();
+  ctx.arc(w - 520, h / 2 + 90, 260, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.font = "900 80px Georgia";
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#3f6f9c";
+  ctx.fillText("BIKINI", w - 520, h / 2 + 50);
+  ctx.fillText("BOTTOM", w - 520, h / 2 + 145);
+  ctx.restore();
+
+  // shell-like decorations
+  ctx.save();
+  ctx.globalAlpha = 0.18;
+  ctx.fillStyle = "#d8c8ac";
+  ctx.beginPath();
+  ctx.ellipse(850, 565, 105, 150, -0.25, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(760, 985, 80, 65, -0.35, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // title
+  ctx.fillStyle = "#0e0d0c";
+  ctx.textAlign = "center";
+  ctx.font = "900 118px Georgia";
+  ctx.fillText("BIKINI BOTTOM", w / 2 + 120, 150);
+  ctx.font = "900 68px Georgia";
+  ctx.fillText("DRIVER LICENSE", w / 2 + 120, 240);
+
+  ctx.fillStyle = "#175c25";
+  ctx.font = "900 64px Georgia";
+  ctx.fillText("A1356021", w / 2 + 140, 330);
+
+  ctx.fillStyle = "#111";
+  ctx.font = "900 44px Georgia";
+  ctx.fillText("CLASS: S", w - 245, 245);
+
+  ctx.fillStyle = "#971719";
+  ctx.textAlign = "left";
+  ctx.font = "900 44px Georgia";
+  ctx.fillText("EXPIRES: 12-14-03", 190, 400);
+
+  // portrait box outline
+  ctx.strokeStyle = "#4b1f77";
+  ctx.lineWidth = 9;
+  roundRect(130, 470, 580, 640, 18, false, true);
+
+  // text information
+  ctx.fillStyle = "#111";
+  ctx.font = "48px Georgia";
+  ctx.fillText("NAME:", 800, 555);
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#111";
+  ctx.beginPath();
+  ctx.moveTo(970, 560);
+  ctx.lineTo(w - 180, 560);
+  ctx.stroke();
+
+  ctx.font = "900 60px Georgia";
+  ctx.fillText("124 CONCH ST.", 800, 700);
+  ctx.fillText("BIKINI BOTTOM", 800, 790);
+
+  ctx.font = "900 42px Georgia";
+  ctx.fillText("SEX: M", 800, 875);
+  ctx.fillText("HAIR: YELLOW", 980, 875);
+  ctx.fillText("EYES: BLUE", 1390, 875);
+
+  ctx.fillText("HT: 0-04", 800, 940);
+  ctx.fillText("WT: 1oz", 1020, 940);
+
+  ctx.fillStyle = "#971719";
+  ctx.fillText("DOB: 07-14-86", 1240, 940);
+
+  ctx.fillStyle = "#111";
+  ctx.font = "44px Georgia";
+  ctx.fillText("SIGNATURE:", 960, 1080);
+  ctx.beginPath();
+  ctx.moveTo(1230, 1082);
+  ctx.lineTo(w - 90, 1082);
+  ctx.stroke();
+}
+
+function roundRect(x, y, w, h, r, fill, stroke) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  if (fill) ctx.fill();
+  if (stroke) ctx.stroke();
+}
+
 function slotsFor(frame) {
+  if (frame.style === "license") return [[130, 470, 580, 640]];
   const p = frame.poses;
   const w = frame.w, h = frame.h;
   const slots = [];
@@ -1109,7 +1237,7 @@ function drawEmptyFrame() {
 
 function drawSlot(slot, text, frame) {
   const [x, y, w, h] = slot;
-  ctx.fillStyle = frame.style === "classic" ? "#fffdf5" : "#ffffff";
+  ctx.fillStyle = frame.style === "license" ? "#efefef" : (frame.style === "classic" ? "#fffdf5" : "#ffffff");
   ctx.fillRect(x, y, w, h);
   ctx.strokeStyle = frame.style === "lips" ? "#3b0509" : "#080808";
   ctx.lineWidth = frame.style === "polaroid" ? 18 : 10;
@@ -1165,6 +1293,7 @@ function cover(img, x, y, w, h) {
 }
 
 function brand(frame) {
+  if (frame.style === "license") return;
   ctx.textAlign = "center";
   const strip = frame.ratio === "2x6";
   const y1 = frame.h - (strip ? 310 : 260);
