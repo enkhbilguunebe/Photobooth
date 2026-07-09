@@ -17,6 +17,12 @@
           <a class="ig-link" href="https://www.instagram.com/cheezybybilly?igsh=bzJzZjdkYjhiZWdv&utm_source=qr" target="_blank" rel="noopener" aria-label="Cheezy by Billy on Instagram">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.15" fill="currentColor" stroke="none"/></svg>
           </a>
+          <a class="contact-icon mail-icon" href="mailto:biltrixtech@gmail.com" aria-label="Email Biltrix Tech">
+            <img src="/assets/gmail-icon.png" alt="Email" />
+          </a>
+          <button class="contact-icon person-card-btn" type="button" aria-label="Show business card">
+            <img src="/assets/person-icon.png" alt="Business card" />
+          </button>
         </div>
         <div class="top-actions">
           <button id="landingLangBtn" class="lang-btn" type="button">MN</button>
@@ -39,8 +45,13 @@
 
           <button id="igEarnBtnLanding" class="ghost ig-btn" type="button">
             <span class="ig-icon">📷</span>
-            <span data-i18n="igEarnBtn">Follow on Instagram · +5 tokens</span>
+            <span data-i18n="igEarnBtn">Follow on Instagram · +3 tokens</span>
           </button>
+          <div class="redeem-box">
+            <input id="redeemInputLanding" inputmode="numeric" maxlength="6" placeholder="6 digit redeem code" />
+            <button id="redeemBtnLanding" class="ghost" type="button" data-i18n="redeemBtn">Redeem code</button>
+            <p id="redeemMsgLanding" class="redeem-msg"></p>
+          </div>
           <p class="landing-token-hint" data-i18n="tokenHint">Each photo costs 1 token. New here? You start with a few on the house.</p>
         </div>
 
@@ -79,6 +90,12 @@
         <a class="ig-link" href="https://www.instagram.com/cheezybybilly?igsh=bzJzZjdkYjhiZWdv&utm_source=qr" target="_blank" rel="noopener" aria-label="Cheezy by Billy on Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.15" fill="currentColor" stroke="none"/></svg>
         </a>
+        <a class="contact-icon mail-icon" href="mailto:biltrixtech@gmail.com" aria-label="Email Biltrix Tech">
+            <img src="/assets/gmail-icon.png" alt="Email" />
+          </a>
+          <button class="contact-icon person-card-btn" type="button" aria-label="Show business card">
+            <img src="/assets/person-icon.png" alt="Business card" />
+          </button>
       </div>
 
       <div class="top-actions">
@@ -216,9 +233,14 @@
       <p id="poseNote">2-person order: Host → Guest → Host → Guest.</p>
       <p class="guest-note" data-i18n="guestNote">Guest mode: press Ready and wait for the host to start.</p>
       <p id="tokenStatus" class="token-status"></p>
+      <div class="redeem-box app-redeem">
+        <input id="redeemInputApp" inputmode="numeric" maxlength="6" placeholder="6 digit redeem code" />
+        <button id="redeemBtnApp" class="ghost" type="button" data-i18n="redeemBtn">Redeem code</button>
+        <p id="redeemMsgApp" class="redeem-msg"></p>
+      </div>
       <button id="igEarnBtnApp" class="ghost ig-btn" type="button">
         <span class="ig-icon">📷</span>
-        <span data-i18n="igEarnBtn">Follow on Instagram · +5 tokens</span>
+        <span data-i18n="igEarnBtn">Follow on Instagram · +3 tokens</span>
       </button>
     </section>
   </main>
@@ -247,6 +269,14 @@
       </div>
     </div>
   </section>
+
+  <div id="businessCardModal" class="business-card-modal hidden" aria-hidden="true">
+    <div class="business-card-backdrop" id="businessCardBackdrop"></div>
+    <div class="business-card-box" role="dialog" aria-label="Business card">
+      <button id="closeBusinessCardBtn" class="business-card-close" type="button">×</button>
+      <img src="/assets/business-card.png" alt="Enkhbilguun Agaanorov Biltrix business card" />
+    </div>
+  </div>
 
   <div id="countdown" class="countdown hidden">
     <span id="countdownText">3</span>

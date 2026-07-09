@@ -16,7 +16,64 @@ const io = new Server(server, {
 const PORT = process.env.PORT || 3000;
 const rooms = new Map();
 
+const redeemCodes = new Map();
+const REDEEM_TOKENS = 5;
+
+function makeRedeemCode() {
+  let code = "";
+  do {
+    code = String(Math.floor(100000 + Math.random() * 900000));
+  } while (redeemCodes.has(code));
+  return code;
+}
+
+app.use(express.json({ limit: "1mb" }));
 app.use(express.static(path.join(__dirname, "public")));
+
+app.post("/api/admin/create-code", (req, res) => {
+  const code = makeRedeemCode();
+  const tokens = REDEEM_TOKENS;
+  redeemCodes.set(code, {
+    code,
+    tokens,
+    used: false,
+    createdAt: new Date().toISOString(),
+    usedAt: null
+  });
+  res.json({ ok: true, code, tokens });
+});
+
+app.get("/api/admin/codes", (req, res) => {
+  res.json({
+    codes: Array.from(redeemCodes.values()).sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  });
+});
+
+app.post("/api/redeem-code", (req, res) => {
+  const code = String((req.body && req.body.code) || "").replace(/\D/g, "").slice(0, 6);
+
+  if (!/^\d{6}$/.test(code)) {
+    return res.status(400).json({ ok: false, message: "Enter a valid 6 digit code." });
+  }
+
+  const item = redeemCodes.get(code);
+
+  if (!item) {
+    return res.status(404).json({ ok: false, message: "Code not found." });
+  }
+
+  if (item.used) {
+    return res.status(409).json({ ok: false, message: "This code was already used." });
+  }
+
+  item.used = true;
+  item.usedAt = new Date().toISOString();
+  res.json({ ok: true, tokens: item.tokens, message: `Code accepted. ${item.tokens} tokens added.` });
+});
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "admin.html"));
+});
 
 app.get("/room/:roomId", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
@@ -255,5 +312,5 @@ io.on("connection", socket => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Cheezy by Billy v15 running on http://localhost:${PORT}`);
+  console.log(`Cheezy by Billy v21 redeem/contact running on http://localhost:${PORT}`);
 });

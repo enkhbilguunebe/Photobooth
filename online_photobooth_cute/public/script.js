@@ -62,6 +62,15 @@ const appTokenChip = $("appTokenChip");
 const igEarnBtnLanding = $("igEarnBtnLanding");
 const igEarnBtnApp = $("igEarnBtnApp");
 const tokenStatus = $("tokenStatus");
+const redeemInputLanding = $("redeemInputLanding");
+const redeemBtnLanding = $("redeemBtnLanding");
+const redeemMsgLanding = $("redeemMsgLanding");
+const redeemInputApp = $("redeemInputApp");
+const redeemBtnApp = $("redeemBtnApp");
+const redeemMsgApp = $("redeemMsgApp");
+const businessCardModal = $("businessCardModal");
+const closeBusinessCardBtn = $("closeBusinessCardBtn");
+const businessCardBackdrop = $("businessCardBackdrop");
 
 const TEXT = {
   en: {
@@ -75,7 +84,8 @@ const TEXT = {
     needTokens: "You need TOKEN_N token(s) for your photos. Follow us on Instagram for 5 free.",
     outOfTokens: "Out of tokens for this turn. Earn more, then retake.",
     tokensLeft: "You have TOKEN_N token(s) left.",
-    igBonusToast: "Plus 5 tokens added! Thanks for the follow.",
+    igBonusToast: "Plus 3 tokens added! Thanks for the follow.",
+    redeemBtn: "Redeem code", redeemSuccess: "Code accepted. TOKEN_N tokens added.", redeemInvalid: "Enter a valid 6 digit code.", redeemError: "Code not valid or already used.",
     backHome: "Back to home",
     btn: "MN", nameLabel: "Name", modeLabel: "Mode", poseLabel: "Pose count", filterLabel: "Filter", timerLabel: "Seconds each turn",
     shareLabel: "Send this room link", copyLink: "Copy link", readyToStart: "Ready to start",
@@ -102,7 +112,8 @@ const TEXT = {
     needTokens: "Зургаа авахад TOKEN_N токен хэрэгтэй. Instagram дагаад 5 үнэгүй ав.",
     outOfTokens: "Энэ эргэлтэд токен дууслаа. Нэмж аваад дахин оролдоорой.",
     tokensLeft: "Танд TOKEN_N токен байна.",
-    igBonusToast: "Нэмж 5 токен нэмэгдлээ! Дагасанд баярлалаа.",
+    igBonusToast: "Нэмж 3 токен нэмэгдлээ! Дагасанд баярлалаа.",
+    redeemBtn: "Код ашиглах", redeemSuccess: "Код амжилттай. TOKEN_N токен нэмэгдлээ.", redeemInvalid: "6 оронтой код оруулна уу.", redeemError: "Код буруу эсвэл ашиглагдсан байна.",
     backHome: "Нүүр хуудас руу буцах",
     btn: "EN", nameLabel: "Нэр", modeLabel: "Горим", poseLabel: "Зургийн тоо", filterLabel: "Өнгөний эффект", timerLabel: "Зураг бүрийн хугацаа",
     shareLabel: "Найздаа явуулах холбоос", copyLink: "Холбоос хуулах", readyToStart: "Эхлэхэд бэлэн",
@@ -125,7 +136,7 @@ function trTokens(key, n) { return tr(key).replace("TOKEN_N", n); }
 /* ---------------- Token economy ---------------- */
 const TOKEN_COST_PER_PHOTO = 1;
 const FREE_TOKENS_ON_FIRST_VISIT = 3;
-const INSTAGRAM_BONUS_TOKENS = 5;
+const INSTAGRAM_BONUS_TOKENS = 3;
 const INSTAGRAM_URL = "https://www.instagram.com/cheezybybilly?igsh=bzJzZjdkYjhiZWdv&utm_source=qr";
 
 function getTokens() {
@@ -154,6 +165,54 @@ function claimInstagramBonus() {
   addTokens(INSTAGRAM_BONUS_TOKENS);
   setStatus(tr("igBonusToast"), trTokens("tokensLeft", getTokens()));
   renderTokenUI();
+}
+
+
+async function redeemCode(input, msgEl) {
+  const code = (input.value || "").replace(/\D/g, "").slice(0, 6);
+  input.value = code;
+
+  if (!/^\d{6}$/.test(code)) {
+    msgEl.textContent = tr("redeemInvalid");
+    msgEl.classList.add("error");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/redeem-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.ok) {
+      msgEl.textContent = (data && data.message) || tr("redeemError");
+      msgEl.classList.add("error");
+      return;
+    }
+
+    addTokens(Number(data.tokens) || 5);
+    msgEl.textContent = trTokens("redeemSuccess", Number(data.tokens) || 5);
+    msgEl.classList.remove("error");
+    input.value = "";
+    setStatus("Redeemed", trTokens("redeemSuccess", Number(data.tokens) || 5));
+  } catch (err) {
+    console.error(err);
+    msgEl.textContent = tr("redeemError");
+    msgEl.classList.add("error");
+  }
+}
+
+function openBusinessCard() {
+  businessCardModal.classList.remove("hidden");
+  businessCardModal.setAttribute("aria-hidden", "false");
+}
+
+function closeBusinessCard() {
+  businessCardModal.classList.add("hidden");
+  businessCardModal.setAttribute("aria-hidden", "true");
 }
 
 function renderTokenUI() {
@@ -1130,6 +1189,16 @@ enterBoothBtn.onclick = showBoothApp;
 backToLandingBtn.onclick = showLanding;
 igEarnBtnLanding.onclick = claimInstagramBonus;
 igEarnBtnApp.onclick = claimInstagramBonus;
+redeemBtnLanding.onclick = () => redeemCode(redeemInputLanding, redeemMsgLanding);
+redeemBtnApp.onclick = () => redeemCode(redeemInputApp, redeemMsgApp);
+[redeemInputLanding, redeemInputApp].forEach((input, idx) => {
+  const btn = idx === 0 ? redeemBtnLanding : redeemBtnApp;
+  input.addEventListener("input", () => input.value = input.value.replace(/\D/g, "").slice(0, 6));
+  input.addEventListener("keydown", event => { if (event.key === "Enter") btn.click(); });
+});
+document.querySelectorAll(".person-card-btn").forEach(btn => btn.addEventListener("click", openBusinessCard));
+closeBusinessCardBtn.onclick = closeBusinessCard;
+businessCardBackdrop.onclick = closeBusinessCard;
 
 modeSelect.onchange = () => { updateModeUI(true); onSettingsChanged(true); };
 poseSelect.onchange = () => onSettingsChanged(true);

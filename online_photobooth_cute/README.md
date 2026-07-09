@@ -1,23 +1,28 @@
-# Cheezy by Billy v15 Pose + Frame Clean
+# Cheezy by Billy v21 Redeem + Contact
 
-Confirmed redesign:
-- Title is now two rows:
-  - Let’s get
-  - Cheezy
-- Removed old Layout A/B/C selection.
-- Added Pose count:
-  - 1 pose
-  - 2 poses
-  - 4 poses
-  - 6 poses
-- In 2-person mode, 1 pose is hidden.
-- 2-person order:
-  - Host → Guest → Host → Guest
-- Frame templates are filtered by pose count.
-- Frame logic is separated from pose count, so each frame fits the selected number of photos.
-- Host controls mode, pose count, frame, filter, and timer.
-- Guest presses Ready and waits for the host.
-- Photo taking still works through the server, so it does not require live video connection.
+Current features:
+- Landing page before the booth app.
+- 3 free tokens on first visit.
+- 1 token = 1 captured photo.
+- Instagram follow bonus now gives 3 tokens.
+- Admin can create 6 digit redeem codes at `/admin`.
+- Each redeem code gives 5 tokens and can be used once.
+- Users can redeem codes from the landing page or booth page.
+- Gmail icon links to `mailto:biltrixtech@gmail.com`.
+- Person icon opens the animated Biltrix business card modal.
+- Keeps current pose/frame/token/photo booth logic.
+
+Admin:
+- Open `/admin`
+- Click "Create 6 digit code"
+- Give the code to a user
+- User enters it in the redeem code bar
+- Code adds 5 tokens
+
+Important:
+- Redeem codes are stored in server memory.
+- Codes reset when Render restarts.
+- For production, add password protection and a database later.
 
 Render:
 Build Command: npm install

@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v15-pose-frame-clean",
-  "version": "15.0.0",
-  "description": "Clean Cheezy by Billy with pose count selection, matching frame templates, and turn-based 2-person capture.",
+  "name": "cheezy-by-billy-v21-redeem-contact",
+  "version": "21.0.0",
+  "description": "Cheezy by Billy with redeem codes, 3-token Instagram bonus, Gmail/contact icons, and animated business card.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

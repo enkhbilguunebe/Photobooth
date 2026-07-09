@@ -139,3 +139,122 @@ body.solo-mode .videos{grid-template-columns:1fr;max-width:520px;margin:0 auto}
 @media(max-width:920px){.landing-hero{grid-template-columns:1fr}.landing-gallery{min-height:260px;order:-1}.landing-steps{grid-template-columns:1fr}}
 @media(max-width:1020px){.settings{grid-template-columns:1fr 1fr}.frame-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.top{flex-direction:column;align-items:stretch}.top-actions{justify-content:space-between}.settings,.share,.videos{grid-template-columns:1fr}.frame-grid{grid-template-columns:1fr}button,.download{width:100%}.brand-logo{width:50px;height:50px}}
+
+
+/* ---------- v21 contact icons, redeem code, business card ---------- */
+.contact-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  border-radius:999px;
+  background:rgba(255,248,234,.16);
+  color:var(--cream);
+  border:2px solid rgba(255,248,234,.55);
+  flex-shrink:0;
+  padding:4px;
+  cursor:pointer;
+  transition:transform .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.contact-icon img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  display:block;
+}
+.contact-icon:hover{
+  background:var(--cream);
+  transform:translateY(-2px) scale(1.08);
+  box-shadow:5px 5px 0 rgba(0,0,0,.35);
+}
+.person-card-btn{
+  appearance:none;
+  margin:0;
+}
+.redeem-box{
+  display:grid;
+  grid-template-columns:minmax(0, 180px) auto;
+  gap:8px;
+  align-items:center;
+  margin:12px 0 8px;
+  max-width:430px;
+}
+.app-redeem{
+  margin-left:auto;
+  margin-right:auto;
+  justify-content:center;
+}
+.redeem-box input{
+  text-align:center;
+  letter-spacing:.12em;
+  font-weight:950;
+  text-transform:uppercase;
+}
+.redeem-msg{
+  grid-column:1 / -1;
+  min-height:18px;
+  margin:0;
+  color:#11734b!important;
+  font-size:13px;
+  font-weight:950;
+}
+.redeem-msg.error{
+  color:#9a0f24!important;
+}
+.business-card-modal{
+  position:fixed;
+  inset:0;
+  z-index:999998;
+  display:grid;
+  place-items:center;
+  padding:22px;
+}
+.business-card-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(7px);
+}
+.business-card-box{
+  position:relative;
+  z-index:2;
+  width:min(960px, 94vw);
+  animation:businessCardSpinIn .75s cubic-bezier(.2,1.18,.36,1) both;
+  transform-origin:center;
+}
+.business-card-box img{
+  display:block;
+  width:100%;
+  border-radius:22px;
+  box-shadow:0 30px 100px rgba(0,0,0,.55), 10px 10px 0 #111;
+}
+.business-card-close{
+  position:absolute;
+  top:-18px;
+  right:-18px;
+  width:48px;
+  height:48px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  font-size:30px;
+  line-height:1;
+  background:var(--cream);
+  color:var(--ink);
+  border:2px solid #111;
+  box-shadow:5px 5px 0 #111;
+  z-index:3;
+}
+@keyframes businessCardSpinIn{
+  0%{opacity:0;transform:scale(.15) rotate(-540deg) translateY(40px)}
+  70%{opacity:1;transform:scale(1.04) rotate(10deg) translateY(0)}
+  100%{opacity:1;transform:scale(1) rotate(0deg) translateY(0)}
+}
+@media(max-width:760px){
+  .brand{flex-wrap:wrap}
+  .contact-icon{width:32px;height:32px}
+  .redeem-box{grid-template-columns:1fr}
+  .business-card-close{right:0}
+}
