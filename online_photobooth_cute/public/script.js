@@ -193,11 +193,11 @@ async function redeemCode(input, msgEl) {
       return;
     }
 
-    addTokens(Number(data.tokens) || 5);
-    msgEl.textContent = trTokens("redeemSuccess", Number(data.tokens) || 5);
+    addTokens(Number(data.tokens) || 3);
+    msgEl.textContent = trTokens("redeemSuccess", Number(data.tokens) || 3);
     msgEl.classList.remove("error");
     input.value = "";
-    setStatus("Redeemed", trTokens("redeemSuccess", Number(data.tokens) || 5));
+    setStatus("Redeemed", trTokens("redeemSuccess", Number(data.tokens) || 3));
   } catch (err) {
     console.error(err);
     msgEl.textContent = tr("redeemError");
@@ -271,9 +271,7 @@ let lang = localStorage.getItem("cheezyLang") || "en";
 function tr(key) { return (TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || key; }
 
 const FRAMES = [
-  { id:"polaroid-1", name:"Polaroid Single", poses:1, style:"polaroid", ratio:"4x6", w:1600, h:2400 },
-  { id:"camera-1", name:"Digital Camera", poses:1, style:"camera", ratio:"4x6", w:1600, h:2400 },
-  { id:"tv-1", name:"Retro TV", poses:1, style:"tv", ratio:"4x6", w:1600, h:2400 },
+  { id:"hawaii-license-1", name:"Hawaii License", poses:1, style:"hawaii", ratio:"license", w:1700, h:1050 },
   { id:"bikini-license-1", name:"Bikini Bottom ID", poses:1, style:"license", ratio:"license", w:2000, h:1200 },
   { id:"double-strip-2", name:"Double Strip", poses:2, style:"classic", ratio:"2x6", w:800, h:2400 },
   { id:"polaroid-duo-2", name:"Polaroid Duo", poses:2, style:"polaroid", ratio:"4x6", w:1600, h:2400 },
@@ -462,7 +460,7 @@ function renderPosePills() {
 }
 
 function frameLayout(frame) {
-  if (frame.style === "license") return { cols: 1, rows: 1 };
+  if (frame.style === "license" || frame.style === "hawaii") return { cols: 1, rows: 1 };
   if (frame.ratio === "2x6") return { cols: 1, rows: frame.poses };
   if (frame.poses <= 2) return { cols: 1, rows: frame.poses };
   if (frame.poses === 4) return { cols: 2, rows: 2 };
@@ -478,6 +476,7 @@ function miniClass(frame) {
   if (frame.style === "polaroid" || frame.style === "cream") return "mini cream";
   if (frame.style === "camera") return "mini white";
   if (frame.style === "license") return "mini license-mini";
+  if (frame.style === "hawaii") return "mini hawaii-mini";
   return "mini";
 }
 
@@ -988,6 +987,7 @@ function frameBg(frame) {
   if (frame.style === "lips") return "#8b1018";
   if (frame.style === "gingham") return "#fff8ea";
   if (frame.style === "license") return "#f7ecd7";
+  if (frame.style === "hawaii") return "#ffffff";
   if (frame.style === "polaroid" || frame.style === "camera" || frame.style === "tv" || frame.style === "cream") return "#fff8ea";
   if (frame.style === "scrapbook") return "#f6ead2";
   return "#050505";
@@ -1010,6 +1010,7 @@ function paper(frame) {
   if (frame.style === "tv") drawTvDecor(frame);
   if (frame.style === "scrapbook") drawScrapbookTape(frame);
   if (frame.style === "license") drawLicenseDecor(frame);
+  if (frame.style === "hawaii") drawHawaiiLicenseDecor(frame);
 }
 
 function drawFilmHoles(frame) {
@@ -1190,7 +1191,93 @@ function roundRect(x, y, w, h, r, fill, stroke) {
   if (stroke) ctx.stroke();
 }
 
+
+function drawHawaiiLicenseDecor(frame) {
+  const w = frame.w, h = frame.h;
+
+  ctx.save();
+  ctx.fillStyle = "#fffdf7";
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = "#222";
+  ctx.lineWidth = 4;
+  roundRect(50, 45, w - 100, h - 90, 22, false, true);
+  ctx.restore();
+
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#1f71c9";
+  ctx.font = "900 108px Impact, Arial Black, Arial";
+  ctx.fillText("HAWAII", 710, 135);
+  ctx.font = "900 46px Arial";
+  ctx.fillText("DRIVER", 1188, 90);
+  ctx.fillText("LICENSE", 1188, 140);
+
+  ctx.fillStyle = "#111";
+  ctx.font = "34px Arial";
+  ctx.fillText("NUMBER", 710, 205);
+  ctx.font = "900 54px Arial";
+  ctx.fillText("01-47-87441", 900, 210);
+
+  const colors = ["#e5292f", "#ff8f1f", "#ffe12b", "#21a950", "#2878d5", "#7a3db8"];
+  ctx.save();
+  ctx.translate(650, 250);
+  ctx.rotate(0.28);
+  colors.forEach((c, i) => {
+    ctx.fillStyle = c;
+    ctx.fillRect(0, i * 34, 1050, 34);
+  });
+  ctx.restore();
+
+  ctx.fillStyle = "#111";
+  ctx.font = "900 38px Arial";
+  ctx.fillText("DOB 06/03/1981", 710, 305);
+  ctx.fillText("EXP 06/03/2008", 1175, 305);
+
+  ctx.font = "28px Arial";
+  ctx.fillText("HT", 720, 385);
+  ctx.fillText("WT", 865, 385);
+  ctx.fillText("HAIR", 1010, 385);
+  ctx.fillText("EYES", 1160, 385);
+  ctx.fillText("SEX", 1310, 385);
+  ctx.fillText("CTY", 1455, 385);
+
+  ctx.font = "30px Arial";
+  ctx.fillText("6-10", 720, 435);
+  ctx.fillText("150", 865, 435);
+  ctx.fillText("BRO", 1010, 435);
+  ctx.fillText("BRO", 1160, 435);
+  ctx.fillText("YES", 1310, 435);
+  ctx.fillText("0", 1455, 435);
+
+  ctx.font = "28px Arial";
+  ctx.fillText("ISSUE   DATE   CLASS   RESTR   ENDORSE", 710, 505);
+  ctx.fillText("06/18/1998        3", 710, 560);
+
+  ctx.fillStyle = "#f9f9f9";
+  ctx.fillRect(90, 90, 580, 475);
+  ctx.strokeStyle = "#222";
+  ctx.lineWidth = 5;
+  ctx.strokeRect(90, 90, 580, 475);
+
+  ctx.fillStyle = "#111";
+  let x = 95;
+  const bars = [6,3,8,2,4,7,3,9,2,5,4,8,2,6,3,7,5,2,9,4,3,7,2,6,5,3,8,2,4,7,3,9,2,5];
+  bars.forEach((bw, i) => {
+    if (i % 2 === 0) ctx.fillRect(x, 610, bw, 120);
+    x += bw + 4;
+  });
+
+  ctx.font = "900 40px Arial";
+  ctx.fillText("Mc LOVIN", 100, 780);
+  ctx.fillText("892 MOMONA ST", 100, 840);
+  ctx.fillText("HONOLULU , HI 96820", 100, 900);
+
+  ctx.font = "54px cursive";
+  ctx.fillText("McLovin", 850, 735);
+}
+
+
 function slotsFor(frame) {
+  if (frame.style === "hawaii") return [[90, 90, 580, 475]];
   if (frame.style === "license") return [[130, 470, 580, 640]];
   const p = frame.poses;
   const w = frame.w, h = frame.h;
@@ -1237,7 +1324,7 @@ function drawEmptyFrame() {
 
 function drawSlot(slot, text, frame) {
   const [x, y, w, h] = slot;
-  ctx.fillStyle = frame.style === "license" ? "#efefef" : (frame.style === "classic" ? "#fffdf5" : "#ffffff");
+  ctx.fillStyle = (frame.style === "license" || frame.style === "hawaii") ? "#efefef" : (frame.style === "classic" ? "#fffdf5" : "#ffffff");
   ctx.fillRect(x, y, w, h);
   ctx.strokeStyle = frame.style === "lips" ? "#3b0509" : "#080808";
   ctx.lineWidth = frame.style === "polaroid" ? 18 : 10;
@@ -1293,7 +1380,7 @@ function cover(img, x, y, w, h) {
 }
 
 function brand(frame) {
-  if (frame.style === "license") return;
+  if (frame.style === "license" || frame.style === "hawaii") return;
   ctx.textAlign = "center";
   const strip = frame.ratio === "2x6";
   const y1 = frame.h - (strip ? 310 : 260);

@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v23-license-frame",
-  "version": "23.0.0",
-  "description": "Cheezy by Billy with fixed developer popup and Bikini Bottom 1-pose license frame.",
+  "name": "cheezy-by-billy-v24-fixed-codes-hawaii",
+  "version": "24.0.0",
+  "description": "Cheezy by Billy with three fixed redeem codes and Hawaii license 1-pose frame.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

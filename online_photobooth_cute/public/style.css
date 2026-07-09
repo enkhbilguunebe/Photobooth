@@ -483,3 +483,44 @@ body.solo-mode .videos{grid-template-columns:1fr;max-width:520px;margin:0 auto}
 .developer-card-box{
   display:block !important;
 }
+
+
+/* ---------- v24 fixed codes + Hawaii License frame thumbnail ---------- */
+.mini.hawaii-mini{
+  width:160px !important;
+  height:96px !important;
+  margin:0 auto;
+  border:2px solid #111;
+  border-radius:10px;
+  overflow:hidden;
+  position:relative;
+  background:
+    linear-gradient(25deg, transparent 0 53%, #e5292f 53% 58%, #ff8f1f 58% 63%, #ffe12b 63% 68%, #21a950 68% 73%, #2878d5 73% 78%, #7a3db8 78% 83%, transparent 83%),
+    #fffdf7 !important;
+}
+
+.mini.hawaii-mini::before{
+  content:"HAWAII";
+  position:absolute;
+  top:6px;
+  left:70px;
+  font-family:Impact, Arial Black, Arial;
+  font-size:20px;
+  color:#1f71c9;
+  font-weight:950;
+}
+
+.mini.hawaii-mini::after{
+  content:"";
+  position:absolute;
+  left:12px;
+  top:16px;
+  width:48px;
+  height:38px;
+  border:2px solid #111;
+  background:#f2f2f2;
+}
+
+.mini.hawaii-mini i{
+  display:none !important;
+}

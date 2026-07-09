@@ -1,48 +1,27 @@
-# Cheezy by Billy v21 Redeem + Contact
+# Cheezy by Billy v24 Fixed Codes + Hawaii License
 
-Current features:
-- Landing page before the booth app.
-- 3 free tokens on first visit.
-- 1 token = 1 captured photo.
-- Instagram follow bonus now gives 3 tokens.
-- Admin can create 6 digit redeem codes at `/admin`.
-- Each redeem code gives 5 tokens and can be used once.
-- Users can redeem codes from the landing page or booth page.
-- Gmail icon links to `mailto:biltrixtech@gmail.com`.
-- Person icon opens the animated Biltrix business card modal.
-- Keeps current pose/frame/token/photo booth logic.
+Changes:
+- Removed the random/admin generated redeem-code system.
+- Added exactly 3 fixed 6-digit redeem codes.
+- Each code gives 3 tokens.
+- Each code can be used once while the server is running.
+- Removed these 1-pose frame options:
+  - Polaroid Single
+  - Digital Camera
+  - Retro TV
+- Added new 1-pose frame:
+  - Hawaii License
 
-Admin:
-- Open `/admin`
-- Click "Create 6 digit code"
-- Give the code to a user
-- User enters it in the redeem code bar
-- Code adds 5 tokens
+Fixed redeem codes:
+- 835294
+- 472619
+- 906381
 
 Important:
-- Redeem codes are stored in server memory.
-- Codes reset when Render restarts.
-- For production, add password protection and a database later.
+- Codes are tracked in server memory.
+- If Render restarts, the codes become usable again.
+- For permanent one-time use, add a database later.
 
 Render:
 Build Command: npm install
 Start Command: npm start
-
-
-## v22
-- Replaced weak Gmail/person image icons with clean matching SVG-style circular icons.
-- Person icon now opens a developer profile card instead of the old business card image.
-- Profile card includes:
-  - Developer title
-  - Enkhbilguun Agaanorov
-  - circular developer photo
-  - Instagram link: @ebe.exe
-  - Toronto, Ontario
-- Kept redeem-code/token/photo booth logic unchanged.
-
-
-## v23
-- Fixed the person icon popup so the old business-card image no longer appears.
-- Person icon now only opens the developer profile card.
-- Added `Bikini Bottom ID` frame to 1-person / 1-pose frame options.
-- The captured photo is placed inside the left portrait area of the license frame.

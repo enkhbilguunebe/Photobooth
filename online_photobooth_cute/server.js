@@ -16,37 +16,27 @@ const io = new Server(server, {
 const PORT = process.env.PORT || 3000;
 const rooms = new Map();
 
-const redeemCodes = new Map();
-const REDEEM_TOKENS = 5;
+const FIXED_REDEEM_CODES = {
+  "835294": 3,
+  "472619": 3,
+  "906381": 3
+};
 
-function makeRedeemCode() {
-  let code = "";
-  do {
-    code = String(Math.floor(100000 + Math.random() * 900000));
-  } while (redeemCodes.has(code));
-  return code;
+const usedRedeemCodes = new Set();
+
+function listFixedCodes() {
+  return Object.entries(FIXED_REDEEM_CODES).map(([code, tokens]) => ({
+    code,
+    tokens,
+    used: usedRedeemCodes.has(code)
+  }));
 }
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.post("/api/admin/create-code", (req, res) => {
-  const code = makeRedeemCode();
-  const tokens = REDEEM_TOKENS;
-  redeemCodes.set(code, {
-    code,
-    tokens,
-    used: false,
-    createdAt: new Date().toISOString(),
-    usedAt: null
-  });
-  res.json({ ok: true, code, tokens });
-});
-
 app.get("/api/admin/codes", (req, res) => {
-  res.json({
-    codes: Array.from(redeemCodes.values()).sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-  });
+  res.json({ codes: listFixedCodes() });
 });
 
 app.post("/api/redeem-code", (req, res) => {
@@ -56,19 +46,18 @@ app.post("/api/redeem-code", (req, res) => {
     return res.status(400).json({ ok: false, message: "Enter a valid 6 digit code." });
   }
 
-  const item = redeemCodes.get(code);
+  const tokens = FIXED_REDEEM_CODES[code];
 
-  if (!item) {
+  if (!tokens) {
     return res.status(404).json({ ok: false, message: "Code not found." });
   }
 
-  if (item.used) {
+  if (usedRedeemCodes.has(code)) {
     return res.status(409).json({ ok: false, message: "This code was already used." });
   }
 
-  item.used = true;
-  item.usedAt = new Date().toISOString();
-  res.json({ ok: true, tokens: item.tokens, message: `Code accepted. ${item.tokens} tokens added.` });
+  usedRedeemCodes.add(code);
+  res.json({ ok: true, tokens, message: `Code accepted. ${tokens} tokens added.` });
 });
 
 app.get("/admin", (req, res) => {
@@ -312,5 +301,5 @@ io.on("connection", socket => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Cheezy by Billy v21 redeem/contact running on http://localhost:${PORT}`);
+  console.log(`Cheezy by Billy v24 fixed codes Hawaii running on http://localhost:${PORT}`);
 });
