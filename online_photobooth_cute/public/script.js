@@ -76,13 +76,13 @@ const TEXT = {
   en: {
     tokensWord: "tokens", landingEyebrow: "Free vintage photo booth",
     enterBooth: "Start a Cheezy session", igEarnBtn: "Follow on Instagram plus 5 tokens", igClaimedBtn: "Bonus claimed",
-    tokenHint: "Each photo costs 1 token. New here? You start with a few on the house.",
+    tokenHint: "Taking photos is free. Downloading the final PNG costs 1 token.",
     step1Title: "Choose your setup", step1Body: "Pick 1, 2, 4 or 6 poses and a matching frame, like polaroid, film strip, or scrapbook.",
     step2Title: "Send the link, strike a pose", step2Body: "Solo, or share the room link so a friend anywhere can join and take turns with you.",
     step3Title: "Download your print", step3Body: "Your finished scrapbook strip is ready to save and share in seconds.",
     landingFooter: "Made for people who miss real photo booths.",
-    needTokens: "You need TOKEN_N token(s) for your photos. Follow us on Instagram for 5 free.",
-    outOfTokens: "Out of tokens for this turn. Earn more, then retake.",
+    needTokens: "You need 1 token to download. Follow us on Instagram or use a redeem code.",
+    outOfTokens: "Out of tokens. Earn more, then download.",
     tokensLeft: "You have TOKEN_N token(s) left.",
     igBonusToast: "Plus 3 tokens added! Thanks for the follow.",
     redeemBtn: "Redeem code", redeemSuccess: "Code accepted. TOKEN_N tokens added.", redeemInvalid: "Enter a valid 6 digit code.", redeemError: "Code not valid or already used.",
@@ -104,13 +104,13 @@ const TEXT = {
   mn: {
     tokensWord: "токен", landingEyebrow: "Үнэгүй ретро фото будк",
     enterBooth: "Cheezy эхлүүлэх", igEarnBtn: "Instagram дагаад, 5 токен ав", igClaimedBtn: "Бонус авсан",
-    tokenHint: "Зураг бүр 1 токен зарцуулна. Шинэ хэрэглэгч бол хэдэн токен үнэгүй өгнө.",
+    tokenHint: "Зураг авах үнэгүй. Бэлэн PNG татахад 1 токен зарцуулна.",
     step1Title: "Тохиргоогоо сонго", step1Body: "1, 2, 4 эсвэл 6 pose, тохирох frame-аа сонго, polaroid, film strip, scrapbook гэх мэт.",
     step2Title: "Холбоос явуулаад зураг ав", step2Body: "Ганцаараа эсвэл room холбоосоо явуулж найзтайгаа ээлжлэн зураг ав.",
     step3Title: "Зургаа татаж ав", step3Body: "Бэлэн scrapbook зураг хэдхэн секундэд татахад бэлэн болно.",
     landingFooter: "Жинхэнэ фото будкийг санадаг хүмүүст зориулав.",
-    needTokens: "Зургаа авахад TOKEN_N токен хэрэгтэй. Instagram дагаад 5 үнэгүй ав.",
-    outOfTokens: "Энэ эргэлтэд токен дууслаа. Нэмж аваад дахин оролдоорой.",
+    needTokens: "PNG татахад 1 токен хэрэгтэй. Instagram дагах эсвэл код ашиглаарай.",
+    outOfTokens: "Токен дууссан байна. Нэмж аваад татаж аваарай.",
     tokensLeft: "Танд TOKEN_N токен байна.",
     igBonusToast: "Нэмж 3 токен нэмэгдлээ! Дагасанд баярлалаа.",
     redeemBtn: "Код ашиглах", redeemSuccess: "Код амжилттай. TOKEN_N токен нэмэгдлээ.", redeemInvalid: "6 оронтой код оруулна уу.", redeemError: "Код буруу эсвэл ашиглагдсан байна.",
@@ -230,8 +230,7 @@ function renderTokenUI() {
 }
 
 function requiredTokensForMe() {
-  const frame = selectedFrame();
-  return myRequiredPhotos(frame.poses, modeSelect.value) * TOKEN_COST_PER_PHOTO;
+  return 1;
 }
 
 function renderLandingGallery() {
@@ -436,6 +435,7 @@ function renderFilterPills() {
       if (!isHost) return;
       filterSelect.value = val;
       renderFilterPills();
+      applyLiveFilterPreview();
       drawIfReady();
       emitSettings();
     };
@@ -445,7 +445,7 @@ function renderFilterPills() {
 
 function renderTimerPills() {
   timerPills.innerHTML = "";
-  [2, 3, 5, 7].forEach(sec => {
+  [3, 5, 7].forEach(sec => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "pose-pill" + (Number(timerSelect.value) === sec ? " active" : "");
@@ -586,6 +586,7 @@ function applySettings(settings) {
 
   updateModeUI(false);
   refreshFrameUI();
+  applyLiveFilterPreview();
   drawIfReady();
 }
 
@@ -743,15 +744,6 @@ async function handleSignal({ from, data }) {
 }
 
 function toggleReady() {
-  if (!localReady) {
-    const need = requiredTokensForMe();
-    if (getTokens() < need) {
-      tokenStatus.textContent = trTokens("needTokens", need);
-      tokenStatus.classList.remove("hidden");
-      setStatus("Not enough tokens", trTokens("needTokens", need));
-      return;
-    }
-  }
   tokenStatus.classList.add("hidden");
   localReady = !localReady;
   readyBtn.textContent = localReady ? tr("readyDone") : tr("imReady");
@@ -766,7 +758,7 @@ function updateShootButton() {
     shootBtn.disabled = true;
     return;
   }
-  shootBtn.disabled = getTokens() < requiredTokensForMe();
+  shootBtn.disabled = false;
 }
 
 function requestShoot() {
@@ -775,13 +767,6 @@ function requestShoot() {
     return;
   }
   if (shooting) return;
-  const need = requiredTokensForMe();
-  if (getTokens() < need) {
-    tokenStatus.textContent = trTokens("needTokens", need);
-    tokenStatus.classList.remove("hidden");
-    setStatus("Not enough tokens", trTokens("needTokens", need));
-    return;
-  }
   emitSettings();
   resetPhotos(false, false);
   setStatus("Checking", modeSelect.value === "two" ? "Starting if both people are ready." : "Starting countdown.");
@@ -928,6 +913,12 @@ function filter() {
   if (value === "purple") return "contrast(128%) saturate(155%) hue-rotate(255deg)";
   if (value === "pixel") return "contrast(160%) saturate(115%)";
   return "none";
+}
+
+function applyLiveFilterPreview() {
+  const previewFilter = filter();
+  if (localVideo) localVideo.style.filter = previewFilter;
+  if (remoteVideo) remoteVideo.style.filter = previewFilter;
 }
 
 function capture(video, mirror = false) {
@@ -1586,7 +1577,7 @@ businessCardBackdrop.onclick = closeBusinessCard;
 
 modeSelect.onchange = () => { updateModeUI(true); onSettingsChanged(true); };
 poseSelect.onchange = () => onSettingsChanged(true);
-filterSelect.onchange = () => { drawIfReady(); emitSettings(); };
+filterSelect.onchange = () => { applyLiveFilterPreview(); drawIfReady(); emitSettings(); };
 timerSelect.onchange = () => { updatePoseNote(); emitSettings(); };
 nameInput.oninput = () => { localNameLabel.textContent = getName(); drawIfReady(); socket.emit("update-profile", { name: getName() }); };
 
@@ -1594,6 +1585,7 @@ applyRoleUI();
 applyLanguage();
 refreshFrameUI();
 updateModeUI(false);
+applyLiveFilterPreview();
 drawEmptyFrame();
 renderLandingGallery();
 renderTokenUI();

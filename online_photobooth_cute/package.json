@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v25-more-templates-filters",
-  "version": "25.0.0",
-  "description": "Cheezy by Billy with travel license/wanted templates and expanded filter options.",
+  "name": "cheezy-by-billy-v26-layout-livefilter-downloadtokens",
+  "version": "26.0.0",
+  "description": "Cheezy by Billy with reordered booth sections, live camera filter preview, and tokens used only for downloads.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

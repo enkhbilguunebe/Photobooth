@@ -617,3 +617,15 @@ body.solo-mode .videos{grid-template-columns:1fr;max-width:520px;margin:0 auto}
   overflow:auto;
   padding-bottom:4px;
 }
+
+
+/* ---------- v26 order + live filter polish ---------- */
+#filterPills.pose-pills{
+  max-height:220px;
+}
+video{
+  transition:filter .22s ease;
+}
+.actions .redeem-box{
+  margin-top:14px;
+}

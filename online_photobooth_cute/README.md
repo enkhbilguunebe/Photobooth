@@ -45,3 +45,24 @@ Expanded filters:
 - Green cam
 - Purple haze
 - Pixel sharp
+
+
+## v26
+Changed booth section order:
+1. Title
+2. Name
+3. Mode
+4. Send this room link
+5. Two-person mode status
+6. Choose a frame
+7. Seconds each turn
+8. Filter
+9. Camera
+10. Buttons / Start camera
+
+Other changes:
+- Removed 2 second timer option.
+- Filters now apply live to the camera preview before taking photos.
+- Tokens are no longer required for Ready or Start Booth.
+- Taking photos is free.
+- Downloading the final PNG costs 1 token.
