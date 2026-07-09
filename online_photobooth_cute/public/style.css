@@ -27,6 +27,9 @@ body::after{
 .app{position:relative;z-index:1;width:min(1180px,94vw);margin:0 auto;padding:24px 0 56px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
 .brand{display:flex;align-items:center;gap:12px;color:var(--cream);text-shadow:0 4px 20px rgba(0,0,0,.65)}
+.ig-link{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:999px;background:rgba(255,248,234,.16);color:var(--cream);border:2px solid rgba(255,248,234,.55);flex-shrink:0;transition:transform .18s ease,background .18s ease,color .18s ease}
+.ig-link svg{width:17px;height:17px}
+.ig-link:hover{background:var(--cream);color:var(--ink);transform:translateY(-2px) scale(1.06)}
 .brand-logo{width:54px;height:54px;object-fit:cover;border-radius:999px;background:#fff;border:5px solid #fff;box-shadow:0 8px 22px rgba(0,0,0,.28),4px 4px 0 #111;transform:rotate(-4deg)}
 .brand strong{display:block;font-size:28px;line-height:1;letter-spacing:-.04em}
 .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}

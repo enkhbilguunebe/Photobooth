@@ -126,7 +126,7 @@ function trTokens(key, n) { return tr(key).replace("TOKEN_N", n); }
 const TOKEN_COST_PER_PHOTO = 1;
 const FREE_TOKENS_ON_FIRST_VISIT = 3;
 const INSTAGRAM_BONUS_TOKENS = 5;
-const INSTAGRAM_URL = "https://instagram.com/cheezybybilly"; // TODO: replace with your real Instagram handle
+const INSTAGRAM_URL = "https://www.instagram.com/cheezybybilly?igsh=bzJzZjdkYjhiZWdv&utm_source=qr";
 
 function getTokens() {
   const raw = localStorage.getItem("cheezyTokens");
@@ -505,7 +505,7 @@ function applySettings(settings) {
 
   updateModeUI(false);
   refreshFrameUI();
-  drawEmptyFrame();
+  drawIfReady();
 }
 
 function refreshFrameUI() {
