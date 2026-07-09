@@ -258,3 +258,177 @@ body.solo-mode .videos{grid-template-columns:1fr;max-width:520px;margin:0 auto}
   .redeem-box{grid-template-columns:1fr}
   .business-card-close{right:0}
 }
+
+
+/* ---------- v22 clean matching contact icons + developer profile card ---------- */
+.brand .contact-icon,
+.brand .ig-link{
+  width:44px !important;
+  height:44px !important;
+  padding:0 !important;
+  border-radius:999px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:rgba(255,248,234,.18) !important;
+  color:var(--cream) !important;
+  border:3px solid rgba(255,248,234,.65) !important;
+  box-shadow:0 8px 24px rgba(0,0,0,.22) !important;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  overflow:hidden;
+}
+
+.brand .ig-link svg,
+.brand .contact-icon svg{
+  width:25px !important;
+  height:25px !important;
+  display:block !important;
+  fill:none !important;
+  stroke:currentColor !important;
+  stroke-width:2.25 !important;
+  stroke-linecap:round !important;
+  stroke-linejoin:round !important;
+}
+
+.brand .contact-icon img{
+  display:none !important;
+}
+
+.brand .ig-link:hover,
+.brand .contact-icon:hover{
+  background:var(--cream) !important;
+  color:var(--ink) !important;
+  transform:translateY(-3px) scale(1.08) !important;
+  box-shadow:7px 7px 0 rgba(0,0,0,.38) !important;
+}
+
+.person-card-btn{
+  background:rgba(255,248,234,.18) !important;
+  border:3px solid rgba(255,248,234,.65) !important;
+  margin:0 !important;
+}
+
+.developer-card-box{
+  position:relative;
+  z-index:2;
+  width:min(420px, 92vw);
+  min-height:560px;
+  border-radius:34px;
+  padding:34px 26px 28px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(169,220,247,.45), transparent 32%),
+    linear-gradient(180deg, #fff8ea 0%, #f7e6ca 100%);
+  border:3px solid #111;
+  box-shadow:0 30px 100px rgba(0,0,0,.6), 10px 10px 0 #111;
+  animation:businessCardSpinIn .78s cubic-bezier(.2,1.18,.36,1) both;
+  transform-origin:center;
+}
+
+.developer-kicker{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:999px;
+  background:#111;
+  color:#fff8ea;
+  font-weight:950;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:12px;
+  box-shadow:4px 4px 0 rgba(0,0,0,.18);
+}
+
+.developer-card-box h2{
+  margin:16px auto 18px;
+  font-size:clamp(28px, 6vw, 40px);
+  line-height:1.02;
+  max-width:340px;
+  letter-spacing:-.06em;
+  color:#160d0d;
+}
+
+.developer-photo-wrap{
+  width:220px;
+  height:220px;
+  margin:0 auto 20px;
+  padding:9px;
+  border-radius:999px;
+  background:#fff;
+  border:5px solid #111;
+  box-shadow:0 18px 40px rgba(0,0,0,.24), 6px 6px 0 #9a0f24;
+  overflow:hidden;
+}
+
+.developer-photo-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:999px;
+  display:block;
+}
+
+.developer-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:2px auto 14px;
+  padding:12px 18px;
+  border-radius:999px;
+  background:#a9dcf7;
+  color:#061723;
+  text-decoration:none;
+  font-weight:950;
+  border:2px solid #111;
+  box-shadow:5px 5px 0 #111;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+
+.developer-link::before{
+  content:"◎";
+  font-size:20px;
+  line-height:1;
+}
+
+.developer-link:hover{
+  transform:translateY(-3px) scale(1.04);
+  box-shadow:8px 8px 0 #111;
+}
+
+.developer-location{
+  margin:0;
+  font-size:20px;
+  color:#6f6262;
+  font-weight:950;
+}
+
+.developer-location::before{
+  content:"📍 ";
+}
+
+.business-card-close{
+  top:-16px !important;
+  right:-16px !important;
+}
+
+@media(max-width:760px){
+  .brand .contact-icon,
+  .brand .ig-link{
+    width:40px !important;
+    height:40px !important;
+  }
+  .brand .ig-link svg,
+  .brand .contact-icon svg{
+    width:22px !important;
+    height:22px !important;
+  }
+  .developer-card-box{
+    min-height:auto;
+    padding:30px 20px 24px;
+  }
+  .developer-photo-wrap{
+    width:190px;
+    height:190px;
+  }
+}

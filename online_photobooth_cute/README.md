@@ -27,3 +27,15 @@ Important:
 Render:
 Build Command: npm install
 Start Command: npm start
+
+
+## v22
+- Replaced weak Gmail/person image icons with clean matching SVG-style circular icons.
+- Person icon now opens a developer profile card instead of the old business card image.
+- Profile card includes:
+  - Developer title
+  - Enkhbilguun Agaanorov
+  - circular developer photo
+  - Instagram link: @ebe.exe
+  - Toronto, Ontario
+- Kept redeem-code/token/photo booth logic unchanged.

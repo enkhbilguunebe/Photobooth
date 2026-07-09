@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v21-redeem-contact",
-  "version": "21.0.0",
-  "description": "Cheezy by Billy with redeem codes, 3-token Instagram bonus, Gmail/contact icons, and animated business card.",
+  "name": "cheezy-by-billy-v22-profile-card",
+  "version": "22.0.0",
+  "description": "Cheezy by Billy with cleaner header icons and animated developer profile card.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
