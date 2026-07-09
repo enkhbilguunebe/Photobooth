@@ -220,10 +220,10 @@ const FRAMES = [
   { id:"gingham-duo-2", name:"Gingham Duo", poses:2, style:"gingham", ratio:"4x6", w:1600, h:2400 },
   { id:"classic-black-4", name:"Classic Black", poses:4, style:"classic", ratio:"2x6", w:800, h:2400 },
   { id:"film-strip-4", name:"Film Strip", poses:4, style:"film", ratio:"2x6", w:900, h:2500 },
-  { id:"red-lips-4", name:"Red Lips Strip", poses:4, style:"lips", ratio:"2x6", w:900, h:2500 },
+  { id:"red-lips-4", name:"Red Lips Strip", poses:4, style:"lips", ratio:"4x6", w:1600, h:2400 },
   { id:"scrapbook-4", name:"Scrapbook 4", poses:4, style:"scrapbook", ratio:"4x6", w:1600, h:2400 },
   { id:"long-film-6", name:"Long Film 6", poses:6, style:"film", ratio:"2x6", w:900, h:2800 },
-  { id:"cream-strip-6", name:"Cream Strip 6", poses:6, style:"cream", ratio:"2x6", w:900, h:2800 },
+  { id:"cream-strip-6", name:"Cream Strip 6", poses:6, style:"cream", ratio:"4x6", w:1600, h:2400 },
   { id:"collage-6", name:"Collage 6", poses:6, style:"scrapbook", ratio:"4x6", w:1600, h:2400 },
   { id:"gingham-6", name:"Gingham 6", poses:6, style:"gingham", ratio:"4x6", w:1600, h:2400 }
 ];
@@ -401,18 +401,22 @@ function renderPosePills() {
   });
 }
 
+function frameLayout(frame) {
+  if (frame.ratio === "2x6") return { cols: 1, rows: frame.poses };
+  if (frame.poses <= 2) return { cols: 1, rows: frame.poses };
+  if (frame.poses === 4) return { cols: 2, rows: 2 };
+  if (frame.poses === 6) return { cols: 2, rows: 3 };
+  return { cols: 1, rows: frame.poses };
+}
+
 function miniClass(frame) {
-  const p = `p${frame.poses}`;
-  if (frame.style === "classic") return `mini ${p}`;
-  if (frame.style === "film") return `mini ${p} film`;
-  if (frame.style === "lips") return `mini ${p} red`;
-  if (frame.style === "scrapbook") return `mini ${p} stars`;
-  if (frame.style === "gingham") return `mini ${p} gingham`;
-  if (frame.style === "polaroid") return `mini ${p} cream`;
-  if (frame.style === "camera") return `mini ${p} white`;
-  if (frame.style === "tv") return `mini ${p}`;
-  if (frame.style === "cream") return `mini ${p} cream`;
-  return `mini ${p}`;
+  if (frame.style === "film") return "mini film";
+  if (frame.style === "lips") return "mini red";
+  if (frame.style === "scrapbook") return "mini stars";
+  if (frame.style === "gingham") return "mini gingham";
+  if (frame.style === "polaroid" || frame.style === "cream") return "mini cream";
+  if (frame.style === "camera") return "mini white";
+  return "mini";
 }
 
 function renderFrameCards() {
@@ -428,6 +432,10 @@ function renderFrameCards() {
 
     const mini = document.createElement("span");
     mini.className = miniClass(frame);
+    const { cols, rows } = frameLayout(frame);
+    mini.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    mini.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+    mini.style.width = cols === 1 && rows > 1 ? "58px" : cols === 2 ? "112px" : "100%";
     for (let i = 0; i < Math.min(frame.poses, 6); i++) {
       mini.appendChild(document.createElement("i"));
     }
