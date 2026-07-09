@@ -96,46 +96,60 @@
         <span data-i18n="nameLabel">Name</span>
         <input id="nameInput" maxlength="18" value="Me" />
       </label>
+    </section>
 
-      <label class="host-only">
-        <span data-i18n="modeLabel">Mode</span>
-        <select id="modeSelect">
-          <option value="one" data-i18n="modeOne">1 person</option>
-          <option value="two" selected data-i18n="modeTwo">2 people</option>
-        </select>
-      </label>
+    <div class="hidden-native-controls" aria-hidden="true">
+      <select id="modeSelect">
+        <option value="one" data-i18n="modeOne">1 person</option>
+        <option value="two" selected data-i18n="modeTwo">2 people</option>
+      </select>
+      <select id="poseSelect">
+        <option value="1">1 pose</option>
+        <option value="2">2 poses</option>
+        <option value="4" selected>4 poses</option>
+        <option value="6">6 poses</option>
+      </select>
+      <select id="filterSelect">
+        <option value="none" data-i18n="filterNone">No filter</option>
+        <option value="contrast" data-i18n="filterContrast">More contrast</option>
+        <option value="boothbw" selected data-i18n="filterBoothBw">Vintage booth B/W</option>
+        <option value="oldbw" data-i18n="filterOldBw">Old black & white</option>
+        <option value="vintage" data-i18n="filterVintage">Retro warm</option>
+        <option value="soft" data-i18n="filterSoft">Soft pastel</option>
+      </select>
+      <select id="timerSelect">
+        <option value="2">2 seconds</option>
+        <option value="3" selected>3 seconds</option>
+        <option value="5">5 seconds</option>
+        <option value="7">7 seconds</option>
+      </select>
+    </div>
 
-      <label class="host-only">
-        <span data-i18n="poseLabel">Pose count</span>
-        <select id="poseSelect">
-          <option value="1">1 pose</option>
-          <option value="2">2 poses</option>
-          <option value="4" selected>4 poses</option>
-          <option value="6">6 poses</option>
-        </select>
-      </label>
+    <section class="panel frame-panel host-only">
+      <header class="section-header">
+        <div>
+          <h2 data-i18n="modeLabel">Mode</h2>
+        </div>
+      </header>
+      <div class="pose-pills" id="modePills"></div>
+    </section>
 
-      <label class="host-only">
-        <span data-i18n="filterLabel">Filter</span>
-        <select id="filterSelect">
-          <option value="none" data-i18n="filterNone">No filter</option>
-          <option value="contrast" data-i18n="filterContrast">More contrast</option>
-          <option value="boothbw" selected data-i18n="filterBoothBw">Vintage booth B/W</option>
-          <option value="oldbw" data-i18n="filterOldBw">Old black & white</option>
-          <option value="vintage" data-i18n="filterVintage">Retro warm</option>
-          <option value="soft" data-i18n="filterSoft">Soft pastel</option>
-        </select>
-      </label>
+    <section class="panel frame-panel host-only">
+      <header class="section-header">
+        <div>
+          <h2 data-i18n="filterLabel">Filter</h2>
+        </div>
+      </header>
+      <div class="pose-pills" id="filterPills"></div>
+    </section>
 
-      <label class="host-only">
-        <span data-i18n="timerLabel">Seconds each turn</span>
-        <select id="timerSelect">
-          <option value="2">2 seconds</option>
-          <option value="3" selected>3 seconds</option>
-          <option value="5">5 seconds</option>
-          <option value="7">7 seconds</option>
-        </select>
-      </label>
+    <section class="panel frame-panel host-only">
+      <header class="section-header">
+        <div>
+          <h2 data-i18n="timerLabel">Seconds each turn</h2>
+        </div>
+      </header>
+      <div class="pose-pills" id="timerPills"></div>
     </section>
 
     <section class="panel frame-panel host-only">
@@ -193,7 +207,6 @@
       <button id="startBtn" type="button" data-i18n="startJoin">Start camera & join</button>
       <button id="readyBtn" class="ghost" type="button" disabled data-i18n="imReady">I'm ready</button>
       <button id="shootBtn" class="primary host-only" type="button" disabled data-i18n="startBooth">Start photo booth</button>
-      <button id="resetBtn" class="ghost" type="button" disabled data-i18n="retake">Retake</button>
       <p id="poseNote">2-person order: Host → Guest → Host → Guest.</p>
       <p class="guest-note" data-i18n="guestNote">Guest mode: press Ready and wait for the host to start.</p>
       <p id="tokenStatus" class="token-status"></p>
@@ -202,16 +215,32 @@
         <span data-i18n="igEarnBtn">Follow on Instagram · +5 tokens</span>
       </button>
     </section>
+  </main>
 
-    <section class="panel result">
-      <header>
-        <div><h2 data-i18n="finalPrint">Final booth print</h2><p id="resultSub" data-i18n="resultHint">Choose pose count and frame, then start the booth.</p></div>
+  <section id="resultScreen" class="result-screen hidden">
+    <div class="result-inner">
+      <header class="result-head">
+        <div>
+          <h2 data-i18n="finalPrint">Final booth print</h2>
+          <p id="resultSub" data-i18n="resultHint">Choose pose count and frame, then start the booth.</p>
+        </div>
         <em id="resultBadge" data-i18n="notReady">not ready</em>
       </header>
-      <canvas id="finalCanvas" width="800" height="2400"></canvas>
-      <a id="downloadLink" class="download disabled" download="cheezy-by-billy.png" data-i18n="downloadPng">Download PNG</a>
-    </section>
-  </main>
+
+      <div class="print-machine">
+        <div class="print-slot-bar"></div>
+        <div class="print-window">
+          <canvas id="finalCanvas" width="800" height="2400"></canvas>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <a id="downloadLink" class="download disabled" download="cheezy-by-billy.png" data-i18n="downloadPng">Download PNG</a>
+        <button id="resetBtn" class="ghost" type="button" data-i18n="retake">Take another photo</button>
+        <button id="homeFromResultBtn" class="ghost" type="button" data-i18n="backHome">Back to home</button>
+      </div>
+    </div>
+  </section>
 
   <div id="countdown" class="countdown hidden">
     <span id="countdownText">3</span>

@@ -22,6 +22,11 @@ const timerSelect = $("timerSelect");
 const poseNote = $("poseNote");
 const frameGrid = $("frameGrid");
 const posePills = $("posePills");
+const modePills = $("modePills");
+const filterPills = $("filterPills");
+const timerPills = $("timerPills");
+const resultScreen = $("resultScreen");
+const homeFromResultBtn = $("homeFromResultBtn");
 const frameHint = $("frameHint");
 const localBadge = $("localBadge");
 const remoteBadge = $("remoteBadge");
@@ -71,6 +76,7 @@ const TEXT = {
     outOfTokens: "Out of tokens for this turn. Earn more, then retake.",
     tokensLeft: "You have TOKEN_N token(s) left.",
     igBonusToast: "Plus 5 tokens added! Thanks for the follow.",
+    backHome: "Back to home",
     btn: "MN", nameLabel: "Name", modeLabel: "Mode", poseLabel: "Pose count", filterLabel: "Filter", timerLabel: "Seconds each turn",
     shareLabel: "Send this room link", copyLink: "Copy link", readyToStart: "Ready to start",
     initialStatus: "Start your camera. In 2-person mode, send the room link to your friend.",
@@ -97,6 +103,7 @@ const TEXT = {
     outOfTokens: "Энэ эргэлтэд токен дууслаа. Нэмж аваад дахин оролдоорой.",
     tokensLeft: "Танд TOKEN_N токен байна.",
     igBonusToast: "Нэмж 5 токен нэмэгдлээ! Дагасанд баярлалаа.",
+    backHome: "Нүүр хуудас руу буцах",
     btn: "EN", nameLabel: "Нэр", modeLabel: "Горим", poseLabel: "Зургийн тоо", filterLabel: "Өнгөний эффект", timerLabel: "Зураг бүрийн хугацаа",
     shareLabel: "Найздаа явуулах холбоос", copyLink: "Холбоос хуулах", readyToStart: "Эхлэхэд бэлэн",
     initialStatus: "Камераа асаана уу. 2 хүний горимд холбоосоо найздаа явуулаарай.",
@@ -185,14 +192,20 @@ function renderLandingGallery() {
   });
 }
 
-function showLanding() {
-  landing.classList.remove("hidden");
-  boothApp.classList.add("hidden");
+function showScreen(name) {
+  landing.classList.toggle("hidden", name !== "landing");
+  boothApp.classList.toggle("hidden", name !== "booth");
+  resultScreen.classList.toggle("hidden", name !== "result");
 }
 
-function showBoothApp() {
-  landing.classList.add("hidden");
-  boothApp.classList.remove("hidden");
+function showLanding() { showScreen("landing"); }
+function showBoothApp() { showScreen("booth"); }
+
+function showResultScreen() {
+  showScreen("result");
+  finalCanvas.classList.remove("printing");
+  void finalCanvas.offsetWidth;
+  requestAnimationFrame(() => finalCanvas.classList.add("printing"));
 }
 
 let lang = localStorage.getItem("cheezyLang") || "en";
@@ -285,7 +298,8 @@ function applyLanguage() {
   roleChip.textContent = isHost ? tr("hostRole") : tr("guestRole");
   readyBtn.textContent = localReady ? tr("readyDone") : tr("imReady");
   renderHeroTitle();
-  updatePoseNote();
+  refreshFrameUI();
+  renderTokenUI();
 }
 
 function allowedPoses() {
@@ -311,6 +325,64 @@ function ensureFrameMatchesPose() {
   if (!frames.some(f => f.id === currentFrameId)) {
     currentFrameId = frames[0]?.id || FRAMES[0].id;
   }
+}
+
+function renderModePills() {
+  modePills.innerHTML = "";
+  [["one", tr("modeOne")], ["two", tr("modeTwo")]].forEach(([val, label]) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "pose-pill" + (modeSelect.value === val ? " active" : "");
+    btn.textContent = label;
+    btn.onclick = () => {
+      if (!isHost) return;
+      if (modeSelect.value === val) return;
+      modeSelect.value = val;
+      updateModeUI(true);
+    };
+    modePills.appendChild(btn);
+  });
+}
+
+const FILTER_OPTIONS = [
+  ["none", "filterNone"], ["contrast", "filterContrast"], ["boothbw", "filterBoothBw"],
+  ["oldbw", "filterOldBw"], ["vintage", "filterVintage"], ["soft", "filterSoft"]
+];
+
+function renderFilterPills() {
+  filterPills.innerHTML = "";
+  FILTER_OPTIONS.forEach(([val, key]) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "pose-pill" + (filterSelect.value === val ? " active" : "");
+    btn.textContent = tr(key);
+    btn.onclick = () => {
+      if (!isHost) return;
+      filterSelect.value = val;
+      renderFilterPills();
+      drawIfReady();
+      emitSettings();
+    };
+    filterPills.appendChild(btn);
+  });
+}
+
+function renderTimerPills() {
+  timerPills.innerHTML = "";
+  [2, 3, 5, 7].forEach(sec => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "pose-pill" + (Number(timerSelect.value) === sec ? " active" : "");
+    btn.textContent = `${sec}s`;
+    btn.onclick = () => {
+      if (!isHost) return;
+      timerSelect.value = String(sec);
+      renderTimerPills();
+      updatePoseNote();
+      emitSettings();
+    };
+    timerPills.appendChild(btn);
+  });
 }
 
 function renderPosePills() {
@@ -431,6 +503,9 @@ function applySettings(settings) {
 function refreshFrameUI() {
   normalizePoseForMode();
   ensureFrameMatchesPose();
+  renderModePills();
+  renderFilterPills();
+  renderTimerPills();
   renderPosePills();
   renderFrameCards();
   updatePoseNote();
@@ -813,9 +888,9 @@ async function tryRenderFinal() {
   downloadLink.classList.remove("disabled");
   badge(resultBadge, tr("ready"), "good");
   resultSub.textContent = tr("finalReady");
-  resetBtn.disabled = false;
   shooting = false;
   updateShootButton();
+  showResultScreen();
 }
 
 function resetPhotos(redraw = true, notify = true) {
@@ -823,7 +898,6 @@ function resetPhotos(redraw = true, notify = true) {
   remotePhotos = [];
   downloadLink.classList.add("disabled");
   downloadLink.removeAttribute("href");
-  resetBtn.disabled = true;
   badge(resultBadge, tr("notReady"));
   resultSub.textContent = tr("resultHint");
   shooting = false;
@@ -1042,7 +1116,8 @@ startBtn.onclick = startCameraAndJoin;
 copyLinkBtn.onclick = copyLink;
 readyBtn.onclick = toggleReady;
 shootBtn.onclick = requestShoot;
-resetBtn.onclick = () => resetPhotos(true, true);
+resetBtn.onclick = () => { resetPhotos(true, true); showBoothApp(); };
+homeFromResultBtn.onclick = () => { resetPhotos(true, true); showLanding(); };
 enterBoothBtn.onclick = showBoothApp;
 backToLandingBtn.onclick = showLanding;
 igEarnBtnLanding.onclick = claimInstagramBonus;
