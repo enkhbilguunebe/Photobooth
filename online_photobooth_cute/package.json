@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v24-fixed-codes-hawaii",
-  "version": "24.0.0",
-  "description": "Cheezy by Billy with three fixed redeem codes and Hawaii license 1-pose frame.",
+  "name": "cheezy-by-billy-v25-more-templates-filters",
+  "version": "25.0.0",
+  "description": "Cheezy by Billy with travel license/wanted templates and expanded filter options.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

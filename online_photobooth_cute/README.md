@@ -25,3 +25,23 @@ Important:
 Render:
 Build Command: npm install
 Start Command: npm start
+
+
+## v25
+Added two new 1-person / 1-pose templates:
+- Travel License
+- Wanted Poster
+
+Expanded filters:
+- Chrome pop
+- Y2K digicam
+- Dreamy
+- Sunset
+- Aqua
+- Rose
+- Lomo
+- Noir
+- Faded film
+- Green cam
+- Purple haze
+- Pixel sharp

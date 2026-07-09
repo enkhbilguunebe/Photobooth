@@ -96,7 +96,7 @@ const TEXT = {
     retake: "Retake", finalPrint: "Final booth print", resultHint: "Choose pose count and frame, then start the booth.",
     notReady: "not ready", downloadPng: "Download PNG", modeOne: "1 person", modeTwo: "2 people",
     filterNone: "No filter", filterContrast: "More contrast", filterBoothBw: "Vintage booth B/W", filterOldBw: "Old black & white",
-    filterVintage: "Retro warm", filterSoft: "Soft pastel", frameTitle: "Choose a frame", hostRole: "Host", guestRole: "Guest",
+    filterVintage: "Retro warm", filterSoft: "Soft pastel", filterChrome: "Chrome pop", filterY2k: "Y2K digicam", filterDream: "Dreamy", filterSunset: "Sunset", filterAqua: "Aqua", filterRose: "Rose", filterLomo: "Lomo", filterNoir: "Noir", filterFaded: "Faded film", filterGreen: "Green cam", filterPurple: "Purple haze", filterPixel: "Pixel sharp", frameTitle: "Choose a frame", hostRole: "Host", guestRole: "Guest",
     guestNote: "Guest mode: press Ready and wait for the host to start.", copied: "Copied", live: "live", ready: "ready",
     connected: "connected", cameraReady: "Camera ready", youReady: "You are ready", friendReady: "Friend is ready",
     friendConnected: "Friend connected", finalReady: "Your Cheezy by Billy print is ready."
@@ -124,7 +124,7 @@ const TEXT = {
     retake: "Дахин авах", finalPrint: "Бэлэн зураг", resultHint: "Зургийн тоо, frame сонгоод эхлээрэй.",
     notReady: "бэлэн биш", downloadPng: "PNG татах", modeOne: "1 хүн", modeTwo: "2 хүн",
     filterNone: "Эффектгүй", filterContrast: "Контраст нэмэх", filterBoothBw: "Хуучны booth хар-цагаан", filterOldBw: "Сонгодог хар-цагаан",
-    filterVintage: "Дулаан ретро", filterSoft: "Зөөлөн пастел", frameTitle: "Frame сонгох", hostRole: "Host", guestRole: "Guest",
+    filterVintage: "Дулаан ретро", filterSoft: "Зөөлөн пастел", filterChrome: "Chrome тод", filterY2k: "Y2K камер", filterDream: "Мөрөөдлийн", filterSunset: "Нар жаргах", filterAqua: "Aqua", filterRose: "Ягаан", filterLomo: "Lomo", filterNoir: "Noir", filterFaded: "Бүдгэрсэн film", filterGreen: "Ногоон cam", filterPurple: "Нил ягаан", filterPixel: "Pixel sharp", frameTitle: "Frame сонгох", hostRole: "Host", guestRole: "Guest",
     guestNote: "Guest горим: Бэлэн дарж host эхлүүлэхийг хүлээнэ.", copied: "Хуулагдлаа", live: "асаалттай", ready: "бэлэн",
     connected: "холбогдсон", cameraReady: "Камер бэлэн", youReady: "Та бэлэн байна", friendReady: "Найз бэлэн байна",
     friendConnected: "Найз холбогдлоо", finalReady: "Cheezy by Billy зураг бэлэн боллоо."
@@ -272,6 +272,8 @@ function tr(key) { return (TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || key
 
 const FRAMES = [
   { id:"hawaii-license-1", name:"Hawaii License", poses:1, style:"hawaii", ratio:"license", w:1700, h:1050 },
+  { id:"travel-license-1", name:"Travel License", poses:1, style:"travel", ratio:"license", w:1700, h:1050 },
+  { id:"wanted-poster-1", name:"Wanted Poster", poses:1, style:"wanted", ratio:"poster", w:1300, h:1800 },
   { id:"bikini-license-1", name:"Bikini Bottom ID", poses:1, style:"license", ratio:"license", w:2000, h:1200 },
   { id:"double-strip-2", name:"Double Strip", poses:2, style:"classic", ratio:"2x6", w:800, h:2400 },
   { id:"polaroid-duo-2", name:"Polaroid Duo", poses:2, style:"polaroid", ratio:"4x6", w:1600, h:2400 },
@@ -403,8 +405,24 @@ function renderModePills() {
 }
 
 const FILTER_OPTIONS = [
-  ["none", "filterNone"], ["contrast", "filterContrast"], ["boothbw", "filterBoothBw"],
-  ["oldbw", "filterOldBw"], ["vintage", "filterVintage"], ["soft", "filterSoft"]
+  ["none", "filterNone"],
+  ["contrast", "filterContrast"],
+  ["boothbw", "filterBoothBw"],
+  ["oldbw", "filterOldBw"],
+  ["vintage", "filterVintage"],
+  ["soft", "filterSoft"],
+  ["chrome", "filterChrome"],
+  ["y2k", "filterY2k"],
+  ["dream", "filterDream"],
+  ["sunset", "filterSunset"],
+  ["aqua", "filterAqua"],
+  ["rose", "filterRose"],
+  ["lomo", "filterLomo"],
+  ["noir", "filterNoir"],
+  ["faded", "filterFaded"],
+  ["green", "filterGreen"],
+  ["purple", "filterPurple"],
+  ["pixel", "filterPixel"]
 ];
 
 function renderFilterPills() {
@@ -460,7 +478,7 @@ function renderPosePills() {
 }
 
 function frameLayout(frame) {
-  if (frame.style === "license" || frame.style === "hawaii") return { cols: 1, rows: 1 };
+  if (frame.style === "license" || frame.style === "hawaii" || frame.style === "travel" || frame.style === "wanted") return { cols: 1, rows: 1 };
   if (frame.ratio === "2x6") return { cols: 1, rows: frame.poses };
   if (frame.poses <= 2) return { cols: 1, rows: frame.poses };
   if (frame.poses === 4) return { cols: 2, rows: 2 };
@@ -477,6 +495,8 @@ function miniClass(frame) {
   if (frame.style === "camera") return "mini white";
   if (frame.style === "license") return "mini license-mini";
   if (frame.style === "hawaii") return "mini hawaii-mini";
+  if (frame.style === "travel") return "mini travel-mini";
+  if (frame.style === "wanted") return "mini wanted-mini";
   return "mini";
 }
 
@@ -895,6 +915,18 @@ function filter() {
   if (value === "oldbw") return "grayscale(100%) contrast(120%) brightness(96%)";
   if (value === "vintage") return "sepia(45%) contrast(112%) saturate(82%) brightness(96%)";
   if (value === "soft") return "brightness(110%) contrast(92%) saturate(90%)";
+  if (value === "chrome") return "contrast(155%) saturate(185%) brightness(104%)";
+  if (value === "y2k") return "contrast(135%) saturate(170%) brightness(108%) hue-rotate(-8deg)";
+  if (value === "dream") return "brightness(118%) contrast(82%) saturate(128%) blur(.35px)";
+  if (value === "sunset") return "sepia(30%) saturate(155%) contrast(110%) brightness(102%) hue-rotate(-18deg)";
+  if (value === "aqua") return "saturate(145%) contrast(112%) hue-rotate(160deg)";
+  if (value === "rose") return "saturate(140%) contrast(108%) sepia(18%) hue-rotate(305deg)";
+  if (value === "lomo") return "contrast(150%) saturate(135%) brightness(88%)";
+  if (value === "noir") return "grayscale(100%) contrast(190%) brightness(82%)";
+  if (value === "faded") return "sepia(25%) contrast(82%) saturate(70%) brightness(112%)";
+  if (value === "green") return "contrast(122%) saturate(135%) hue-rotate(70deg)";
+  if (value === "purple") return "contrast(128%) saturate(155%) hue-rotate(255deg)";
+  if (value === "pixel") return "contrast(160%) saturate(115%)";
   return "none";
 }
 
@@ -988,6 +1020,8 @@ function frameBg(frame) {
   if (frame.style === "gingham") return "#fff8ea";
   if (frame.style === "license") return "#f7ecd7";
   if (frame.style === "hawaii") return "#ffffff";
+  if (frame.style === "travel") return "#efe2ba";
+  if (frame.style === "wanted") return "#d7bc82";
   if (frame.style === "polaroid" || frame.style === "camera" || frame.style === "tv" || frame.style === "cream") return "#fff8ea";
   if (frame.style === "scrapbook") return "#f6ead2";
   return "#050505";
@@ -1011,6 +1045,8 @@ function paper(frame) {
   if (frame.style === "scrapbook") drawScrapbookTape(frame);
   if (frame.style === "license") drawLicenseDecor(frame);
   if (frame.style === "hawaii") drawHawaiiLicenseDecor(frame);
+  if (frame.style === "travel") drawTravelLicenseDecor(frame);
+  if (frame.style === "wanted") drawWantedPosterDecor(frame);
 }
 
 function drawFilmHoles(frame) {
@@ -1276,7 +1312,139 @@ function drawHawaiiLicenseDecor(frame) {
 }
 
 
+
+function drawTravelLicenseDecor(frame) {
+  const w = frame.w, h = frame.h;
+  ctx.fillStyle = "#efe2ba";
+  ctx.fillRect(0, 0, w, h);
+  ctx.save();
+  ctx.globalAlpha = 0.12;
+  ctx.fillStyle = "#5c4726";
+  for (let i = 0; i < 650; i++) ctx.fillRect(Math.random() * w, Math.random() * h, Math.random() * 4 + 1, Math.random() * 4 + 1);
+  ctx.restore();
+
+  roundRect(80, 80, w - 160, h - 160, 32, false, true);
+
+  ctx.fillStyle = "#111";
+  ctx.font = "42px Arial";
+  for (let x = 145; x < w - 120; x += 100) ctx.fillText("★", x, 145);
+  for (let x = 145; x < w - 120; x += 100) ctx.fillText("★", x, h - 110);
+  for (let y = 225; y < h - 170; y += 100) ctx.fillText("★", 115, y);
+  for (let y = 225; y < h - 170; y += 100) ctx.fillText("★", w - 145, y);
+
+  ctx.strokeStyle = "rgba(0,0,0,.35)";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(205, 215, 585, 560);
+  ctx.fillStyle = "rgba(255,255,255,.25)";
+  ctx.fillRect(205, 215, 585, 560);
+  ctx.fillStyle = "#111";
+  ctx.font = "italic 26px Georgia";
+  ctx.fillText("Photograph of Authorized traveler", 380, 780);
+
+  ctx.textAlign = "center";
+  ctx.font = "900 34px Courier New";
+  ctx.fillText("PERMANENT LICENSE OF TRAVEL", 1180, 205);
+  ctx.font = "900 42px Courier New";
+  ctx.fillText("NO. TTC6252021", 1180, 260);
+
+  ctx.textAlign = "left";
+  ctx.font = "32px Courier New";
+  ctx.fillText("Issued to............................", 875, 340);
+  ctx.fillText("Date of birth ........................", 875, 420);
+  ctx.fillText("Place of issue .......................", 875, 500);
+  ctx.fillText("Date of issue ........................", 875, 580);
+
+  ctx.textAlign = "center";
+  ctx.font = "900 30px Courier New";
+  ctx.fillText("LICENSE OF TRAVEL", 1180, 655);
+
+  ctx.textAlign = "left";
+  ctx.font = "26px Courier New";
+  wrapText("This is to Certify that the person named and described above is permitted to travel and explore freely unless detained by law.", 880, 710, 620, 32);
+
+  ctx.save();
+  ctx.globalAlpha = 0.55;
+  ctx.fillStyle = "#45b6c7";
+  ctx.font = "900 82px Arial";
+  ctx.translate(1050, 855);
+  ctx.rotate(-0.18);
+  ctx.fillText("CALL ME IF LOST", 0, 0);
+  ctx.restore();
+
+  ctx.font = "900 30px Courier New";
+  ctx.textAlign = "center";
+  ctx.fillText("IMPORTANT", 1180, 850);
+  ctx.textAlign = "left";
+  ctx.font = "26px Courier New";
+  wrapText("The holder of this license wrote, composed, and arranged all songs within the attached record, unless stated otherwise.", 880, 905, 620, 32);
+
+  ctx.strokeStyle = "#111";
+  ctx.setLineDash([5, 8]);
+  ctx.beginPath();
+  ctx.moveTo(880, 980);
+  ctx.lineTo(1500, 980);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font = "italic 24px Georgia";
+  ctx.fillText("Signature of Authorized traveler", 1050, 1012);
+}
+
+function drawWantedPosterDecor(frame) {
+  const w = frame.w, h = frame.h;
+  ctx.fillStyle = "#d7bc82";
+  ctx.fillRect(0, 0, w, h);
+  ctx.save();
+  ctx.globalAlpha = 0.13;
+  ctx.fillStyle = "#3b2617";
+  for (let i = 0; i < 900; i++) ctx.fillRect(Math.random() * w, Math.random() * h, Math.random() * 5 + 1, Math.random() * 5 + 1);
+  ctx.restore();
+
+  ctx.strokeStyle = "#3a2518";
+  ctx.lineWidth = 5;
+  ctx.strokeRect(35, 35, w - 70, h - 70);
+
+  ctx.fillStyle = "#5a3827";
+  ctx.textAlign = "center";
+  ctx.font = "900 170px Georgia";
+  ctx.fillText("WANTED", w / 2, 230);
+
+  ctx.fillStyle = "#fffdf7";
+  ctx.fillRect(170, 330, w - 340, 850);
+  ctx.strokeStyle = "#3a2518";
+  ctx.lineWidth = 6;
+  ctx.strokeRect(170, 330, w - 340, 850);
+
+  ctx.font = "900 76px Georgia";
+  ctx.fillStyle = "#5a3827";
+  ctx.fillText("DEAD  OR  ALIVE", w / 2, 1320);
+  ctx.font = "900 70px Georgia";
+  ctx.fillText("MARINE", w - 310, h - 130);
+  ctx.font = "42px Georgia";
+  ctx.fillText("$", 190, h - 250);
+  ctx.textAlign = "left";
+  ctx.font = "22px Courier New";
+  wrapText("KONO SAKUHIN HA FICTION DETHUNODE JITSU ZAISURU JINBUTSU DANTAI SONOTA NO SOSHIKI TO DOITSU NO MEISHOU GA GEKICHU NI TOUJYOU SHITATOSHITEMO JITSUZAI NA MONOTOHA ISSAI MUKANKEIDETH.", 170, h - 230, 720, 28);
+}
+
+function wrapText(text, x, y, maxWidth, lineHeight) {
+  const words = text.split(" ");
+  let line = "";
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + " ";
+    if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+      ctx.fillText(line, x, y);
+      line = words[n] + " ";
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, y);
+}
+
 function slotsFor(frame) {
+  if (frame.style === "travel") return [[205, 215, 585, 560]];
+  if (frame.style === "wanted") return [[170, 330, frame.w - 340, 850]];
   if (frame.style === "hawaii") return [[90, 90, 580, 475]];
   if (frame.style === "license") return [[130, 470, 580, 640]];
   const p = frame.poses;
@@ -1324,7 +1492,7 @@ function drawEmptyFrame() {
 
 function drawSlot(slot, text, frame) {
   const [x, y, w, h] = slot;
-  ctx.fillStyle = (frame.style === "license" || frame.style === "hawaii") ? "#efefef" : (frame.style === "classic" ? "#fffdf5" : "#ffffff");
+  ctx.fillStyle = (frame.style === "license" || frame.style === "hawaii" || frame.style === "travel" || frame.style === "wanted") ? "#efefef" : (frame.style === "classic" ? "#fffdf5" : "#ffffff");
   ctx.fillRect(x, y, w, h);
   ctx.strokeStyle = frame.style === "lips" ? "#3b0509" : "#080808";
   ctx.lineWidth = frame.style === "polaroid" ? 18 : 10;
@@ -1380,7 +1548,7 @@ function cover(img, x, y, w, h) {
 }
 
 function brand(frame) {
-  if (frame.style === "license" || frame.style === "hawaii") return;
+  if (frame.style === "license" || frame.style === "hawaii" || frame.style === "travel" || frame.style === "wanted") return;
   ctx.textAlign = "center";
   const strip = frame.ratio === "2x6";
   const y1 = frame.h - (strip ? 310 : 260);
