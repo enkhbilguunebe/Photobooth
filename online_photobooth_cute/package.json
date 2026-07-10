@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v27-callmelost-filters-mn",
-  "version": "27.0.0",
-  "description": "Cheezy by Billy with exact Call Me If Lost template, improved Mongolian, and more webcam-style filters.",
+  "name": "cheezy-by-billy-v28-fun-webcam-filters",
+  "version": "28.0.0",
+  "description": "Cheezy by Billy with fewer but stronger webcam-style filters including moving and distortion effects.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

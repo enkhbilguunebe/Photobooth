@@ -74,3 +74,17 @@ Other changes:
 - Removed old filter pills from UI: More contrast, Vintage booth B/W, Old black & white, Retro warm.
 - Added more Webcam Toy-inspired filters: Alien, Berry, Bloom, Cocoa, Comic Book, Disco, Glitch, Hazy Days, Hot Pink, Night Vision, Pop Art, Rainbow, Thermal, True Blue, Underwater, X-Ray, Zinc.
 - Improved Mongolian translations across the landing page and booth UI.
+
+
+## v28
+Replaced the many similar filters with fewer, stronger webcam-style effects:
+- Pink Pop
+- Yellow Flash
+- Black Booth
+- Retro Film
+- 2000s Digicam
+- Moving Wave
+- Mirror Face
+- Big Head
+
+Moving, Mirror Face, and Big Head affect the live preview and the captured image.

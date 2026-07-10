@@ -97,7 +97,7 @@ const TEXT = {
     startJoin: "Start camera & join", imReady: "I'm ready", readyDone: "Ready ✓", startBooth: "Start photo booth",
     retake: "Retake", finalPrint: "Final booth print", resultHint: "Choose pose count and frame, then start the booth.",
     notReady: "not ready", downloadPng: "Download PNG", modeOne: "1 person", modeTwo: "2 people",
-    filterNone: "No filter", filterContrast: "More contrast", filterBoothBw: "Vintage booth B/W", filterOldBw: "Old black & white",
+    filterNone: "No filter", filterPink: "Pink Pop", filterYellow: "Yellow Flash", filterBlack: "Black Booth", filterRetro: "Retro Film", filterY2kCam: "2000s Digicam", filterMoving: "Moving Wave", filterMirrorFun: "Mirror Face", filterBigHead: "Big Head", filterContrast: "More contrast", filterBoothBw: "Vintage booth B/W", filterOldBw: "Old black & white",
     filterVintage: "Retro warm", filterSoft: "Soft pastel", filterChrome: "Chrome pop", filterY2k: "Y2K digicam", filterDream: "Dreamy", filterSunset: "Sunset", filterAqua: "Aqua", filterRose: "Rose", filterLomo: "Lomo", filterNoir: "Noir", filterFaded: "Faded film", filterGreen: "Green cam", filterPurple: "Purple haze", filterPixel: "Pixel sharp", filterAlien: "Alien", filterBerry: "Berry", filterBloom: "Bloom", filterCocoa: "Cocoa", filterComic: "Comic Book", filterDisco: "Disco", filterEnvy: "Envy", filterGlitch: "Glitch", filterHazy: "Hazy Days", filterHotPink: "Hot Pink", filterMint: "Mint", filterNeon: "Neon", filterNight: "Night Vision", filterPopArt: "Pop Art", filterRainbow: "Rainbow", filterSoftFocus: "Soft Focus", filterThermal: "Thermal", filterTrueBlue: "True Blue", filterUnderwater: "Underwater", filterVintageToy: "Vintage Toy", filterXray: "X-Ray", filterZinc: "Zinc", frameTitle: "Choose a frame", hostRole: "Host", guestRole: "Guest",
     guestNote: "Guest mode: press Ready and wait for the host to start.", copied: "Copied", live: "live", ready: "ready",
     connected: "connected", cameraReady: "Camera ready", youReady: "You are ready", friendReady: "Friend is ready",
@@ -125,7 +125,7 @@ const TEXT = {
     startJoin: "Камер асааж орох", imReady: "Би бэлэн", readyDone: "Бэлэн ✓", startBooth: "Зураг авалтыг эхлүүлэх",
     retake: "Дахин авах", finalPrint: "Эцсийн зураг", resultHint: "Frame, фильтерээ сонгоод зураг авалтаа эхлүүлээрэй.",
     notReady: "бэлэн биш", downloadPng: "PNG татах", modeOne: "1 хүн", modeTwo: "2 хүн",
-    filterNone: "Фильтергүй", filterContrast: "Контраст нэмэх", filterBoothBw: "Хуучны booth хар-цагаан", filterOldBw: "Сонгодог хар-цагаан",
+    filterNone: "Фильтергүй", filterPink: "Ягаан Pop", filterYellow: "Шар Flash", filterBlack: "Хар Booth", filterRetro: "Retro Film", filterY2kCam: "2000s Digicam", filterMoving: "Долгионт хөдөлгөөн", filterMirrorFun: "Толин нүүр", filterBigHead: "Big Head", filterContrast: "Контраст нэмэх", filterBoothBw: "Хуучны booth хар-цагаан", filterOldBw: "Сонгодог хар-цагаан",
     filterVintage: "Дулаан ретро", filterSoft: "Зөөлөн пастел", filterChrome: "Chrome тод", filterY2k: "Y2K камер", filterDream: "Мөрөөдлийн", filterSunset: "Нар жаргах", filterAqua: "Aqua", filterRose: "Ягаан", filterLomo: "Lomo", filterNoir: "Noir", filterFaded: "Бүдгэрсэн film", filterGreen: "Ногоон cam", filterPurple: "Нил ягаан", filterPixel: "Pixel sharp", filterAlien: "Alien", filterBerry: "Berry", filterBloom: "Bloom", filterCocoa: "Cocoa", filterComic: "Comic Book", filterDisco: "Disco", filterEnvy: "Envy", filterGlitch: "Glitch", filterHazy: "Hazy Days", filterHotPink: "Hot Pink", filterMint: "Mint", filterNeon: "Neon", filterNight: "Night Vision", filterPopArt: "Pop Art", filterRainbow: "Rainbow", filterSoftFocus: "Soft Focus", filterThermal: "Thermal", filterTrueBlue: "True Blue", filterUnderwater: "Underwater", filterVintageToy: "Vintage Toy", filterXray: "X-Ray", filterZinc: "Zinc", frameTitle: "Frame сонгох", hostRole: "Host", guestRole: "Guest",
     guestNote: "Guest горим: Бэлэн дарсны дараа host эхлүүлэхийг хүлээнэ.", copied: "Хуулагдлаа", live: "асаалттай", ready: "бэлэн",
     connected: "холбогдсон", cameraReady: "Камер бэлэн", youReady: "Та бэлэн байна", friendReady: "Найз бэлэн байна",
@@ -407,12 +407,14 @@ function renderModePills() {
 
 const FILTER_OPTIONS = [
   ["none", "filterNone"],
-  ["alien", "filterAlien"], ["berry", "filterBerry"], ["bloom", "filterBloom"], ["cocoa", "filterCocoa"],
-  ["comic", "filterComic"], ["disco", "filterDisco"], ["envy", "filterEnvy"], ["glitch", "filterGlitch"],
-  ["hazy", "filterHazy"], ["hotpink", "filterHotPink"], ["lomo", "filterLomo"], ["mint", "filterMint"],
-  ["neon", "filterNeon"], ["night", "filterNight"], ["popart", "filterPopArt"], ["rainbow", "filterRainbow"],
-  ["rose", "filterRose"], ["softfocus", "filterSoftFocus"], ["thermal", "filterThermal"], ["trueblue", "filterTrueBlue"],
-  ["underwater", "filterUnderwater"], ["vintageToy", "filterVintageToy"], ["xray", "filterXray"], ["zinc", "filterZinc"]
+  ["pink", "filterPink"],
+  ["yellow", "filterYellow"],
+  ["black", "filterBlack"],
+  ["retro", "filterRetro"],
+  ["y2kcam", "filterY2kCam"],
+  ["moving", "filterMoving"],
+  ["mirrorfun", "filterMirrorFun"],
+  ["bighead", "filterBigHead"]
 ];
 
 function renderFilterPills() {
@@ -886,37 +888,104 @@ async function runCountdown(seconds, slot, totalSlots, mine, mode) {
 
 function filter() {
   const value = filterSelect.value;
-  if (value === "alien") return "hue-rotate(105deg) saturate(180%) contrast(125%) brightness(105%)";
-  if (value === "berry") return "hue-rotate(300deg) saturate(160%) contrast(115%)";
-  if (value === "bloom") return "brightness(126%) contrast(82%) saturate(145%) blur(.25px)";
-  if (value === "cocoa") return "sepia(55%) saturate(92%) contrast(105%) brightness(92%)";
-  if (value === "comic") return "contrast(185%) saturate(45%) brightness(106%)";
-  if (value === "disco") return "hue-rotate(220deg) saturate(220%) contrast(135%)";
-  if (value === "envy") return "hue-rotate(70deg) saturate(160%) contrast(112%)";
-  if (value === "glitch") return "contrast(150%) saturate(190%) hue-rotate(20deg)";
-  if (value === "hazy") return "brightness(118%) contrast(78%) saturate(105%) sepia(12%) blur(.35px)";
-  if (value === "hotpink") return "hue-rotate(300deg) saturate(220%) contrast(118%) brightness(108%)";
-  if (value === "lomo") return "contrast(155%) saturate(135%) brightness(88%) sepia(18%)";
-  if (value === "mint") return "hue-rotate(120deg) saturate(88%) contrast(95%) brightness(116%)";
-  if (value === "neon") return "contrast(180%) saturate(260%) brightness(105%)";
-  if (value === "night") return "hue-rotate(80deg) saturate(145%) contrast(150%) brightness(72%)";
-  if (value === "popart") return "contrast(210%) saturate(260%) brightness(112%)";
-  if (value === "rainbow") return "hue-rotate(180deg) saturate(220%) contrast(125%)";
-  if (value === "rose") return "hue-rotate(315deg) saturate(150%) sepia(18%) brightness(105%)";
-  if (value === "softfocus") return "brightness(116%) contrast(78%) saturate(110%) blur(.6px)";
-  if (value === "thermal") return "hue-rotate(250deg) saturate(300%) contrast(180%) brightness(108%)";
-  if (value === "trueblue") return "hue-rotate(185deg) saturate(165%) contrast(115%)";
-  if (value === "underwater") return "hue-rotate(150deg) saturate(130%) brightness(92%) contrast(105%)";
-  if (value === "vintageToy") return "sepia(42%) contrast(105%) saturate(75%) brightness(104%)";
-  if (value === "xray") return "invert(100%) grayscale(100%) contrast(135%)";
-  if (value === "zinc") return "grayscale(75%) contrast(125%) brightness(104%)";
+  if (value === "pink") return "hue-rotate(300deg) saturate(210%) contrast(118%) brightness(110%)";
+  if (value === "yellow") return "sepia(55%) saturate(220%) hue-rotate(355deg) contrast(120%) brightness(112%)";
+  if (value === "black") return "grayscale(100%) contrast(190%) brightness(86%)";
+  if (value === "retro") return "sepia(46%) contrast(105%) saturate(78%) brightness(104%)";
+  if (value === "y2kcam") return "contrast(145%) saturate(185%) brightness(108%) hue-rotate(-8deg)";
+  if (value === "moving") return "contrast(130%) saturate(160%) brightness(108%)";
+  if (value === "mirrorfun") return "contrast(120%) saturate(140%) brightness(105%)";
+  if (value === "bighead") return "contrast(122%) saturate(130%) brightness(108%)";
   return "none";
 }
 
 function applyLiveFilterPreview() {
   const previewFilter = filter();
-  if (localVideo) localVideo.style.filter = previewFilter;
-  if (remoteVideo) remoteVideo.style.filter = previewFilter;
+
+  [localVideo, remoteVideo].forEach(video => {
+    if (!video) return;
+    video.style.filter = previewFilter;
+    video.classList.remove("fx-moving", "fx-mirrorfun", "fx-bighead");
+    if (filterSelect.value === "moving") video.classList.add("fx-moving");
+    if (filterSelect.value === "mirrorfun") video.classList.add("fx-mirrorfun");
+    if (filterSelect.value === "bighead") video.classList.add("fx-bighead");
+  });
+}
+
+
+function drawVideoBase(targetCtx, video, mirror, filterValue, c) {
+  targetCtx.save();
+  targetCtx.filter = filter();
+  if (mirror) {
+    targetCtx.translate(c.width, 0);
+    targetCtx.scale(-1, 1);
+  }
+  targetCtx.drawImage(video, 0, 0, c.width, c.height);
+  targetCtx.restore();
+}
+
+function applyMovingWave(targetCtx, srcCanvas) {
+  const temp = document.createElement("canvas");
+  temp.width = srcCanvas.width;
+  temp.height = srcCanvas.height;
+  temp.getContext("2d").drawImage(srcCanvas, 0, 0);
+
+  targetCtx.clearRect(0, 0, srcCanvas.width, srcCanvas.height);
+  const slice = 10;
+  for (let y = 0; y < srcCanvas.height; y += slice) {
+    const offset = Math.sin(y / 34 + Date.now() / 180) * 18;
+    targetCtx.drawImage(temp, 0, y, srcCanvas.width, slice, offset, y, srcCanvas.width, slice);
+  }
+
+  targetCtx.globalAlpha = 0.22;
+  targetCtx.fillStyle = "#ff42cc";
+  targetCtx.fillRect(10, 0, srcCanvas.width, srcCanvas.height);
+  targetCtx.fillStyle = "#38d7ff";
+  targetCtx.fillRect(-10, 0, srcCanvas.width, srcCanvas.height);
+  targetCtx.globalAlpha = 1;
+}
+
+function applyMirrorFun(targetCtx, srcCanvas) {
+  const temp = document.createElement("canvas");
+  temp.width = srcCanvas.width;
+  temp.height = srcCanvas.height;
+  temp.getContext("2d").drawImage(srcCanvas, 0, 0);
+
+  targetCtx.clearRect(0, 0, srcCanvas.width, srcCanvas.height);
+  const half = srcCanvas.width / 2;
+  targetCtx.drawImage(temp, 0, 0, half, srcCanvas.height, 0, 0, half, srcCanvas.height);
+  targetCtx.save();
+  targetCtx.translate(srcCanvas.width, 0);
+  targetCtx.scale(-1, 1);
+  targetCtx.drawImage(temp, 0, 0, half, srcCanvas.height, 0, 0, half, srcCanvas.height);
+  targetCtx.restore();
+}
+
+function applyBigHead(targetCtx, srcCanvas) {
+  const temp = document.createElement("canvas");
+  temp.width = srcCanvas.width;
+  temp.height = srcCanvas.height;
+  temp.getContext("2d").drawImage(srcCanvas, 0, 0);
+
+  targetCtx.clearRect(0, 0, srcCanvas.width, srcCanvas.height);
+  targetCtx.drawImage(temp, 0, 0, srcCanvas.width, srcCanvas.height);
+
+  // approximate center-face zoom effect, no face tracking needed
+  const sx = srcCanvas.width * 0.25;
+  const sy = srcCanvas.height * 0.08;
+  const sw = srcCanvas.width * 0.50;
+  const sh = srcCanvas.height * 0.48;
+  const dx = srcCanvas.width * 0.16;
+  const dy = srcCanvas.height * 0.00;
+  const dw = srcCanvas.width * 0.68;
+  const dh = srcCanvas.height * 0.62;
+
+  targetCtx.save();
+  targetCtx.beginPath();
+  targetCtx.ellipse(srcCanvas.width / 2, srcCanvas.height * 0.32, srcCanvas.width * 0.34, srcCanvas.height * 0.31, 0, 0, Math.PI * 2);
+  targetCtx.clip();
+  targetCtx.drawImage(temp, sx, sy, sw, sh, dx, dy, dw, dh);
+  targetCtx.restore();
 }
 
 function capture(video, mirror = false) {
@@ -924,25 +993,36 @@ function capture(video, mirror = false) {
   c.width = 1200;
   c.height = 900;
   const t = c.getContext("2d");
-  t.filter = filter();
+  const value = filterSelect.value;
 
-  if (mirror) {
-    t.translate(c.width, 0);
-    t.scale(-1, 1);
-  }
+  drawVideoBase(t, video, mirror, value, c);
 
-  t.drawImage(video, 0, 0, c.width, c.height);
+  if (value === "moving") applyMovingWave(t, c);
+  if (value === "mirrorfun") applyMirrorFun(t, c);
+  if (value === "bighead") applyBigHead(t, c);
 
-  if (filterSelect.value === "boothbw") {
+  if (value === "retro" || value === "y2kcam") {
     const img = t.getImageData(0, 0, c.width, c.height);
     for (let i = 0; i < img.data.length; i += 4) {
-      const grain = (Math.random() - 0.5) * 22;
+      const grain = (Math.random() - 0.5) * (value === "y2kcam" ? 28 : 16);
       img.data[i] += grain;
       img.data[i + 1] += grain;
       img.data[i + 2] += grain;
     }
     t.putImageData(img, 0, 0);
   }
+
+  if (value === "black") {
+    const img = t.getImageData(0, 0, c.width, c.height);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const grain = (Math.random() - 0.5) * 18;
+      img.data[i] += grain;
+      img.data[i + 1] += grain;
+      img.data[i + 2] += grain;
+    }
+    t.putImageData(img, 0, 0);
+  }
+
   return c.toDataURL("image/jpeg", 0.9);
 }
 

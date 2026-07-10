@@ -633,3 +633,47 @@ video{
 
 /* ---------- v27 Call Me If Lost + cleaner filter list ---------- */
 #filterPills.pose-pills{max-height:260px;overflow:auto;padding:4px 2px 8px;}
+
+
+/* ---------- v28 stronger webcam-style preview effects ---------- */
+video.fx-moving{
+  animation:cheezyWave 1.1s ease-in-out infinite alternate;
+  transform-origin:center;
+}
+#localVideo.fx-moving{
+  transform:scaleX(-1) skewX(-2deg) scale(1.025);
+}
+#remoteVideo.fx-moving{
+  transform:skewX(-2deg) scale(1.025);
+}
+
+video.fx-mirrorfun{
+  transform-origin:center;
+}
+#localVideo.fx-mirrorfun{
+  transform:scaleX(-1) scaleX(1.35) scaleY(.92);
+}
+#remoteVideo.fx-mirrorfun{
+  transform:scaleX(1.35) scaleY(.92);
+}
+
+video.fx-bighead{
+  transform-origin:center 28%;
+}
+#localVideo.fx-bighead{
+  transform:scaleX(-1) scale(1.16);
+}
+#remoteVideo.fx-bighead{
+  transform:scale(1.16);
+}
+
+@keyframes cheezyWave{
+  0%{border-radius:0; translate:-4px 0}
+  50%{border-radius:22% 8% 18% 6%; translate:4px -1px}
+  100%{border-radius:8% 22% 6% 18%; translate:-2px 2px}
+}
+
+#filterPills.pose-pills{
+  max-height:none;
+  overflow:visible;
+}
