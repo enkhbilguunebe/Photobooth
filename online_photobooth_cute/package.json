@@ -1,7 +1,7 @@
 {
-  "name": "cheezy-by-billy-v26-layout-livefilter-downloadtokens",
-  "version": "26.0.0",
-  "description": "Cheezy by Billy with reordered booth sections, live camera filter preview, and tokens used only for downloads.",
+  "name": "cheezy-by-billy-v27-callmelost-filters-mn",
+  "version": "27.0.0",
+  "description": "Cheezy by Billy with exact Call Me If Lost template, improved Mongolian, and more webcam-style filters.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

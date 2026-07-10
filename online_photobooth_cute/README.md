@@ -66,3 +66,11 @@ Other changes:
 - Tokens are no longer required for Ready or Start Booth.
 - Taking photos is free.
 - Downloading the final PNG costs 1 token.
+
+
+## v27
+- Replaced the old Travel License drawing with the uploaded Call Me If Lost template image.
+- Renamed the frame to Call Me If Lost.
+- Removed old filter pills from UI: More contrast, Vintage booth B/W, Old black & white, Retro warm.
+- Added more Webcam Toy-inspired filters: Alien, Berry, Bloom, Cocoa, Comic Book, Disco, Glitch, Hazy Days, Hot Pink, Night Vision, Pop Art, Rainbow, Thermal, True Blue, Underwater, X-Ray, Zinc.
+- Improved Mongolian translations across the landing page and booth UI.

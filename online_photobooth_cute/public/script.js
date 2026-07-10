@@ -1,4 +1,6 @@
 const socket = io();
+const callMeIfLostTemplate = new Image();
+callMeIfLostTemplate.src = "/assets/call-me-if-lost-template.png";
 const $ = id => document.getElementById(id);
 
 const localVideo = $("localVideo");
@@ -96,36 +98,36 @@ const TEXT = {
     retake: "Retake", finalPrint: "Final booth print", resultHint: "Choose pose count and frame, then start the booth.",
     notReady: "not ready", downloadPng: "Download PNG", modeOne: "1 person", modeTwo: "2 people",
     filterNone: "No filter", filterContrast: "More contrast", filterBoothBw: "Vintage booth B/W", filterOldBw: "Old black & white",
-    filterVintage: "Retro warm", filterSoft: "Soft pastel", filterChrome: "Chrome pop", filterY2k: "Y2K digicam", filterDream: "Dreamy", filterSunset: "Sunset", filterAqua: "Aqua", filterRose: "Rose", filterLomo: "Lomo", filterNoir: "Noir", filterFaded: "Faded film", filterGreen: "Green cam", filterPurple: "Purple haze", filterPixel: "Pixel sharp", frameTitle: "Choose a frame", hostRole: "Host", guestRole: "Guest",
+    filterVintage: "Retro warm", filterSoft: "Soft pastel", filterChrome: "Chrome pop", filterY2k: "Y2K digicam", filterDream: "Dreamy", filterSunset: "Sunset", filterAqua: "Aqua", filterRose: "Rose", filterLomo: "Lomo", filterNoir: "Noir", filterFaded: "Faded film", filterGreen: "Green cam", filterPurple: "Purple haze", filterPixel: "Pixel sharp", filterAlien: "Alien", filterBerry: "Berry", filterBloom: "Bloom", filterCocoa: "Cocoa", filterComic: "Comic Book", filterDisco: "Disco", filterEnvy: "Envy", filterGlitch: "Glitch", filterHazy: "Hazy Days", filterHotPink: "Hot Pink", filterMint: "Mint", filterNeon: "Neon", filterNight: "Night Vision", filterPopArt: "Pop Art", filterRainbow: "Rainbow", filterSoftFocus: "Soft Focus", filterThermal: "Thermal", filterTrueBlue: "True Blue", filterUnderwater: "Underwater", filterVintageToy: "Vintage Toy", filterXray: "X-Ray", filterZinc: "Zinc", frameTitle: "Choose a frame", hostRole: "Host", guestRole: "Guest",
     guestNote: "Guest mode: press Ready and wait for the host to start.", copied: "Copied", live: "live", ready: "ready",
     connected: "connected", cameraReady: "Camera ready", youReady: "You are ready", friendReady: "Friend is ready",
     friendConnected: "Friend connected", finalReady: "Your Cheezy by Billy print is ready."
   },
   mn: {
     tokensWord: "токен", landingEyebrow: "Үнэгүй ретро фото будк",
-    enterBooth: "Cheezy эхлүүлэх", igEarnBtn: "Instagram дагаад, 5 токен ав", igClaimedBtn: "Бонус авсан",
-    tokenHint: "Зураг авах үнэгүй. Бэлэн PNG татахад 1 токен зарцуулна.",
-    step1Title: "Тохиргоогоо сонго", step1Body: "1, 2, 4 эсвэл 6 pose, тохирох frame-аа сонго, polaroid, film strip, scrapbook гэх мэт.",
-    step2Title: "Холбоос явуулаад зураг ав", step2Body: "Ганцаараа эсвэл room холбоосоо явуулж найзтайгаа ээлжлэн зураг ав.",
-    step3Title: "Зургаа татаж ав", step3Body: "Бэлэн scrapbook зураг хэдхэн секундэд татахад бэлэн болно.",
+    enterBooth: "Cheezy зураг авалт эхлүүлэх", igEarnBtn: "Instagram дагаад, 5 токен ав", igClaimedBtn: "Бонус авсан",
+    tokenHint: "Зураг авахад токен хасахгүй. Харин PNG татахад 1 токен зарцуулна.",
+    step1Title: "Зураг авалтын төрлөө сонго", step1Body: "1, 2, 4 эсвэл 6 зурагтай frame сонго. ID, poster, film strip, scrapbook зэрэг загварууд бий.",
+    step2Title: "Холбоос явуулаад pose аваарай", step2Body: "Ганцаараа авах эсвэл room холбоосоо найздаа явуулаад ээлжээр зураг аваарай.",
+    step3Title: "Бэлэн зургаа татаж ав", step3Body: "Эцсийн зураг бэлэн болмогц PNG хэлбэрээр татаж авч болно.",
     landingFooter: "Жинхэнэ фото будкийг санадаг хүмүүст зориулав.",
-    needTokens: "PNG татахад 1 токен хэрэгтэй. Instagram дагах эсвэл код ашиглаарай.",
+    needTokens: "PNG татахад 1 токен хэрэгтэй. Instagram дагах эсвэл redeem code ашиглаарай.",
     outOfTokens: "Токен дууссан байна. Нэмж аваад татаж аваарай.",
     tokensLeft: "Танд TOKEN_N токен байна.",
     igBonusToast: "Нэмж 3 токен нэмэгдлээ! Дагасанд баярлалаа.",
     redeemBtn: "Код ашиглах", redeemSuccess: "Код амжилттай. TOKEN_N токен нэмэгдлээ.", redeemInvalid: "6 оронтой код оруулна уу.", redeemError: "Код буруу эсвэл ашиглагдсан байна.",
     backHome: "Нүүр хуудас руу буцах",
-    btn: "EN", nameLabel: "Нэр", modeLabel: "Горим", poseLabel: "Зургийн тоо", filterLabel: "Өнгөний эффект", timerLabel: "Зураг бүрийн хугацаа",
-    shareLabel: "Найздаа явуулах холбоос", copyLink: "Холбоос хуулах", readyToStart: "Эхлэхэд бэлэн",
-    initialStatus: "Камераа асаана уу. 2 хүний горимд холбоосоо найздаа явуулаарай.",
+    btn: "EN", nameLabel: "Нэр", modeLabel: "Горим", poseLabel: "Зургийн тоо", filterLabel: "Фильтер", timerLabel: "Зураг бүрийн хугацаа",
+    shareLabel: "Room холбоос", copyLink: "Холбоос хуулах", readyToStart: "Эхлэхэд бэлэн",
+    initialStatus: "Камераа асаана уу. 2 хүний горимд room холбоосоо найздаа явуулаарай.",
     youTitle: "Та", friendTitle: "Найз", cameraNotStarted: "Камер асаагүй байна", offline: "асаагүй",
-    startCameraShort: "Камераа асаах", waitingForFriend: "Найзыгаа хүлээж байна", waiting: "хүлээж байна", sendRoomLink: "Холбоосоо явуулна уу",
-    startJoin: "Камер асааж орох", imReady: "Би бэлэн", readyDone: "Бэлэн ✓", startBooth: "Зураг авч эхлэх",
-    retake: "Дахин авах", finalPrint: "Бэлэн зураг", resultHint: "Зургийн тоо, frame сонгоод эхлээрэй.",
+    startCameraShort: "Камераа асаах", waitingForFriend: "Найзыгаа хүлээж байна", waiting: "хүлээж байна", sendRoomLink: "Room холбоосоо явуулна уу",
+    startJoin: "Камер асааж орох", imReady: "Би бэлэн", readyDone: "Бэлэн ✓", startBooth: "Зураг авалтыг эхлүүлэх",
+    retake: "Дахин авах", finalPrint: "Эцсийн зураг", resultHint: "Frame, фильтерээ сонгоод зураг авалтаа эхлүүлээрэй.",
     notReady: "бэлэн биш", downloadPng: "PNG татах", modeOne: "1 хүн", modeTwo: "2 хүн",
-    filterNone: "Эффектгүй", filterContrast: "Контраст нэмэх", filterBoothBw: "Хуучны booth хар-цагаан", filterOldBw: "Сонгодог хар-цагаан",
-    filterVintage: "Дулаан ретро", filterSoft: "Зөөлөн пастел", filterChrome: "Chrome тод", filterY2k: "Y2K камер", filterDream: "Мөрөөдлийн", filterSunset: "Нар жаргах", filterAqua: "Aqua", filterRose: "Ягаан", filterLomo: "Lomo", filterNoir: "Noir", filterFaded: "Бүдгэрсэн film", filterGreen: "Ногоон cam", filterPurple: "Нил ягаан", filterPixel: "Pixel sharp", frameTitle: "Frame сонгох", hostRole: "Host", guestRole: "Guest",
-    guestNote: "Guest горим: Бэлэн дарж host эхлүүлэхийг хүлээнэ.", copied: "Хуулагдлаа", live: "асаалттай", ready: "бэлэн",
+    filterNone: "Фильтергүй", filterContrast: "Контраст нэмэх", filterBoothBw: "Хуучны booth хар-цагаан", filterOldBw: "Сонгодог хар-цагаан",
+    filterVintage: "Дулаан ретро", filterSoft: "Зөөлөн пастел", filterChrome: "Chrome тод", filterY2k: "Y2K камер", filterDream: "Мөрөөдлийн", filterSunset: "Нар жаргах", filterAqua: "Aqua", filterRose: "Ягаан", filterLomo: "Lomo", filterNoir: "Noir", filterFaded: "Бүдгэрсэн film", filterGreen: "Ногоон cam", filterPurple: "Нил ягаан", filterPixel: "Pixel sharp", filterAlien: "Alien", filterBerry: "Berry", filterBloom: "Bloom", filterCocoa: "Cocoa", filterComic: "Comic Book", filterDisco: "Disco", filterEnvy: "Envy", filterGlitch: "Glitch", filterHazy: "Hazy Days", filterHotPink: "Hot Pink", filterMint: "Mint", filterNeon: "Neon", filterNight: "Night Vision", filterPopArt: "Pop Art", filterRainbow: "Rainbow", filterSoftFocus: "Soft Focus", filterThermal: "Thermal", filterTrueBlue: "True Blue", filterUnderwater: "Underwater", filterVintageToy: "Vintage Toy", filterXray: "X-Ray", filterZinc: "Zinc", frameTitle: "Frame сонгох", hostRole: "Host", guestRole: "Guest",
+    guestNote: "Guest горим: Бэлэн дарсны дараа host эхлүүлэхийг хүлээнэ.", copied: "Хуулагдлаа", live: "асаалттай", ready: "бэлэн",
     connected: "холбогдсон", cameraReady: "Камер бэлэн", youReady: "Та бэлэн байна", friendReady: "Найз бэлэн байна",
     friendConnected: "Найз холбогдлоо", finalReady: "Cheezy by Billy зураг бэлэн боллоо."
   }
@@ -271,7 +273,7 @@ function tr(key) { return (TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || key
 
 const FRAMES = [
   { id:"hawaii-license-1", name:"Hawaii License", poses:1, style:"hawaii", ratio:"license", w:1700, h:1050 },
-  { id:"travel-license-1", name:"Travel License", poses:1, style:"travel", ratio:"license", w:1700, h:1050 },
+  { id:"travel-license-1", name:"Call Me If Lost", poses:1, style:"travel", ratio:"license", w:1700, h:1050 },
   { id:"wanted-poster-1", name:"Wanted Poster", poses:1, style:"wanted", ratio:"poster", w:1300, h:1800 },
   { id:"bikini-license-1", name:"Bikini Bottom ID", poses:1, style:"license", ratio:"license", w:2000, h:1200 },
   { id:"double-strip-2", name:"Double Strip", poses:2, style:"classic", ratio:"2x6", w:800, h:2400 },
@@ -302,7 +304,7 @@ let localPhotos = [];
 let remotePhotos = [];
 let shooting = false;
 let currentFrameId = "classic-black-4";
-let roomSettings = { mode:"two", poseCount:4, frameId:"classic-black-4", filter:"boothbw", seconds:3 };
+let roomSettings = { mode:"two", poseCount:4, frameId:"classic-black-4", filter:"none", seconds:3 };
 
 const peerConfig = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
 
@@ -405,23 +407,12 @@ function renderModePills() {
 
 const FILTER_OPTIONS = [
   ["none", "filterNone"],
-  ["contrast", "filterContrast"],
-  ["boothbw", "filterBoothBw"],
-  ["oldbw", "filterOldBw"],
-  ["vintage", "filterVintage"],
-  ["soft", "filterSoft"],
-  ["chrome", "filterChrome"],
-  ["y2k", "filterY2k"],
-  ["dream", "filterDream"],
-  ["sunset", "filterSunset"],
-  ["aqua", "filterAqua"],
-  ["rose", "filterRose"],
-  ["lomo", "filterLomo"],
-  ["noir", "filterNoir"],
-  ["faded", "filterFaded"],
-  ["green", "filterGreen"],
-  ["purple", "filterPurple"],
-  ["pixel", "filterPixel"]
+  ["alien", "filterAlien"], ["berry", "filterBerry"], ["bloom", "filterBloom"], ["cocoa", "filterCocoa"],
+  ["comic", "filterComic"], ["disco", "filterDisco"], ["envy", "filterEnvy"], ["glitch", "filterGlitch"],
+  ["hazy", "filterHazy"], ["hotpink", "filterHotPink"], ["lomo", "filterLomo"], ["mint", "filterMint"],
+  ["neon", "filterNeon"], ["night", "filterNight"], ["popart", "filterPopArt"], ["rainbow", "filterRainbow"],
+  ["rose", "filterRose"], ["softfocus", "filterSoftFocus"], ["thermal", "filterThermal"], ["trueblue", "filterTrueBlue"],
+  ["underwater", "filterUnderwater"], ["vintageToy", "filterVintageToy"], ["xray", "filterXray"], ["zinc", "filterZinc"]
 ];
 
 function renderFilterPills() {
@@ -577,7 +568,7 @@ function applySettings(settings) {
   if (!isHost) {
     modeSelect.value = settings.mode || "two";
     poseSelect.value = String(settings.poseCount || 4);
-    filterSelect.value = settings.filter || "boothbw";
+    filterSelect.value = settings.filter || "none";
     timerSelect.value = String(settings.seconds || 3);
     currentFrameId = settings.frameId || currentFrameId;
   } else {
@@ -895,23 +886,30 @@ async function runCountdown(seconds, slot, totalSlots, mine, mode) {
 
 function filter() {
   const value = filterSelect.value;
-  if (value === "contrast") return "contrast(132%) saturate(118%)";
-  if (value === "boothbw") return "grayscale(100%) contrast(145%) brightness(94%) sepia(12%)";
-  if (value === "oldbw") return "grayscale(100%) contrast(120%) brightness(96%)";
-  if (value === "vintage") return "sepia(45%) contrast(112%) saturate(82%) brightness(96%)";
-  if (value === "soft") return "brightness(110%) contrast(92%) saturate(90%)";
-  if (value === "chrome") return "contrast(155%) saturate(185%) brightness(104%)";
-  if (value === "y2k") return "contrast(135%) saturate(170%) brightness(108%) hue-rotate(-8deg)";
-  if (value === "dream") return "brightness(118%) contrast(82%) saturate(128%) blur(.35px)";
-  if (value === "sunset") return "sepia(30%) saturate(155%) contrast(110%) brightness(102%) hue-rotate(-18deg)";
-  if (value === "aqua") return "saturate(145%) contrast(112%) hue-rotate(160deg)";
-  if (value === "rose") return "saturate(140%) contrast(108%) sepia(18%) hue-rotate(305deg)";
-  if (value === "lomo") return "contrast(150%) saturate(135%) brightness(88%)";
-  if (value === "noir") return "grayscale(100%) contrast(190%) brightness(82%)";
-  if (value === "faded") return "sepia(25%) contrast(82%) saturate(70%) brightness(112%)";
-  if (value === "green") return "contrast(122%) saturate(135%) hue-rotate(70deg)";
-  if (value === "purple") return "contrast(128%) saturate(155%) hue-rotate(255deg)";
-  if (value === "pixel") return "contrast(160%) saturate(115%)";
+  if (value === "alien") return "hue-rotate(105deg) saturate(180%) contrast(125%) brightness(105%)";
+  if (value === "berry") return "hue-rotate(300deg) saturate(160%) contrast(115%)";
+  if (value === "bloom") return "brightness(126%) contrast(82%) saturate(145%) blur(.25px)";
+  if (value === "cocoa") return "sepia(55%) saturate(92%) contrast(105%) brightness(92%)";
+  if (value === "comic") return "contrast(185%) saturate(45%) brightness(106%)";
+  if (value === "disco") return "hue-rotate(220deg) saturate(220%) contrast(135%)";
+  if (value === "envy") return "hue-rotate(70deg) saturate(160%) contrast(112%)";
+  if (value === "glitch") return "contrast(150%) saturate(190%) hue-rotate(20deg)";
+  if (value === "hazy") return "brightness(118%) contrast(78%) saturate(105%) sepia(12%) blur(.35px)";
+  if (value === "hotpink") return "hue-rotate(300deg) saturate(220%) contrast(118%) brightness(108%)";
+  if (value === "lomo") return "contrast(155%) saturate(135%) brightness(88%) sepia(18%)";
+  if (value === "mint") return "hue-rotate(120deg) saturate(88%) contrast(95%) brightness(116%)";
+  if (value === "neon") return "contrast(180%) saturate(260%) brightness(105%)";
+  if (value === "night") return "hue-rotate(80deg) saturate(145%) contrast(150%) brightness(72%)";
+  if (value === "popart") return "contrast(210%) saturate(260%) brightness(112%)";
+  if (value === "rainbow") return "hue-rotate(180deg) saturate(220%) contrast(125%)";
+  if (value === "rose") return "hue-rotate(315deg) saturate(150%) sepia(18%) brightness(105%)";
+  if (value === "softfocus") return "brightness(116%) contrast(78%) saturate(110%) blur(.6px)";
+  if (value === "thermal") return "hue-rotate(250deg) saturate(300%) contrast(180%) brightness(108%)";
+  if (value === "trueblue") return "hue-rotate(185deg) saturate(165%) contrast(115%)";
+  if (value === "underwater") return "hue-rotate(150deg) saturate(130%) brightness(92%) contrast(105%)";
+  if (value === "vintageToy") return "sepia(42%) contrast(105%) saturate(75%) brightness(104%)";
+  if (value === "xray") return "invert(100%) grayscale(100%) contrast(135%)";
+  if (value === "zinc") return "grayscale(75%) contrast(125%) brightness(104%)";
   return "none";
 }
 
@@ -1306,78 +1304,27 @@ function drawHawaiiLicenseDecor(frame) {
 
 function drawTravelLicenseDecor(frame) {
   const w = frame.w, h = frame.h;
+
+  if (callMeIfLostTemplate && callMeIfLostTemplate.complete && callMeIfLostTemplate.naturalWidth) {
+    ctx.drawImage(callMeIfLostTemplate, 0, 0, w, h);
+    return;
+  }
+
   ctx.fillStyle = "#efe2ba";
   ctx.fillRect(0, 0, w, h);
-  ctx.save();
-  ctx.globalAlpha = 0.12;
-  ctx.fillStyle = "#5c4726";
-  for (let i = 0; i < 650; i++) ctx.fillRect(Math.random() * w, Math.random() * h, Math.random() * 4 + 1, Math.random() * 4 + 1);
-  ctx.restore();
-
   roundRect(80, 80, w - 160, h - 160, 32, false, true);
-
   ctx.fillStyle = "#111";
   ctx.font = "42px Arial";
   for (let x = 145; x < w - 120; x += 100) ctx.fillText("★", x, 145);
   for (let x = 145; x < w - 120; x += 100) ctx.fillText("★", x, h - 110);
   for (let y = 225; y < h - 170; y += 100) ctx.fillText("★", 115, y);
   for (let y = 225; y < h - 170; y += 100) ctx.fillText("★", w - 145, y);
-
   ctx.strokeStyle = "rgba(0,0,0,.35)";
   ctx.lineWidth = 4;
-  ctx.strokeRect(205, 215, 585, 560);
-  ctx.fillStyle = "rgba(255,255,255,.25)";
-  ctx.fillRect(205, 215, 585, 560);
-  ctx.fillStyle = "#111";
-  ctx.font = "italic 26px Georgia";
-  ctx.fillText("Photograph of Authorized traveler", 380, 780);
-
+  ctx.strokeRect(140, 175, 650, 610);
   ctx.textAlign = "center";
   ctx.font = "900 34px Courier New";
   ctx.fillText("PERMANENT LICENSE OF TRAVEL", 1180, 205);
-  ctx.font = "900 42px Courier New";
-  ctx.fillText("NO. TTC6252021", 1180, 260);
-
-  ctx.textAlign = "left";
-  ctx.font = "32px Courier New";
-  ctx.fillText("Issued to............................", 875, 340);
-  ctx.fillText("Date of birth ........................", 875, 420);
-  ctx.fillText("Place of issue .......................", 875, 500);
-  ctx.fillText("Date of issue ........................", 875, 580);
-
-  ctx.textAlign = "center";
-  ctx.font = "900 30px Courier New";
-  ctx.fillText("LICENSE OF TRAVEL", 1180, 655);
-
-  ctx.textAlign = "left";
-  ctx.font = "26px Courier New";
-  wrapText("This is to Certify that the person named and described above is permitted to travel and explore freely unless detained by law.", 880, 710, 620, 32);
-
-  ctx.save();
-  ctx.globalAlpha = 0.55;
-  ctx.fillStyle = "#45b6c7";
-  ctx.font = "900 82px Arial";
-  ctx.translate(1050, 855);
-  ctx.rotate(-0.18);
-  ctx.fillText("CALL ME IF LOST", 0, 0);
-  ctx.restore();
-
-  ctx.font = "900 30px Courier New";
-  ctx.textAlign = "center";
-  ctx.fillText("IMPORTANT", 1180, 850);
-  ctx.textAlign = "left";
-  ctx.font = "26px Courier New";
-  wrapText("The holder of this license wrote, composed, and arranged all songs within the attached record, unless stated otherwise.", 880, 905, 620, 32);
-
-  ctx.strokeStyle = "#111";
-  ctx.setLineDash([5, 8]);
-  ctx.beginPath();
-  ctx.moveTo(880, 980);
-  ctx.lineTo(1500, 980);
-  ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.font = "italic 24px Georgia";
-  ctx.fillText("Signature of Authorized traveler", 1050, 1012);
 }
 
 function drawWantedPosterDecor(frame) {
@@ -1434,7 +1381,7 @@ function wrapText(text, x, y, maxWidth, lineHeight) {
 }
 
 function slotsFor(frame) {
-  if (frame.style === "travel") return [[205, 215, 585, 560]];
+  if (frame.style === "travel") return [[140, 175, 650, 610]];
   if (frame.style === "wanted") return [[170, 330, frame.w - 340, 850]];
   if (frame.style === "hawaii") return [[90, 90, 580, 475]];
   if (frame.style === "license") return [[130, 470, 580, 640]];
